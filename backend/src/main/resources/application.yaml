@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: gutlog
+
+  datasource:
+    url: jdbc:h2:file:./data/gutlog
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true

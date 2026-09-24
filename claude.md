@@ -35,6 +35,11 @@
 - 형식: `타입: 설명` (예: `feat: 식사 기록 화면 구현`)
 - 타입: feat(기능), fix(버그), docs(문서), refactor(리팩터링), style(포맷)
 
+## 디자인
+- 디자인 핸드오프: docs/design/README.md
+- 화면 시안: docs/design/designs/*.dc.html
+- 프론트는 이 디자인을 High-fidelity로 재현 (색·간격·radius 값 그대로)
+
 ## 현재 상태
 - 기획·설계 완료 (docs/ 참고)
 - 백엔드 구현 예정
