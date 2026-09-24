@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0">
+<style>
+body{margin:0;background:#F7F9FB;color:#16202E;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+a{color:#2B63CC;text-decoration:none}a:hover{color:#1E4FA8;text-decoration:underline}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-size:24px;line-height:1;font-feature-settings:"liga"}
+</style>
+</helmet>
+
+<div style="max-width:1120px;margin:0 auto;padding:48px 24px 96px;display:flex;flex-direction:column;gap:64px">
+
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:10px;background:#2B63CC;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px">g</div>
+      <span style="font-size:15px;font-weight:600;color:#6B7686;letter-spacing:0.02em;white-space:nowrap">gutlog · Design System v0.1</span>
+    </div>
+    <h1 style="margin:0;font-size:40px;line-height:1.2;font-weight:700;letter-spacing:-0.02em">것로그 디자인 시스템</h1>
+    <p style="margin:0;max-width:640px;font-size:17px;line-height:1.6;color:#3F4A5A;text-wrap:pretty">화이트 바탕에 차분한 블루를 기준색으로, 배변·식사·복약을 구분하는 저채도 보조색을 둡니다. 모든 인터랙션은 최소 48px 터치 영역, 본문 대비 4.5:1 이상을 기준으로 합니다.</p>
+  </header>
+
+  <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+    <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <span class="ms" style="color:#2B63CC">touch_app</span>
+      <strong style="font-size:17px">큰 터치 영역</strong>
+      <span style="font-size:15px;line-height:1.5;color:#3F4A5A">주요 버튼 56px, 선택지 최소 48px. 손 떨림·통증 상황에서도 정확하게.</span>
+    </div>
+    <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <span class="ms" style="color:#2B63CC">contrast</span>
+      <strong style="font-size:17px">명확한 대비</strong>
+      <span style="font-size:15px;line-height:1.5;color:#3F4A5A">색만으로 구분하지 않고 아이콘·라벨을 항상 함께 표기합니다.</span>
+    </div>
+    <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <span class="ms" style="color:#2B63CC">bolt</span>
+      <strong style="font-size:17px">최소 단계 기록</strong>
+      <span style="font-size:15px;line-height:1.5;color:#3F4A5A">홈에서 한 번 탭으로 기록 시작, 3단계 이내 저장. 기본값은 직전 기록.</span>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">01 컬러</h2>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:14px;font-weight:600;color:#6B7686">Primary · Blue</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px">
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:72px;background:#16408C"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 800</strong><br><span style="color:#6B7686">#16408C · 강조 텍스트</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:72px;background:#1E4FA8"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 700</strong><br><span style="color:#6B7686">#1E4FA8 · Pressed</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:2px solid #2B63CC;background:#fff"><div style="height:72px;background:#2B63CC"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 600 · Primary</strong><br><span style="color:#6B7686">#2B63CC</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:72px;background:#8FB0EC"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 300</strong><br><span style="color:#6B7686">#8FB0EC · 차트 보조</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:72px;background:#E6EEFB"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 100</strong><br><span style="color:#6B7686">#E6EEFB · 선택 배경</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:72px;background:#F3F7FD"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Blue 50</strong><br><span style="color:#6B7686">#F3F7FD · 강조 카드</span></div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:14px;font-weight:600;color:#6B7686">Neutral · Cool gray</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px">
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#16202E"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Ink</strong><br><span style="color:#6B7686">#16202E · 제목·본문</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#3F4A5A"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Gray 700</strong><br><span style="color:#6B7686">#3F4A5A · 보조 본문</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#6B7686"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Gray 500</strong><br><span style="color:#6B7686">#6B7686 · 캡션</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#C9D0DA"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Gray 300</strong><br><span style="color:#6B7686">#C9D0DA · 비활성</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#E3E7ED"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Gray 200</strong><br><span style="color:#6B7686">#E3E7ED · 테두리</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E3E7ED;background:#fff"><div style="height:56px;background:#F7F9FB"></div><div style="padding:10px 12px;font-size:13px;line-height:1.4"><strong>Surface</strong><br><span style="color:#6B7686">#F7F9FB · 화면 배경</span></div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:14px;font-weight:600;color:#6B7686">Category · 기록 유형 보조색 (텍스트/배경 쌍, 대비 4.5:1 이상)</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <div style="border-radius:16px;background:#E3F3F8;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:#0B6E8C"><span class="ms">water_drop</span></div><strong style="font-size:18px;color:#0B6E8C">배변</strong></div>
+          <div style="display:flex;gap:6px"><div style="flex:1;height:28px;border-radius:6px;background:#0B6E8C"></div><div style="flex:1;height:28px;border-radius:6px;background:#5BB5D0"></div><div style="flex:1;height:28px;border-radius:6px;background:#E3F3F8;border:1px solid #B9DFEB"></div></div>
+          <span style="font-size:13px;color:#2A5F70">#0B6E8C · #5BB5D0 · #E3F3F8</span>
+        </div>
+        <div style="border-radius:16px;background:#E5F4EC;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:#1F7A4D"><span class="ms">restaurant</span></div><strong style="font-size:18px;color:#1F7A4D">식사</strong></div>
+          <div style="display:flex;gap:6px"><div style="flex:1;height:28px;border-radius:6px;background:#1F7A4D"></div><div style="flex:1;height:28px;border-radius:6px;background:#6DBF93"></div><div style="flex:1;height:28px;border-radius:6px;background:#E5F4EC;border:1px solid #BFE2CE"></div></div>
+          <span style="font-size:13px;color:#2C5E44">#1F7A4D · #6DBF93 · #E5F4EC</span>
+        </div>
+        <div style="border-radius:16px;background:#EEEAFB;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:#5B3FB8"><span class="ms">medication</span></div><strong style="font-size:18px;color:#5B3FB8">복약</strong></div>
+          <div style="display:flex;gap:6px"><div style="flex:1;height:28px;border-radius:6px;background:#5B3FB8"></div><div style="flex:1;height:28px;border-radius:6px;background:#A392E4"></div><div style="flex:1;height:28px;border-radius:6px;background:#EEEAFB;border:1px solid #D4CCF3"></div></div>
+          <span style="font-size:13px;color:#4A3A86">#5B3FB8 · #A392E4 · #EEEAFB</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:14px;font-weight:600;color:#6B7686">Status · 증상 상태 (출혈·주의·양호)</span>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#FCEAEA;color:#B42D32;font-size:15px;font-weight:600"><span class="ms" style="font-size:20px">emergency</span>출혈 #B42D32</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#FDF0E4;color:#A34B0B;font-size:15px;font-weight:600"><span class="ms" style="font-size:20px">warning</span>주의 #A34B0B</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#E3F3F1;color:#136B61;font-size:15px;font-weight:600"><span class="ms" style="font-size:20px">check_circle</span>양호 #136B61</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">02 타이포그래피</h2>
+    <p style="margin:0;font-size:15px;line-height:1.6;color:#3F4A5A">Pretendard 단일 서체. 숫자는 tabular 설정으로 기록·통계 값의 자릿수를 맞춥니다. 본문 최소 16px, 캡션 최소 13px.</p>
+    <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px;border-bottom:1px solid #F1F3F6"><span style="font-size:13px;color:#6B7686">Display<br>40 / 700</span><span style="font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.2">하루 4회</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px;border-bottom:1px solid #F1F3F6"><span style="font-size:13px;color:#6B7686">Title 1<br>26 / 700</span><span style="font-size:26px;font-weight:700;letter-spacing:-0.015em;line-height:1.3">오늘의 컨디션</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px;border-bottom:1px solid #F1F3F6"><span style="font-size:13px;color:#6B7686">Title 2<br>20 / 600</span><span style="font-size:20px;font-weight:600;line-height:1.35">최근 7일 배변 횟수</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px;border-bottom:1px solid #F1F3F6"><span style="font-size:13px;color:#6B7686">Body L<br>17 / 500</span><span style="font-size:17px;font-weight:500;line-height:1.5">버튼 라벨, 선택지, 리스트 항목</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px;border-bottom:1px solid #F1F3F6"><span style="font-size:13px;color:#6B7686">Body<br>16 / 400</span><span style="font-size:16px;line-height:1.6;color:#3F4A5A">어제보다 배변 횟수가 1회 줄었어요. 복약 알림은 오후 8시에 울립니다.</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:baseline;padding:18px 20px"><span style="font-size:13px;color:#6B7686">Caption<br>13 / 500</span><span style="font-size:13px;font-weight:500;color:#6B7686">오전 8:42 · 직전 기록</span></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">03 버튼</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:13px;color:#6B7686">Primary · 56px · radius 14</span>
+        <button style="height:56px;border:0;border-radius:14px;background:#2B63CC;color:#fff;font:inherit;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1E4FA8" style-active="background:#16408C">기록 저장</button>
+        <span style="font-size:13px;color:#6B7686">Secondary</span>
+        <button style="height:56px;border:0;border-radius:14px;background:#E6EEFB;color:#1E4FA8;font:inherit;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#D6E3F8">나중에 하기</button>
+        <span style="font-size:13px;color:#6B7686">Outline · 48px</span>
+        <button style="height:48px;border:1.5px solid #C9D0DA;border-radius:12px;background:#fff;color:#16202E;font:inherit;font-size:16px;font-weight:600;cursor:pointer" style-hover="border-color:#2B63CC">리포트 공유</button>
+        <span style="font-size:13px;color:#6B7686">Disabled</span>
+        <button style="height:56px;border:0;border-radius:14px;background:#E3E7ED;color:#6B7686;font:inherit;font-size:17px;font-weight:600">항목을 선택하세요</button>
+      </div>
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:13px;color:#6B7686">Quick record · 홈 빠른 기록 (카테고리별 88px 타일)</span>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+          <button style="height:88px;border:0;border-radius:16px;background:#E3F3F8;color:#0B6E8C;font:inherit;font-size:16px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer"><span class="ms" style="font-size:28px">water_drop</span>배변</button>
+          <button style="height:88px;border:0;border-radius:16px;background:#E5F4EC;color:#1F7A4D;font:inherit;font-size:16px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer"><span class="ms" style="font-size:28px">restaurant</span>식사</button>
+          <button style="height:88px;border:0;border-radius:16px;background:#EEEAFB;color:#5B3FB8;font:inherit;font-size:16px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer"><span class="ms" style="font-size:28px">medication</span>복약</button>
+        </div>
+        <span style="font-size:13px;color:#6B7686">FAB · 64px 원형</span>
+        <div style="display:flex;align-items:center;gap:16px">
+          <button style="width:64px;height:64px;border:0;border-radius:50%;background:#2B63CC;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(43,99,204,0.28);cursor:pointer"><span class="ms" style="font-size:32px">add</span></button>
+          <button style="height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;color:#2B63CC;font:inherit;font-size:16px;font-weight:600;display:flex;align-items:center;gap:4px;cursor:pointer" style-hover="background:#F3F7FD">전체 보기<span class="ms" style="font-size:20px">chevron_right</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">04 카드</h2>
+    <p style="margin:0;font-size:15px;line-height:1.6;color:#3F4A5A">카드는 흰색 + 1px #E3E7ED 테두리, radius 20, 패딩 20. 그림자는 FAB·시트에만 사용합니다.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
+      <div style="background:#F3F7FD;border:1px solid #D6E3F8;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:15px;font-weight:600;color:#1E4FA8">오늘 요약</span><span style="font-size:13px;color:#6B7686">9월 24일 (목)</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#6B7686">배변</span><span style="font-size:28px;font-weight:700">3<span style="font-size:15px;font-weight:500;color:#6B7686"> 회</span></span></div>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#6B7686">출혈</span><span style="font-size:28px;font-weight:700;color:#B42D32">1<span style="font-size:15px;font-weight:500;color:#6B7686"> 회</span></span></div>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#6B7686">복약</span><span style="font-size:28px;font-weight:700">1<span style="font-size:15px;font-weight:500;color:#6B7686">/2</span></span></div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:8px 20px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:14px;min-height:64px;border-bottom:1px solid #F1F3F6">
+          <div style="width:44px;height:44px;border-radius:12px;background:#E3F3F8;color:#0B6E8C;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms">water_drop</span></div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">배변 · 무른 변</span><span style="font-size:13px;color:#6B7686">오전 8:42 · 복통 약함</span></div>
+          <span style="padding:4px 10px;border-radius:999px;background:#FCEAEA;color:#B42D32;font-size:13px;font-weight:600">출혈</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;min-height:64px;border-bottom:1px solid #F1F3F6">
+          <div style="width:44px;height:44px;border-radius:12px;background:#E5F4EC;color:#1F7A4D;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms">restaurant</span></div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">아침 · 흰죽, 계란찜</span><span style="font-size:13px;color:#6B7686">오전 7:30</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;min-height:64px">
+          <div style="width:44px;height:44px;border-radius:12px;background:#EEEAFB;color:#5B3FB8;display:flex;align-items:center;justify-content:center;flex:none"><span class="ms">medication</span></div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">메살라진 1.2g</span><span style="font-size:13px;color:#6B7686">오전 7:50 · 복용 완료</span></div>
+          <span class="ms" style="color:#136B61">check_circle</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">05 선택 · 입력</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:13px;color:#6B7686">단일 선택 타일 · 48px 이상, 선택 시 블루 테두리 + 체크</span>
+        <span style="font-size:17px;font-weight:600">변 형태</span>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+          <div style="min-height:56px;border-radius:14px;border:1.5px solid #E3E7ED;display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:500">단단함</div>
+          <div style="min-height:56px;border-radius:14px;border:1.5px solid #E3E7ED;display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:500">보통</div>
+          <div style="min-height:56px;border-radius:14px;border:2px solid #2B63CC;background:#F3F7FD;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:16px;font-weight:600;color:#1E4FA8">무름<span class="ms" style="font-size:22px">check</span></div>
+          <div style="min-height:56px;border-radius:14px;border:1.5px solid #E3E7ED;display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:500">물설사</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:13px;color:#6B7686">강도 스케일 · 세그먼트 (0–3)</span>
+        <span style="font-size:17px;font-weight:600">복통 정도</span>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;background:#F1F3F6;border-radius:14px">
+          <div style="height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:#3F4A5A">없음</div>
+          <div style="height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;background:#fff;color:#1E4FA8;box-shadow:0 1px 3px rgba(22,32,46,0.12)">약함</div>
+          <div style="height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:#3F4A5A">중간</div>
+          <div style="height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:#3F4A5A">심함</div>
+        </div>
+        <span style="font-size:13px;color:#6B7686">토글 · 예/아니오 즉답</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;min-height:56px">
+          <span style="font-size:17px;font-weight:600">혈변 있음</span>
+          <div style="width:56px;height:32px;border-radius:999px;background:#2B63CC;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end"><div style="width:26px;height:26px;border-radius:50%;background:#fff"></div></div>
+        </div>
+        <span style="font-size:13px;color:#6B7686">칩 · 다중 선택 (음식 태그 등)</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="height:40px;padding:0 14px;border-radius:999px;background:#E5F4EC;color:#1F7A4D;display:flex;align-items:center;gap:4px;white-space:nowrap;flex:none;font-size:15px;font-weight:600"><span class="ms" style="font-size:18px">check</span>유제품</span>
+          <span style="height:40px;padding:0 14px;border-radius:999px;border:1px solid #C9D0DA;display:flex;align-items:center;white-space:nowrap;flex:none;font-size:15px;font-weight:500">매운 음식</span>
+          <span style="height:40px;padding:0 14px;border-radius:999px;border:1px solid #C9D0DA;display:flex;align-items:center;white-space:nowrap;flex:none;font-size:15px;font-weight:500">카페인</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">06 하단 탭 네비게이션</h2>
+    <div style="max-width:400px;width:100%;background:#fff;border:1px solid #E3E7ED;border-radius:20px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #E3E7ED;padding:6px 4px 10px">
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#2B63CC"><span class="ms" style="font-variation-settings:'FILL' 1">home</span><span style="font-size:12px;font-weight:700">홈</span></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686"><span class="ms">edit_note</span><span style="font-size:12px;font-weight:500">기록</span></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686"><span class="ms">bar_chart</span><span style="font-size:12px;font-weight:500">통계</span></div>
+        <div style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686"><span class="ms">person</span><span style="font-size:12px;font-weight:500">마이페이지</span></div>
+      </div>
+    </div>
+    <span style="font-size:14px;color:#6B7686">탭 높이 56px + 안전 영역. 활성 탭은 채운 아이콘 + Blue 600 + 굵은 라벨.</span>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.01em">07 토큰 요약</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:15px;line-height:1.7;color:#3F4A5A">
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:18px"><strong style="color:#16202E">Radius</strong><br>칩 999 · 입력 12 · 버튼 14 · 타일 16 · 카드 20 · 시트 24</div>
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:18px"><strong style="color:#16202E">Spacing (4 단위)</strong><br>4 · 8 · 12 · 16 · 20 · 24 · 32<br>화면 좌우 여백 20</div>
+      <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:18px"><strong style="color:#16202E">Touch</strong><br>최소 48 · 주요 버튼 56 · 빠른 기록 88 · FAB 64</div>
+    </div>
+  </section>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0">
+<style>
+body{margin:0;background:#EEF1F5;color:#16202E;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+a{color:#2B63CC;text-decoration:none}a:hover{color:#1E4FA8;text-decoration:underline}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-size:24px;line-height:1;font-feature-settings:"liga"}
+</style>
+</helmet>
+
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em">통계</h1>
+    <span style="font-size:15px;color:#6B7686">390 × 844 · 기간을 바꾸면 수치가 바뀌어요</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <div id="4a" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="padding:3px 9px;border-radius:6px;background:#16202E;color:#fff;font-size:13px;font-weight:700">4a</span><span style="font-size:15px;font-weight:600;color:#3F4A5A">기록 충분</span></div>
+      <div data-screen-label="05 통계" style="width:390px;height:844px;background:#F7F9FB;border-radius:44px;overflow:hidden;box-shadow:0 20px 50px rgba(22,32,46,0.14);display:flex;flex-direction:column">
+        <div style="height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:15px;font-weight:600"><span>9:41</span><span style="display:flex;gap:4px"><span class="ms" style="font-size:18px">signal_cellular_alt</span><span class="ms" style="font-size:18px">wifi</span><span class="ms" style="font-size:18px">battery_full</span></span></div>
+        <div style="flex:none;padding:12px 20px 12px;display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.015em;padding:0 4px">통계</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;background:#E9EDF2;border-radius:14px">
+            <sc-for list="{{ periods }}" as="p" hint-placeholder-count="3">
+              <button type="button" onClick="{{ p.pick }}" style="height:44px;border:0;border-radius:10px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:{{ p.shadow }};font:inherit;font-size:15px;font-weight:{{ p.weight }};cursor:pointer">{{ p.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1;overflow-y:auto;padding:4px 20px 24px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:13px;color:#6B7686;padding:0 4px">{{ range }}</span>
+
+          <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#0B6E8C"><span style="width:30px;height:30px;border-radius:9px;background:#E3F3F8;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:18px">water_drop</span></span>배변</span>
+              <span style="padding:4px 10px;border-radius:999px;background:#FCEAEA;color:#B42D32;font-size:13px;font-weight:600">혈변 {{ bloodDays }}일</span>
+            </div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:13px;color:#6B7686">하루 평균</span>
+                <span style="font-size:32px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ bowelAvg }}<span style="font-size:16px;font-weight:500;color:#6B7686"> 회</span></span>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:6px;height:64px">
+                <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                    <div style="width:{{ barW }};height:{{ b.h }};border-radius:5px;background:{{ b.color }}"></div>
+                    <span style="font-size:11px;color:#6B7686">{{ b.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+            <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1F7A4D"><span style="width:30px;height:30px;border-radius:9px;background:#E5F4EC;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:18px">restaurant</span></span>식사</span>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:13px;color:#6B7686">하루 평균</span>
+                <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ mealAvg }}<span style="font-size:15px;font-weight:500;color:#6B7686"> 회</span></span>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#5B3FB8"><span style="width:30px;height:30px;border-radius:9px;background:#EEEAFB;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:18px">medication</span></span>복약</span>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:13px;color:#6B7686">복용률 · {{ medCount }}</span>
+                <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ medRate }}<span style="font-size:15px;font-weight:500;color:#6B7686"> %</span></span>
+              </div>
+              <div style="height:6px;border-radius:999px;background:#EEEAFB;overflow:hidden"><div style="width:{{ medRateW }};height:100%;background:#5B3FB8;border-radius:999px"></div></div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;margin-top:8px">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:17px;font-weight:700">음식과 다음날 혈변</span>
+              <span style="font-size:13px;color:#6B7686;line-height:1.5">먹은 다음날과 먹지 않은 다음날의 혈변 비율을 비교했어요</span>
+            </div>
+            <sc-for list="{{ corr }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-top:1px solid #F1F3F6">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <span style="font-size:16px;font-weight:700">{{ c.food }} <span style="font-size:13px;font-weight:500;color:#6B7686">· {{ c.days }}일 섭취</span></span>
+                  <span style="padding:4px 10px;border-radius:999px;background:{{ c.tagBg }};color:{{ c.tagFg }};font-size:13px;font-weight:600;white-space:nowrap">{{ c.tag }}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:72px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:13px">
+                  <span style="color:#3F4A5A">먹은 다음날</span>
+                  <div style="height:10px;border-radius:999px;background:#F1F3F6;overflow:hidden"><div style="width:{{ c.withW }};height:100%;border-radius:999px;background:{{ c.barColor }}"></div></div>
+                  <span style="font-weight:700;text-align:right">{{ c.with }}%</span>
+                  <span style="color:#3F4A5A">안 먹은 날</span>
+                  <div style="height:10px;border-radius:999px;background:#F1F3F6;overflow:hidden"><div style="width:{{ c.withoutW }};height:100%;border-radius:999px;background:#C9D0DA"></div></div>
+                  <span style="font-weight:700;text-align:right;color:#6B7686">{{ c.without }}%</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:flex;gap:8px;padding:12px;border-radius:12px;background:#F7F9FB;font-size:13px;line-height:1.5;color:#3F4A5A">
+              <span class="ms" style="font-size:18px;color:#6B7686">info</span>
+              <span>기록에서 찾은 경향이며 원인을 뜻하지 않아요. 식단이나 치료를 바꾸기 전에 주치의와 상의하세요.</span>
+            </div>
+          </div>
+        </div>
+
+        <nav style="flex:none;background:#fff;border-top:1px solid #E3E7ED;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px 4px 26px">
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">home</span><span style="font-size:12px;font-weight:500">홈</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">edit_note</span><span style="font-size:12px;font-weight:500">기록</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#2B63CC;text-decoration:none"><span class="ms" style="font-variation-settings:'FILL' 1">bar_chart</span><span style="font-size:12px;font-weight:700">통계</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">person</span><span style="font-size:12px;font-weight:500">마이페이지</span></a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="4b" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="padding:3px 9px;border-radius:6px;background:#16202E;color:#fff;font-size:13px;font-weight:700">4b</span><span style="font-size:15px;font-weight:600;color:#3F4A5A">기록 부족</span></div>
+      <div data-screen-label="06 통계 · 기록 부족" style="width:390px;height:844px;background:#F7F9FB;border-radius:44px;overflow:hidden;box-shadow:0 20px 50px rgba(22,32,46,0.14);display:flex;flex-direction:column">
+        <div style="height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:15px;font-weight:600"><span>9:41</span><span style="display:flex;gap:4px"><span class="ms" style="font-size:18px">signal_cellular_alt</span><span class="ms" style="font-size:18px">wifi</span><span class="ms" style="font-size:18px">battery_full</span></span></div>
+        <div style="flex:none;padding:12px 20px 12px;display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.015em;padding:0 4px">통계</h2>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;background:#E9EDF2;border-radius:14px">
+            <div style="height:44px;border-radius:10px;background:#fff;color:#1E4FA8;box-shadow:0 1px 3px rgba(22,32,46,0.12);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center">1주일</div>
+            <div style="height:44px;border-radius:10px;color:#3F4A5A;font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center">1개월</div>
+            <div style="height:44px;border-radius:10px;color:#3F4A5A;font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center">3개월</div>
+          </div>
+        </div>
+
+        <div style="flex:1;overflow-y:auto;padding:4px 20px 24px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#fff;border:1px solid #E3E7ED;border-radius:20px;padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+            <span style="width:64px;height:64px;border-radius:20px;background:#F3F7FD;color:#2B63CC;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:34px">insights</span></span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:20px;font-weight:700;letter-spacing:-0.01em">분석하려면 기록이 더 필요해요</span>
+              <span style="font-size:15px;line-height:1.55;color:#3F4A5A;text-wrap:pretty">7일 이상 기록하면 식사·복약·배변 요약과<br>음식별 혈변 경향을 보여드려요.</span>
+            </div>
+            <div style="width:100%;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:14px;background:#F7F9FB">
+              <div style="display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:600">기록한 날</span><span><strong style="color:#2B63CC">3일</strong> <span style="color:#6B7686">/ 7일</span></span></div>
+              <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">
+                <div style="height:8px;border-radius:999px;background:#2B63CC"></div><div style="height:8px;border-radius:999px;background:#2B63CC"></div><div style="height:8px;border-radius:999px;background:#2B63CC"></div><div style="height:8px;border-radius:999px;background:#E3E7ED"></div><div style="height:8px;border-radius:999px;background:#E3E7ED"></div><div style="height:8px;border-radius:999px;background:#E3E7ED"></div><div style="height:8px;border-radius:999px;background:#E3E7ED"></div>
+              </div>
+            </div>
+            <button style="width:100%;height:56px;border:0;border-radius:14px;background:#2B63CC;color:#fff;font:inherit;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1E4FA8">오늘 기록하기</button>
+          </div>
+
+          <span style="font-size:13px;font-weight:600;color:#6B7686;padding:8px 4px 0">지금까지의 기록</span>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#1F7A4D"><span class="ms" style="font-size:16px">restaurant</span>식사</span>
+              <span style="font-size:22px;font-weight:700">8<span style="font-size:13px;font-weight:500;color:#6B7686"> 회</span></span>
+            </div>
+            <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#5B3FB8"><span class="ms" style="font-size:16px">medication</span>복약</span>
+              <span style="font-size:22px;font-weight:700">5<span style="font-size:13px;font-weight:500;color:#6B7686">/6</span></span>
+            </div>
+            <div style="background:#fff;border:1px solid #E3E7ED;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#0B6E8C"><span class="ms" style="font-size:16px">water_drop</span>배변</span>
+              <span style="font-size:22px;font-weight:700">10<span style="font-size:13px;font-weight:500;color:#6B7686"> 회</span></span>
+            </div>
+          </div>
+        </div>
+
+        <nav style="flex:none;background:#fff;border-top:1px solid #E3E7ED;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px 4px 26px">
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">home</span><span style="font-size:12px;font-weight:500">홈</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">edit_note</span><span style="font-size:12px;font-weight:500">기록</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#2B63CC;text-decoration:none"><span class="ms" style="font-variation-settings:'FILL' 1">bar_chart</span><span style="font-size:12px;font-weight:700">통계</span></a>
+          <a href="#" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#6B7686;text-decoration:none"><span class="ms">person</span><span style="font-size:12px;font-weight:500">마이페이지</span></a>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { period: '1m' };
+  renderVals() {
+    const D = {
+      '1w': { label: '1주일', range: '9월 18일 – 9월 24일 · 7일 기록', meal: 2.6, med: [13, 14], bowel: 3.4, blood: 3,
+        bars: [[3, '목'], [4, '금'], [2, '토'], [5, '일'], [3, '월'], [4, '화'], [3, '수']], barW: '14px',
+        corr: [['매운 음식', 3, 67, 25], ['유제품', 2, 50, 20], ['카페인', 5, 40, 50]] },
+      '1m': { label: '1개월', range: '8월 26일 – 9월 24일 · 26일 기록', meal: 2.8, med: [54, 60], bowel: 3.1, blood: 8,
+        bars: [[3.6, '1주'], [3.2, '2주'], [2.9, '3주'], [2.7, '4주']], barW: '22px',
+        corr: [['유제품', 7, 43, 13], ['매운 음식', 9, 44, 19], ['카페인', 18, 28, 25]] },
+      '3m': { label: '3개월', range: '6월 26일 – 9월 24일 · 81일 기록', meal: 2.7, med: [166, 180], bowel: 3.3, blood: 21,
+        bars: [[3.8, '7월'], [3.3, '8월'], [2.9, '9월']], barW: '26px',
+        corr: [['유제품', 20, 40, 15], ['매운 음식', 24, 38, 18], ['카페인', 55, 24, 22]] }
+    };
+    const d = D[this.state.period];
+    const max = Math.max(...d.bars.map(b => b[0]));
+    const corr = d.corr.map(([food, days, w, wo]) => {
+      const r = w / Math.max(wo, 1);
+      const lvl = r >= 2 ? 0 : r >= 1.4 ? 1 : 2;
+      return {
+        food, days, with: w, without: wo, withW: w + '%', withoutW: wo + '%',
+        tag: ['관련 높음', '관련 있음', '뚜렷한 관련 없음'][lvl],
+        tagBg: ['#FCEAEA', '#FDF0E4', '#F1F3F6'][lvl], tagFg: ['#B42D32', '#A34B0B', '#6B7686'][lvl],
+        barColor: ['#B42D32', '#D9772B', '#8A94A3'][lvl], r
+      };
+    }).sort((a, b) => b.r - a.r);
+    const rate = Math.round(d.med[0] / d.med[1] * 100);
+    return {
+      periods: Object.entries(D).map(([k, v]) => {
+        const on = k === this.state.period;
+        return { label: v.label, pick: () => this.setState({ period: k }), bg: on ? '#fff' : 'transparent', fg: on ? '#1E4FA8' : '#3F4A5A', shadow: on ? '0 1px 3px rgba(22,32,46,0.12)' : 'none', weight: on ? 700 : 500 };
+      }),
+      range: d.range, bowelAvg: d.bowel.toFixed(1), bloodDays: d.blood, mealAvg: d.meal.toFixed(1),
+      medRate: rate, medRateW: rate + '%', medCount: `${d.med[0]}/${d.med[1]}`,
+      barW: d.barW,
+      bars: d.bars.map(([v, label], i) => ({ label, h: Math.round(v / max * 44) + 'px', color: i === d.bars.length - 1 ? '#0B6E8C' : '#9ED3E3' })),
+      corr
+    };
+  }
+}
+</script>
+</body>
+</html>

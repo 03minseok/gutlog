@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0">
+<style>
+body{margin:0;background:#EEF1F5;color:#16202E;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#2B63CC;text-decoration:none}a:hover{color:#1E4FA8;text-decoration:underline}
+input{font-family:inherit}input::placeholder{color:#8A94A3}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-size:24px;line-height:1;font-feature-settings:"liga"}
+</style>
+</helmet>
+
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em">로그인 · 회원가입</h1>
+    <span style="font-size:15px;color:#6B7686">390 × 844</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="padding:3px 9px;border-radius:6px;background:#16202E;color:#fff;font-size:13px;font-weight:700">1a</span><span style="font-size:15px;font-weight:600;color:#3F4A5A">로그인</span></div>
+      <div data-screen-label="01 로그인" style="width:390px;height:844px;background:#fff;border-radius:44px;overflow:hidden;box-shadow:0 20px 50px rgba(22,32,46,0.14);display:flex;flex-direction:column;position:relative">
+        <div style="height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:15px;font-weight:600"><span>9:41</span><span style="display:flex;gap:4px"><span class="ms" style="font-size:18px">signal_cellular_alt</span><span class="ms" style="font-size:18px">wifi</span><span class="ms" style="font-size:18px">battery_full</span></span></div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:56px 24px 32px;gap:40px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div style="width:72px;height:72px;border-radius:22px;background:#2B63CC;display:flex;align-items:center;justify-content:center;color:#fff;font-size:38px;font-weight:700;letter-spacing:-0.02em">g</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em">것로그</span>
+              <span style="font-size:15px;color:#6B7686">매일의 장 건강을 기록해요</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <label style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:14px;font-weight:600;color:#3F4A5A">아이디</span>
+              <input value="{{ loginId }}" onChange="{{ onLoginId }}" placeholder="아이디 입력" autocomplete="username" style="height:56px;border:1.5px solid #E3E7ED;border-radius:12px;padding:0 16px;font-size:17px;color:#16202E;outline:none;background:#fff" style-focus="border-color:#2B63CC;box-shadow:0 0 0 3px #E6EEFB">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:14px;font-weight:600;color:#3F4A5A">비밀번호</span>
+              <div style="position:relative;display:flex">
+                <input type="{{ loginPwType }}" value="{{ loginPw }}" onChange="{{ onLoginPw }}" placeholder="비밀번호 입력" autocomplete="current-password" style="flex:1;min-width:0;height:56px;border:1.5px solid #E3E7ED;border-radius:12px;padding:0 56px 0 16px;font-size:17px;color:#16202E;outline:none;background:#fff" style-focus="border-color:#2B63CC;box-shadow:0 0 0 3px #E6EEFB">
+                <button type="button" onClick="{{ toggleLoginPw }}" aria-label="비밀번호 보기" style="position:absolute;right:4px;top:4px;width:48px;height:48px;border:0;background:transparent;color:#6B7686;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px"><span class="ms">{{ loginPwIcon }}</span></button>
+              </div>
+            </label>
+            <button disabled="{{ loginDisabled }}" style="margin-top:8px;height:56px;border:0;border-radius:14px;background:{{ loginBg }};color:{{ loginFg }};font:inherit;font-size:17px;font-weight:600;cursor:pointer">로그인</button>
+            <div style="display:flex;justify-content:center;align-items:center;gap:4px;font-size:15px;color:#6B7686">
+              <a href="#" style="padding:12px 8px;color:#6B7686">아이디 찾기</a>
+              <span style="width:1px;height:12px;background:#C9D0DA"></span>
+              <a href="#" style="padding:12px 8px;color:#6B7686">비밀번호 찾기</a>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:auto">
+            <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:#6B7686"><span style="flex:1;height:1px;background:#E3E7ED"></span>간편 로그인<span style="flex:1;height:1px;background:#E3E7ED"></span></div>
+            <button style="height:56px;border:0;border-radius:14px;background:#FEE500;color:#191600;font:inherit;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#191600" d="M12 3C6.5 3 2 6.5 2 10.8c0 2.8 1.9 5.2 4.7 6.6l-1 3.6c-.1.3.3.6.6.4l4.2-2.8c.5.1 1 .1 1.5.1 5.5 0 10-3.5 10-7.9S17.5 3 12 3z"></path></svg>
+              카카오로 시작하기
+            </button>
+            <button style="height:56px;border:0;border-radius:14px;background:#03C75A;color:#fff;font:inherit;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+              <svg width="16" height="16" viewBox="0 0 16 16"><path fill="#fff" d="M10.8 8.6 5 0H0v16h5.2V7.4L11 16h5V0h-5.2z"></path></svg>
+              네이버로 시작하기
+            </button>
+            <div style="display:flex;justify-content:center;align-items:center;gap:6px;font-size:15px;color:#6B7686;padding-top:4px">
+              아직 회원이 아니신가요?<a href="#1b" style="padding:12px 4px;font-weight:700;color:#2B63CC">회원가입</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="padding:3px 9px;border-radius:6px;background:#16202E;color:#fff;font-size:13px;font-weight:700">1b</span><span style="font-size:15px;font-weight:600;color:#3F4A5A">회원가입</span></div>
+      <div data-screen-label="02 회원가입" style="width:390px;height:844px;background:#fff;border-radius:44px;overflow:hidden;box-shadow:0 20px 50px rgba(22,32,46,0.14);display:flex;flex-direction:column">
+        <div style="height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:15px;font-weight:600"><span>9:41</span><span style="display:flex;gap:4px"><span class="ms" style="font-size:18px">signal_cellular_alt</span><span class="ms" style="font-size:18px">wifi</span><span class="ms" style="font-size:18px">battery_full</span></span></div>
+        <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 8px">
+          <a href="#1a" aria-label="뒤로" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;color:#16202E;border-radius:12px"><span class="ms">arrow_back_ios_new</span></a>
+          <span style="font-size:17px;font-weight:600">회원가입</span>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:12px 24px 24px;display:flex;flex-direction:column;gap:22px">
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">아이디</span>
+            <div style="display:flex;gap:8px">
+              <input value="{{ suId }}" onChange="{{ onSuId }}" placeholder="영문·숫자 4~16자" style="flex:1;min-width:0;height:56px;border:1.5px solid #E3E7ED;border-radius:12px;padding:0 16px;font-size:17px;color:#16202E;outline:none" style-focus="border-color:#2B63CC;box-shadow:0 0 0 3px #E6EEFB">
+              <button type="button" onClick="{{ checkId }}" style="flex:none;height:56px;padding:0 16px;border:1.5px solid #C9D0DA;border-radius:12px;background:#fff;color:#16202E;font:inherit;font-size:15px;font-weight:600;cursor:pointer" style-hover="border-color:#2B63CC">중복 확인</button>
+            </div>
+            <sc-if value="{{ idChecked }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:500;color:#136B61"><span class="ms" style="font-size:16px">check_circle</span>사용할 수 있는 아이디예요</span></sc-if>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">비밀번호</span>
+            <div style="position:relative;display:flex">
+              <input type="{{ suPwType }}" value="{{ suPw }}" onChange="{{ onSuPw }}" placeholder="8자 이상, 영문·숫자 포함" style="flex:1;min-width:0;height:56px;border:1.5px solid #E3E7ED;border-radius:12px;padding:0 56px 0 16px;font-size:17px;color:#16202E;outline:none" style-focus="border-color:#2B63CC;box-shadow:0 0 0 3px #E6EEFB">
+              <button type="button" onClick="{{ toggleSuPw }}" aria-label="비밀번호 보기" style="position:absolute;right:4px;top:4px;width:48px;height:48px;border:0;background:transparent;color:#6B7686;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px"><span class="ms">{{ suPwIcon }}</span></button>
+            </div>
+            <span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:500;color:{{ pwHintColor }}"><span class="ms" style="font-size:16px">{{ pwHintIcon }}</span>8자 이상, 영문과 숫자를 포함해 주세요</span>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">닉네임</span>
+            <input value="{{ suNick }}" onChange="{{ onSuNick }}" placeholder="앱에서 불릴 이름" style="height:56px;border:1.5px solid #E3E7ED;border-radius:12px;padding:0 16px;font-size:17px;color:#16202E;outline:none" style-focus="border-color:#2B63CC;box-shadow:0 0 0 3px #E6EEFB">
+          </label>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">회원 유형</span>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;background:#F1F3F6;border-radius:14px">
+              <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
+                <button type="button" onClick="{{ r.pick }}" style="height:48px;border:0;border-radius:10px;background:{{ r.bg }};color:{{ r.fg }};box-shadow:{{ r.shadow }};font:inherit;font-size:16px;font-weight:{{ r.weight }};cursor:pointer">{{ r.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ isPatient }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">질환 종류</span>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+              <button type="button" onClick="{{ pickUC }}" style="min-height:88px;border-radius:16px;border:{{ ucBorder }};background:{{ ucBg }};padding:14px 16px;font:inherit;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:6px;cursor:pointer">
+                <span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="font-size:18px;font-weight:700;color:{{ ucFg }}">UC</span><span class="ms" style="font-size:22px;color:{{ ucFg }}">{{ ucIcon }}</span></span>
+                <span style="font-size:14px;color:#3F4A5A">궤양성대장염</span>
+              </button>
+              <button type="button" onClick="{{ pickCD }}" style="min-height:88px;border-radius:16px;border:{{ cdBorder }};background:{{ cdBg }};padding:14px 16px;font:inherit;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:6px;cursor:pointer">
+                <span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="font-size:18px;font-weight:700;color:{{ cdFg }}">크론병</span><span class="ms" style="font-size:22px;color:{{ cdFg }}">{{ cdIcon }}</span></span>
+                <span style="font-size:14px;color:#3F4A5A">Crohn's disease</span>
+              </button>
+            </div>
+            <span style="font-size:13px;color:#6B7686">선택한 질환에 맞춰 기록 항목이 구성돼요. 나중에 바꿀 수 있어요.</span>
+          </div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:14px;font-weight:600;color:#3F4A5A">약관 동의</span>
+            <div style="border:1.5px solid #E3E7ED;border-radius:16px;overflow:hidden">
+              <button type="button" onClick="{{ toggleAll }}" style="width:100%;min-height:60px;border:0;border-bottom:1px solid #E3E7ED;background:{{ allBg }};padding:0 16px;font:inherit;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left">
+                <span class="ms" style="font-size:26px;color:{{ allColor }};font-variation-settings:'FILL' 1">check_circle</span>
+                <span style="font-size:17px;font-weight:700;color:#16202E">전체 동의</span>
+              </button>
+              <div style="display:flex;flex-direction:column;padding:4px 0">
+                <sc-for list="{{ terms }}" as="t" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;min-height:48px;padding:0 4px 0 16px">
+                    <button type="button" onClick="{{ t.toggle }}" style="flex:1;min-width:0;min-height:48px;border:0;background:transparent;padding:0;font:inherit;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left">
+                      <span class="ms" style="font-size:22px;color:{{ t.color }}">check</span>
+                      <span style="font-size:15px;color:#16202E;line-height:1.4"><span style="font-weight:600;color:{{ t.tagColor }}">{{ t.tag }}</span> {{ t.label }}</span>
+                    </button>
+                    <sc-if value="{{ t.hasDoc }}" hint-placeholder-val="{{ true }}">
+                      <a href="#" aria-label="약관 보기" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;color:#6B7686;border-radius:10px"><span class="ms" style="font-size:20px">chevron_right</span></a>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:none;padding:12px 24px 32px;border-top:1px solid #F1F3F6">
+          <button disabled="{{ suDisabled }}" style="width:100%;height:56px;border:0;border-radius:14px;background:{{ suBg }};color:{{ suFg }};font:inherit;font-size:17px;font-weight:600;cursor:pointer">가입하기</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { loginId: '', loginPw: '', showLoginPw: false, suId: '', suPw: '', suNick: '', showSuPw: false, idChecked: false, role: null, disease: null };
+  renderVals() {
+    const s = this.state;
+    const set = k => e => this.setState({ [k]: e.target.value, ...(k === 'suId' ? { idChecked: false } : {}) });
+    const loginOk = s.loginId && s.loginPw;
+    const pwOk = s.suPw.length >= 8 && /[a-zA-Z]/.test(s.suPw) && /\d/.test(s.suPw);
+    const isPatient = s.role === 'patient';
+    const TERMS = [['age', true, '만 14세 이상입니다', false], ['tos', true, '서비스 이용약관', true], ['privacy', true, '개인정보 수집·이용 동의', true], ['health', true, '민감정보(건강정보) 처리 동의', true], ['marketing', false, '알림·혜택 정보 수신', true]];
+    const agreed = s.agreed || {};
+    const allOn = TERMS.every(([k]) => agreed[k]);
+    const reqOk = TERMS.every(([k, req]) => !req || agreed[k]);
+    const terms = TERMS.map(([k, req, label, hasDoc]) => ({
+      label, hasDoc, tag: req ? '[필수]' : '[선택]', tagColor: req ? '#2B63CC' : '#6B7686',
+      color: agreed[k] ? '#2B63CC' : '#C9D0DA',
+      toggle: () => this.setState({ agreed: { ...agreed, [k]: !agreed[k] } })
+    }));
+    const toggleAll = () => this.setState({ agreed: Object.fromEntries(TERMS.map(([k]) => [k, !allOn])) });
+    const suOk = s.idChecked && pwOk && s.suNick.trim() && s.role && (!isPatient || s.disease) && reqOk;
+    const roles = [['patient', '환자'], ['guardian', '보호자'], ['other', '기타']].map(([k, label]) => {
+      const on = s.role === k;
+      return { label, pick: () => this.setState({ role: k }), bg: on ? '#fff' : 'transparent', fg: on ? '#1E4FA8' : '#3F4A5A', shadow: on ? '0 1px 3px rgba(22,32,46,0.12)' : 'none', weight: on ? 700 : 500 };
+    });
+    const tile = on => ({ border: on ? '2px solid #2B63CC' : '1.5px solid #E3E7ED', bg: on ? '#F3F7FD' : '#fff', fg: on ? '#1E4FA8' : '#16202E', icon: on ? 'check_circle' : 'radio_button_unchecked' });
+    const uc = tile(s.disease === 'uc'), cd = tile(s.disease === 'cd');
+    return {
+      loginId: s.loginId, loginPw: s.loginPw, onLoginId: set('loginId'), onLoginPw: set('loginPw'),
+      loginPwType: s.showLoginPw ? 'text' : 'password', loginPwIcon: s.showLoginPw ? 'visibility_off' : 'visibility',
+      toggleLoginPw: () => this.setState({ showLoginPw: !s.showLoginPw }),
+      loginDisabled: !loginOk, loginBg: loginOk ? '#2B63CC' : '#E3E7ED', loginFg: loginOk ? '#fff' : '#6B7686',
+      suId: s.suId, suPw: s.suPw, suNick: s.suNick, onSuId: set('suId'), onSuPw: set('suPw'), onSuNick: set('suNick'),
+      checkId: () => this.setState({ idChecked: s.suId.length >= 4 }), idChecked: s.idChecked,
+      suPwType: s.showSuPw ? 'text' : 'password', suPwIcon: s.showSuPw ? 'visibility_off' : 'visibility',
+      toggleSuPw: () => this.setState({ showSuPw: !s.showSuPw }),
+      pwHintColor: pwOk ? '#136B61' : '#6B7686', pwHintIcon: pwOk ? 'check_circle' : 'info',
+      roles, isPatient, terms, toggleAll, allColor: allOn ? '#2B63CC' : '#C9D0DA', allBg: allOn ? '#F3F7FD' : '#fff',
+      pickUC: () => this.setState({ disease: 'uc' }), pickCD: () => this.setState({ disease: 'cd' }),
+      ucBorder: uc.border, ucBg: uc.bg, ucFg: uc.fg, ucIcon: uc.icon,
+      cdBorder: cd.border, cdBg: cd.bg, cdFg: cd.fg, cdIcon: cd.icon,
+      suDisabled: !suOk, suBg: suOk ? '#2B63CC' : '#E3E7ED', suFg: suOk ? '#fff' : '#6B7686'
+    };
+  }
+}
+</script>
+</body>
+</html>
