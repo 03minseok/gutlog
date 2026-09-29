@@ -38,7 +38,7 @@ public class UserService {
     //로그인
     public UserResponse login(LoginRequest request){
         User user = userRepository.findByUsername(request.username())
-                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(()-> new BusinessException(ErrorCode.LOGIN_FAILED));
         if(!passwordEncoder.matches(request.password(), user.getPassword())){
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
