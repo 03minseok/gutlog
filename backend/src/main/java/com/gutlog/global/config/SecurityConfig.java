@@ -1,5 +1,6 @@
 package com.gutlog.global.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/signup", "/api/users/login", "/api/users/check-username", "/h2-console/**").permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(e -> e
+                        // 401: 토큰이 없거나 만료/위조 됨
+                        .authenticationEntryPoint((request, response, ex) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        // 403: 인증은 됐지만 권한이 없음
+                        .accessDeniedHandler((request, response, ex) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN)))
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
