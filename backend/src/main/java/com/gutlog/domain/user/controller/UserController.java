@@ -2,6 +2,7 @@ package com.gutlog.domain.user.controller;
 
 import com.gutlog.domain.user.dto.request.LoginRequest;
 import com.gutlog.domain.user.dto.request.SignupRequest;
+import com.gutlog.domain.user.dto.response.LoginResponse;
 import com.gutlog.domain.user.dto.response.UserResponse;
 import com.gutlog.domain.user.service.UserService;
 import com.gutlog.global.response.ApiResponse;
@@ -17,7 +18,7 @@ public class UserController {
 
     //로그인
     @PostMapping("/login")
-    public ApiResponse<UserResponse> login(@Valid @RequestBody LoginRequest request){
+    public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request){
         return ApiResponse.success(userService.login(request));
     }
 

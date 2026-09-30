@@ -2,9 +2,11 @@ package com.gutlog.domain.user.service;
 
 import com.gutlog.domain.user.dto.request.LoginRequest;
 import com.gutlog.domain.user.dto.request.SignupRequest;
+import com.gutlog.domain.user.dto.response.LoginResponse;
 import com.gutlog.domain.user.dto.response.UserResponse;
 import com.gutlog.domain.user.entity.User;
 import com.gutlog.domain.user.repository.UserRepository;
+import com.gutlog.global.config.JwtProvider;
 import com.gutlog.global.exception.BusinessException;
 import com.gutlog.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     //회원가입
     @Transactional
@@ -36,12 +39,15 @@ public class UserService {
     }
 
     //로그인
-    public UserResponse login(LoginRequest request){
+    public LoginResponse login(LoginRequest request){
         User user = userRepository.findByUsername(request.username())
                 .orElseThrow(()-> new BusinessException(ErrorCode.LOGIN_FAILED));
+
         if(!passwordEncoder.matches(request.password(), user.getPassword())){
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
-        return UserResponse.fromEntity(user);
+
+        String accessToken = jwtProvider.createToken(user.getId());
+        return LoginResponse.of(accessToken, UserResponse.fromEntity(user));
     }
 }
