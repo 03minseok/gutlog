@@ -50,4 +50,11 @@ public class UserService {
         String accessToken = jwtProvider.createToken(user.getId());
         return LoginResponse.of(accessToken, UserResponse.fromEntity(user));
     }
+
+    // me
+    public UserResponse getMyInfo(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return UserResponse.fromEntity(user);
+    }
 }

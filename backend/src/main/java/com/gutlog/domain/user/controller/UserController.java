@@ -8,6 +8,7 @@ import com.gutlog.domain.user.service.UserService;
 import com.gutlog.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,5 +33,11 @@ public class UserController {
     @PostMapping("/signup")
     public ApiResponse<UserResponse> signup(@Valid @RequestBody SignupRequest request){
         return ApiResponse.success(userService.signup(request));
+    }
+
+    //내 정보 조회
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> getMyInfo(@AuthenticationPrincipal Long userId){
+        return ApiResponse.success(userService.getMyInfo(userId));
     }
 }
