@@ -28,7 +28,7 @@ public class MealRecord extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime eatenAt;
 
-    protected MealRecord(User user, String content, LocalDateTime eatenAt) {
+    private MealRecord(User user, String content, LocalDateTime eatenAt) {
         this.user = user;
         this.content = content;
         this.eatenAt = eatenAt;
