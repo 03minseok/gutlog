@@ -23,18 +23,14 @@ public class MealRecord extends BaseTimeEntity {
     private User user;
 
     @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
     private LocalDateTime eatenAt;
 
-    private MealRecord(User user, String content, LocalDateTime eatenAt) {
+    private MealRecord(User user, LocalDateTime eatenAt) {
         this.user = user;
-        this.content = content;
         this.eatenAt = eatenAt;
     }
 
-    public static MealRecord create(User user, String content, LocalDateTime eatenAt) {
-        return new MealRecord(user, content, eatenAt);
+    public static MealRecord create(User user, LocalDateTime eatenAt) {
+        return new MealRecord(user, eatenAt);
     }
 }
