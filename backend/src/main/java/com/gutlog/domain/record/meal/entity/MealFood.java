@@ -28,6 +28,10 @@ public class MealFood extends BaseTimeEntity {
         this.mealRecord = mealRecord;
     }
 
+    public void update(Food food){
+        this.food = food;
+    }
+
     public static MealFood of(Food food, MealRecord mealRecord) {
         return new MealFood(food, mealRecord);
     }

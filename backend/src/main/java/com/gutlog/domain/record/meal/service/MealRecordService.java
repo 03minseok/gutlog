@@ -38,21 +38,13 @@ public class MealRecordService {
         User user = userRepository.findById(userId).orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_FOUND));
         MealRecord mealRecord = request.toEntity(user);
         mealRecordRepository.save(mealRecord);
-        for (String food : request.foods()) {
-            Food thisFood = foodRepository.findByUserIdAndName(userId, food)
-                    .orElseGet(()->foodRepository.save(Food.create(user, food)));
-            mealFoodRepository.save(MealFood.of(thisFood, mealRecord));
-        }
+        linkFoods(mealRecord, request.foods());
         return MealResponse.of(mealRecord, request.foods());
     }
 
     //단일 조회
     public MealResponse getMealRecord(Long userId, Long mealRecordId){
-        MealRecord mealRecord = mealRecordRepository.findById(mealRecordId)
-            .orElseThrow(()->new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND));
-        if (!mealRecord.isOwnedBy(userId)) {
-            throw new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND);
-        }
+        MealRecord mealRecord = findMyMeal(userId, mealRecordId);
 			  List<String> foods = mealFoodRepository.findAllByMealRecordId(mealRecord.getId()).stream().map(f -> f.getFood().getName()).toList();
         return MealResponse.of(mealRecord, foods);
     }
@@ -97,17 +89,38 @@ public class MealRecordService {
     //삭제
     @Transactional
     public void deleteMealRecord(Long userId, Long mealRecordId){
+        MealRecord mealRecord = findMyMeal(userId, mealRecordId);
+        mealFoodRepository.deleteAllByMealRecord(mealRecord);
+        mealRecordRepository.delete(mealRecord);
+    }
+
+    //수정
+    @Transactional
+    public MealResponse editMealRecord(Long userId, Long mealRecordId, MealCreateRequest request){
+        // mealRecord
+        MealRecord mealRecord = findMyMeal(userId, mealRecordId);
+        mealRecord.update(request.eatenAt());
+
+        // mealFood
+        mealFoodRepository.deleteAllByMealRecord(mealRecord);
+        linkFoods(mealRecord, request.foods());
+        return MealResponse.of(mealRecord, request.foods());
+    }
+
+    private MealRecord findMyMeal(Long userId, Long mealRecordId) {
         MealRecord mealRecord = mealRecordRepository.findById(mealRecordId)
             .orElseThrow(()->new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND));
         if(!mealRecord.isOwnedBy(userId)){
             throw new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND);
         }
-        mealFoodRepository.deleteAllByMealRecord(mealRecord);
-        mealRecordRepository.deleteById(mealRecordId);
+        return mealRecord;
     }
 
-    //수정
-
-
-
+    private void linkFoods(MealRecord mealRecord, List<String> foods) {
+        for (String food : foods) {
+            Food thisFood = foodRepository.findByUserIdAndName(mealRecord.getUser().getId(), food)
+                .orElseGet(()->foodRepository.save(Food.create(mealRecord.getUser(), food)));
+            mealFoodRepository.save(MealFood.of(thisFood, mealRecord));
+        }
+    }
 }

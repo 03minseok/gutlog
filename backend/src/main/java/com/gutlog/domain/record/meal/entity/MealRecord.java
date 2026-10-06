@@ -34,6 +34,10 @@ public class MealRecord extends BaseTimeEntity {
         return new MealRecord(user, eatenAt);
     }
 
+    public void update(LocalDateTime eatenAt){
+        this.eatenAt = eatenAt;
+    }
+
     public boolean isOwnedBy(Long userId) {
         return this.user.getId().equals(userId);
     }
