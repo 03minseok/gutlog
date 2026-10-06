@@ -50,7 +50,7 @@ public class MealRecordService {
     }
 
     //전체 조회
-    public List<MealResponse> getAllMealRecordByUser(Long userId, LocalDate from, LocalDate to){
+    public List<MealResponse> getAllMealRecordByPeriod(Long userId, LocalDate from, LocalDate to){
         if(from.isAfter(to)){
             throw new BusinessException(ErrorCode.INVALID_DATE_RANGE);
         }
