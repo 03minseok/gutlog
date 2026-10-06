@@ -33,4 +33,8 @@ public class MealRecord extends BaseTimeEntity {
     public static MealRecord create(User user, LocalDateTime eatenAt) {
         return new MealRecord(user, eatenAt);
     }
+
+    public boolean isOwnedBy(Long userId) {
+        return this.user.getId().equals(userId);
+    }
 }

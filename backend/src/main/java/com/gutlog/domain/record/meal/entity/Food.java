@@ -21,8 +21,7 @@ public class Food extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    @Size(max = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     private Food(User user, String name) {
@@ -30,7 +29,11 @@ public class Food extends BaseTimeEntity {
         this.name = name;
     }
 
+    public static String normalizeName(String name) {
+        return name.strip();
+    }
+
     public static Food create(User user, String name) {
-        return new Food(user, name.strip());
+        return new Food(user, normalizeName(name));
     }
 }
