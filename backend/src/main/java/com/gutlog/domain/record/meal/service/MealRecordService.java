@@ -30,7 +30,7 @@ public class MealRecordService {
 
     //등록
     @Transactional
-    public MealResponse uploadMealRecord(MealCreateRequest request, Long userId){
+    public MealResponse uploadMealRecord(Long userId, MealCreateRequest request){
         User user = userRepository.findById(userId).orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_FOUND));
         MealRecord mealRecord = request.toEntity(user);
         mealRecordRepository.save(mealRecord);
@@ -43,7 +43,7 @@ public class MealRecordService {
     }
 
     //단일 조회
-    public MealResponse getMealRecord(Long mealRecordId, Long userId){
+    public MealResponse getMealRecord(Long userId, Long mealRecordId){
         MealRecord mealRecord = mealRecordRepository.findById(mealRecordId)
             .orElseThrow(()->new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND));
         if (!mealRecord.isOwnedBy(userId)) {
