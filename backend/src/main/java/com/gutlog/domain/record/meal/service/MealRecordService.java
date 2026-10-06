@@ -16,7 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,10 +58,56 @@ public class MealRecordService {
     }
 
     //전체 조회
+    public List<MealResponse> getAllMealRecordByUser(Long userId, LocalDate from, LocalDate to){
+        if(from.isAfter(to)){
+            throw new BusinessException(ErrorCode.INVALID_DATE_RANGE);
+        }
+        LocalDateTime start = from.atStartOfDay();
+        LocalDateTime end = to.plusDays(1).atStartOfDay();
 
+        // 기간 안의 내 식사 조회
+        List<MealRecord> meals = mealRecordRepository
+            .findAllByUserIdAndEatenAtGreaterThanEqualAndEatenAtLessThanOrderByEatenAtAsc(userId, start, end);
+
+        if(meals.isEmpty()){
+            return List.of();
+        }
+
+        // 식사 id만 뽑기
+        List<Long> mealIds = meals.stream()
+            .map(MealRecord::getId)
+            .toList();
+
+        // 그 식사들의 음식 연결을 한 번에 조회 (음식까지 같이)
+        List<MealFood> mealFoods = mealFoodRepository.findAllByMealRecordIdIn(mealIds);
+
+        // 식사 id별로 음식 이름 묶기
+        Map<Long, List<String>> foodsByMeal = mealFoods.stream()
+            .collect(Collectors.groupingBy(
+                mf -> mf.getMealRecord().getId(),
+                Collectors.mapping(mf -> mf.getFood().getName(), Collectors.toList())
+            ));
+
+        // 식사마다 응답 만들기 (DB 조회X)
+        return meals.stream()
+            .map(meal -> MealResponse.of(meal, foodsByMeal.getOrDefault(meal.getId(), List.of())))
+            .toList();
+    }
 
     //삭제
+    @Transactional
+    public void deleteMealRecord(Long userId, Long mealRecordId){
+        MealRecord mealRecord = mealRecordRepository.findById(mealRecordId)
+            .orElseThrow(()->new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND));
+        if(!mealRecord.isOwnedBy(userId)){
+            throw new BusinessException(ErrorCode.MEAL_RECORD_NOT_FOUND);
+        }
+        mealFoodRepository.deleteAllByMealRecord(mealRecord);
+        mealRecordRepository.deleteById(mealRecordId);
+    }
 
     //수정
+
+
 
 }

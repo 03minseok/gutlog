@@ -15,13 +15,21 @@ import org.springframework.web.bind.annotation.*;
 public class MealController {
 	private final MealRecordService mealRecordService;
 
+	//생성
 	@PostMapping
 	public ApiResponse<MealResponse> uploadMealRecord(@AuthenticationPrincipal Long userId, MealCreateRequest request){
 		return ApiResponse.success(mealRecordService.uploadMealRecord(userId, request));
 	}
 
+	//조회
 	@GetMapping("/{mealRecordId}")
 	public ApiResponse<MealResponse> getMealRecord(@AuthenticationPrincipal Long userId, @PathVariable Long mealRecordId){
 		return ApiResponse.success(mealRecordService.getMealRecord(userId, mealRecordId));
 	}
+
+	//전체조회
+
+	//삭제
+
+	//수정
 }

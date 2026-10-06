@@ -3,7 +3,6 @@ package com.gutlog.domain.record.meal.entity;
 import com.gutlog.domain.user.entity.User;
 import com.gutlog.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
