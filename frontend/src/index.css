@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+/*
+ * 디자인 토큰 — docs/design/README.md "Design Tokens" 값을 그대로 옮겼다.
+ * Tailwind 기본 색 팔레트는 모두 지우고(--color-*: initial) 시안 색만 쓴다.
+ * 그래서 bg-red-500 같은 기본 클래스는 동작하지 않는다.
+ */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-ink: #16202e;
+
+  --color-gray-700: #3f4a5a;
+  --color-gray-500: #6b7686;
+  --color-gray-400: #8a94a3;
+  --color-gray-300: #c9d0da;
+  --color-gray-200: #e3e7ed;
+  --color-gray-150: #e9edf2;
+  --color-gray-100: #f1f3f6;
+  --color-gray-50: #f7f9fb;
+
+  --color-blue-800: #16408c;
+  --color-blue-700: #1e4fa8;
+  --color-blue-600: #2b63cc;
+  --color-blue-300: #8fb0ec;
+  --color-blue-100: #e6eefb;
+  --color-blue-50: #f3f7fd;
+
+  --color-bowel: #0b6e8c;
+  --color-bowel-mid: #5bb5d0;
+  --color-bowel-soft: #9ed3e3;
+  --color-bowel-bg: #e3f3f8;
+
+  --color-meal: #1f7a4d;
+  --color-meal-mid: #6dbf93;
+  --color-meal-bg: #e5f4ec;
+
+  --color-med: #5b3fb8;
+  --color-med-mid: #a392e4;
+  --color-med-bg: #eeeafb;
+
+  --color-danger: #b42d32;
+  --color-danger-bg: #fceaea;
+  --color-danger-border: #f2c4c6;
+
+  --color-warn: #a34b0b;
+  --color-warn-bar: #d9772b;
+  --color-warn-bg: #fdf0e4;
+
+  --color-ok: #136b61;
+  --color-ok-bg: #e3f3f1;
+
+  --radius-input: 12px;
+  --radius-btn: 14px;
+  --radius-tile: 16px;
+  --radius-card: 20px;
+  --radius-sheet: 24px;
+
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+
+  --shadow-seg: 0 1px 3px rgba(22, 32, 46, 0.12);
+  --shadow-toast: 0 8px 20px rgba(22, 32, 46, 0.2);
+  --shadow-fab: 0 6px 16px rgba(43, 99, 204, 0.28);
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-gray-100 font-sans text-ink antialiased;
+  }
+
+  input,
+  button,
+  textarea {
+    font: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Material Symbols Rounded (weight 500, opsz 24) */
+.ms {
+  font-family: 'Material Symbols Rounded';
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  white-space: nowrap;
+  font-feature-settings: 'liga';
+  user-select: none;
+}
