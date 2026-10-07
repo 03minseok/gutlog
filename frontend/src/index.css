@@ -87,6 +87,22 @@
   }
 }
 
+/*
+ * 날짜·시간 입력: 브라우저 기본 달력·시계 아이콘을 투명하게 칸 전체로 넓힌다.
+ * 시안의 왼쪽 아이콘과 겹치지 않고 글자 공간이 생기며, 칸 어디를 눌러도 선택기가 열린다.
+ * (부모 label에 position: relative 필요)
+ */
+.picker-input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 /* Material Symbols Rounded (weight 500, opsz 24) */
 .ms {
   font-family: 'Material Symbols Rounded';

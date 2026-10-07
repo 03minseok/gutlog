@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../auth/AuthContext'
+import { toDateParam } from '../../lib/date'
+import { TodaySummaryCard } from './TodaySummaryCard'
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -10,8 +12,8 @@ function greeting(hour: number) {
 }
 
 /**
- * 홈. 오늘 날짜와 인사말만 보여준다.
- * 오늘의 기록 요약·빠른 기록·준비 중 카드는 기록 기능을 붙일 때 추가한다.
+ * 홈. 오늘 날짜, 인사말, 오늘의 기록 카드.
+ * 빠른 기록·준비 중 카드는 식사·복약·배변 기록이 모두 준비되면 추가한다.
  */
 export function HomePage() {
   const { user } = useAuth()
@@ -33,6 +35,7 @@ export function HomePage() {
           )}
         </h1>
       </div>
+      <TodaySummaryCard today={toDateParam(now)} />
     </div>
   )
 }
