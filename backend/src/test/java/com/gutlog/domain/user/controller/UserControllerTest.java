@@ -2,7 +2,6 @@ package com.gutlog.domain.user.controller;
 
 import com.gutlog.global.config.JwtProvider;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -107,13 +106,12 @@ class UserControllerTest {
         @Test
         @DisplayName("실패 - 비밀번호가 너무 짧으면 400")
         void shortPassword() throws Exception {
-            signup(PATIENT_SIGNUP.replace("password123", "short"))
+            signup(PATIENT_SIGNUP.replace("password123", "abc1234"))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("비밀번호는 8자 이상 20자 이하로 입력해주세요."));
         }
 
         @Test
-        @Disabled("리뷰 #1: 닉네임 중복 체크가 없어 DB unique 제약 위반 → 현재 500. 수정 후 활성화")
         @DisplayName("실패 - 닉네임 중복이면 409")
         void duplicateNickname() throws Exception {
             signup(PATIENT_SIGNUP).andExpect(status().isOk());
@@ -124,7 +122,6 @@ class UserControllerTest {
         }
 
         @Test
-        @Disabled("리뷰 #2: 잘못된 enum 값(HttpMessageNotReadableException)이 Exception 핸들러로 빠져 현재 500. 수정 후 활성화")
         @DisplayName("실패 - 존재하지 않는 role 값이면 400")
         void invalidRole() throws Exception {
             signup(PATIENT_SIGNUP.replace("PATIENT", "ADMIN"))
@@ -156,7 +153,6 @@ class UserControllerTest {
         }
 
         @Test
-        @Disabled("리뷰 #2: 필수 파라미터 누락(MissingServletRequestParameterException)이 현재 500. 수정 후 활성화")
         @DisplayName("username 파라미터가 없으면 400")
         void missingParam() throws Exception {
             mockMvc.perform(get("/api/users/check-username"))
@@ -177,7 +173,7 @@ class UserControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success").value(true))
                     .andExpect(jsonPath("$.data.accessToken").isString())
-                    .andExpect(jsonPath("$.data.userResponse.username").value("gutlog"));
+                    .andExpect(jsonPath("$.data.user.username").value("gutlog"));
         }
 
         @Test

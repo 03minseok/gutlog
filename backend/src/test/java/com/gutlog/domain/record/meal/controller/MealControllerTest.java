@@ -7,7 +7,6 @@ import com.gutlog.domain.user.repository.UserRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -152,7 +151,6 @@ class MealControllerTest {
         }
 
         @Test
-        @Disabled("유저 리뷰 #2와 같은 원인: 날짜 형식 오류(HttpMessageNotReadableException)가 현재 500. 수정 후 활성화")
         @DisplayName("실패 - 식사 시간 형식이 잘못되면 400")
         void invalidEatenAtFormat() throws Exception {
             create(myToken, mealJson("2026/10/06 08:30", "밥"))
@@ -237,7 +235,6 @@ class MealControllerTest {
         }
 
         @Test
-        @Disabled("유저 리뷰 #2와 같은 원인: 필수 파라미터 누락이 현재 500. 수정 후 활성화")
         @DisplayName("실패 - from/to가 없으면 400")
         void missingParams() throws Exception {
             mockMvc.perform(get(BASE).header("Authorization", myToken))

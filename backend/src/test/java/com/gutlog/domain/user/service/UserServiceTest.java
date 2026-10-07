@@ -136,8 +136,8 @@ class UserServiceTest {
             LoginResponse response = userService.login(request);
 
             assertThat(response.accessToken()).isEqualTo("jwt-token");
-            assertThat(response.userResponse().id()).isEqualTo(1L);
-            assertThat(response.userResponse().username()).isEqualTo("gutlog");
+            assertThat(response.user().id()).isEqualTo(1L);
+            assertThat(response.user().username()).isEqualTo("gutlog");
         }
 
         @Test
