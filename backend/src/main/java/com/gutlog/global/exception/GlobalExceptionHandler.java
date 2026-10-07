@@ -4,9 +4,12 @@ import com.gutlog.global.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 @Slf4j
@@ -17,6 +20,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getMessage()));
+    }
+
+    @ExceptionHandler({
+        HttpMessageNotReadableException.class,
+        MissingServletRequestParameterException.class,
+        MethodArgumentTypeMismatchException.class
+    })
+    public ResponseEntity<ApiResponse<Void>> handleBadRequestException(Exception e){
+        log.warn("잘못된 요청: {}", e.getMessage());
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ApiResponse.error("잘못된 요청입니다."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
