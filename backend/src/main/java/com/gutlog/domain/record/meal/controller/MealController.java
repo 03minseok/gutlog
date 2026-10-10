@@ -1,7 +1,9 @@
 package com.gutlog.domain.record.meal.controller;
 
 import com.gutlog.domain.record.meal.dto.request.MealCreateRequest;
+import com.gutlog.domain.record.meal.dto.response.FoodResponse;
 import com.gutlog.domain.record.meal.dto.response.MealResponse;
+import com.gutlog.domain.record.meal.service.FoodService;
 import com.gutlog.domain.record.meal.service.MealRecordService;
 import com.gutlog.global.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealController {
 	private final MealRecordService mealRecordService;
+	private final FoodService foodService;
 
 	//생성
 	@PostMapping
@@ -47,5 +50,11 @@ public class MealController {
 	@PutMapping("/{mealRecordId}")
 	public ApiResponse<MealResponse> editMealRecord(@AuthenticationPrincipal Long userId, @PathVariable Long mealRecordId, @Valid @RequestBody MealCreateRequest request){
 		return ApiResponse.success(mealRecordService.editMealRecord(userId, mealRecordId, request));
+	}
+
+	//음식
+	@GetMapping("/foods")
+	public ApiResponse<List<FoodResponse>> getAllFoodsByUser(@AuthenticationPrincipal Long userId){
+		return ApiResponse.success(foodService.getAllFoodsByUserId(userId));
 	}
 }

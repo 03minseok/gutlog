@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "meal_record")
+@Table(name = "meal_record",
+    indexes = @Index(name="idx_meal_record_user_eaten", columnList = "user_id, eaten_at"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MealRecord extends BaseTimeEntity {
     @Id
