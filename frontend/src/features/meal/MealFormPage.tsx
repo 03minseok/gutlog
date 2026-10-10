@@ -10,7 +10,8 @@ import { NotFoundView } from '../../components/NotFoundView'
 import { useToast } from '../../components/toast/ToastContext'
 import { isValidDateParam, splitDateTime, toDateTimeParam, toTimeValue, todayParam } from '../../lib/date'
 import { FoodChipInput } from './FoodChipInput'
-import { addFoods } from './foods'
+import { addFoods, filterFoodSuggestions } from './foods'
+import { useMyFoods } from './useMyFoods'
 
 interface FormValues {
   date: string
@@ -55,6 +56,8 @@ export function MealFormPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  // 자동완성용 내 음식 목록 (화면 진입 시 한 번, 실패하면 빈 목록)
+  const myFoods = useMyFoods()
 
   useEffect(() => {
     if (mealId === null || invalidId) return
@@ -224,6 +227,7 @@ export function MealFormPage() {
             foods={values.foods}
             draft={draft}
             error={foodError}
+            suggestions={filterFoodSuggestions(myFoods, draft, values.foods)}
             onDraftChange={(text) => {
               setDraft(text)
               setFoodError(null)

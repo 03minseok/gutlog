@@ -4,6 +4,32 @@ export const FOOD_RULES = {
   maxLength: 50,
 }
 
+/** 자동완성 후보 개수: 입력 중이면 8개, 입력칸이 비었으면 자주 먹은 음식 5개 */
+export const SUGGESTION_LIMIT = {
+  typing: 8,
+  empty: 5,
+}
+
+/**
+ * 받아둔 내 음식 목록에서 자동완성 후보를 고른다.
+ * - 입력값은 앞뒤 공백을 무시하고, 그 글자가 포함된 음식을 찾는다. (영문 대소문자 무시)
+ * - 이미 칩으로 추가된 음식은 뺀다.
+ * - 서버가 준 순서(많이 먹은 순)를 그대로 유지한다.
+ */
+export function filterFoodSuggestions(allFoods: string[], query: string, exclude: string[]): string[] {
+  const q = query.trim().toLowerCase()
+  const limit = q ? SUGGESTION_LIMIT.typing : SUGGESTION_LIMIT.empty
+  const excluded = new Set(exclude.map((name) => name.trim()))
+  const result: string[] = []
+  for (const name of allFoods) {
+    if (excluded.has(name)) continue
+    if (q && !name.toLowerCase().includes(q)) continue
+    result.push(name)
+    if (result.length === limit) break
+  }
+  return result
+}
+
 export interface AddFoodsResult {
   foods: string[]
   error: string | null
