@@ -25,7 +25,7 @@ public class BowelService {
 
 	//조회
 	public BowelResponse getBowelRecord(Long bowelRecordId, Long userId){
-		BowelRecord bowelRecord = findMyBowel(bowelRecordId, userId);
+		BowelRecord bowelRecord = findMyBowel(userId, bowelRecordId);
 		return BowelResponse.fromEntity(bowelRecord);
 	}
 
@@ -38,10 +38,7 @@ public class BowelService {
 		LocalDateTime end = to.plusDays(1).atStartOfDay();
 
 		List<BowelRecord> bowels = bowelRecordRepository.
-				findAllByUserIdAndBowelAtGreaterThanAndBowelAtLessThanOrderByBowelAtAsc(userId, start, end);
-		if(bowels.isEmpty()){
-			return List.of();
-		}
+				findAllByUserIdAndBowelAtGreaterThanEqualAndBowelAtLessThanOrderByBowelAtAsc(userId, start, end);
 		return bowels.stream().map(BowelResponse::fromEntity).toList();
 	}
 
@@ -57,19 +54,19 @@ public class BowelService {
 	//수정
 	@Transactional
 	public BowelResponse editBowelRecord(Long userId, Long bowelRecordId, BowelCreateRequest request){
-		BowelRecord bowelRecord = findMyBowel(bowelRecordId, userId);
-		bowelRecord.update(userId, request.bowelAt(), request.bleeding(), request.bowelCondition(), request.painLevel(), request.memo());
+		BowelRecord bowelRecord = findMyBowel(userId, bowelRecordId);
+		bowelRecord.update(request.bowelAt(), request.bleeding(), request.bowelCondition(), request.painLevel(), request.memo());
 		return BowelResponse.fromEntity(bowelRecord);
 	}
 
 	//삭제
 	@Transactional
 	public void deleteBowelRecord(Long userId, Long bowelRecordId){
-		BowelRecord bowelRecord = findMyBowel(bowelRecordId, userId);
+		BowelRecord bowelRecord = findMyBowel(userId, bowelRecordId);
 		bowelRecordRepository.delete(bowelRecord);
 	}
 
-	private BowelRecord findMyBowel(Long bowelRecordId, Long userId){
+	private BowelRecord findMyBowel(Long userId, Long bowelRecordId){
 		BowelRecord bowelRecord = bowelRecordRepository.findById(bowelRecordId).orElseThrow(()-> new BusinessException(ErrorCode.BOWEL_RECORD_NOT_FOUND));
 		if (!bowelRecord.isOwnedBy(userId)) {
 			throw new BusinessException(ErrorCode.BOWEL_RECORD_NOT_FOUND);

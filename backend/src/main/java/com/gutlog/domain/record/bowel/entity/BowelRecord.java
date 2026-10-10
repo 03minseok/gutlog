@@ -52,10 +52,7 @@ public class BowelRecord extends BaseTimeEntity {
 		return new BowelRecord(user, bowelAt, bleeding, bowelCondition, painLevel, memo);
 	}
 
-	public void update(Long userId, LocalDateTime bowelAt, boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
-		if(!isOwnedBy(userId)){
-			throw new IllegalArgumentException("User does not own this record.");
-		}
+	public void update(LocalDateTime bowelAt, boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
 		this.bowelAt = bowelAt;
 		this.bleeding = bleeding;
 		this.bowelCondition = bowelCondition;

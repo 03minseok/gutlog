@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface BowelRecordRepository extends JpaRepository<BowelRecord, Long> {
-	List<BowelRecord> findAllByUserIdAndBowelAtGreaterThanAndBowelAtLessThanOrderByBowelAtAsc(Long userId, LocalDateTime start, LocalDateTime end);
+	List<BowelRecord> findAllByUserIdAndBowelAtGreaterThanEqualAndBowelAtLessThanOrderByBowelAtAsc(Long userId, LocalDateTime start, LocalDateTime end);
 }
