@@ -14,7 +14,9 @@ public enum ErrorCode {
     INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "D001", "날짜 범위가 올바르지 않습니다."),
 
     MEAL_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "식사 기록을 찾을 수 없습니다."),
-    FOOD_NOT_FOUND(HttpStatus.NOT_FOUND, "F001", "음식을 찾을 수 없습니다.");
+    FOOD_NOT_FOUND(HttpStatus.NOT_FOUND, "F001", "음식을 찾을 수 없습니다."),
+
+    BOWEL_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "B001", "배변 기록을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
