@@ -86,7 +86,7 @@ class BowelServiceTest {
             BowelRecord saved = captor.getValue();
             assertThat(saved.getUser()).isSameAs(user);
             assertThat(saved.getBowelAt()).isEqualTo(BOWEL_AT);
-            assertThat(saved.isBleeding()).isTrue();
+            assertThat(saved.getBleeding()).isTrue();
             assertThat(saved.getBowelCondition()).isEqualTo(BristolType.TYPE_6);
             assertThat(saved.getPainLevel()).isEqualTo(7);
             assertThat(saved.getMemo()).isEqualTo("복통");
@@ -218,7 +218,7 @@ class BowelServiceTest {
             BowelResponse response = bowelService.editBowelRecord(USER_ID, 10L, request(newTime));
 
             assertThat(bowel.getBowelAt()).isEqualTo(newTime);
-            assertThat(bowel.isBleeding()).isTrue();
+            assertThat(bowel.getBleeding()).isTrue();
             assertThat(bowel.getBowelCondition()).isEqualTo(BristolType.TYPE_6);
             assertThat(bowel.getPainLevel()).isEqualTo(7);
             assertThat(bowel.getMemo()).isEqualTo("복통");

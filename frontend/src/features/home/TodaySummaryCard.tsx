@@ -1,22 +1,29 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { bowelApi } from '../../api/bowel'
 import { mealApi } from '../../api/meal'
 import { Icon } from '../../components/Icon'
+import { BleedingBadge } from '../bowel/BleedingBadge'
 
 /**
  * 오늘의 기록 카드 (홈 시안). 요약 API가 아직 없어서
- * 식사는 오늘 하루 기간 조회 결과의 개수로 계산하고, 복약·배변은 API가 생길 때까지 '–'로 비워둔다.
+ * 식사·배변은 오늘 하루 기간 조회 결과의 개수로 계산하고, 복약은 API가 생길 때까지 '–'로 비워둔다.
+ * 오늘 혈변 기록이 하나라도 있으면 배변 칸에 혈변 배지를 붙인다.
  */
 export function TodaySummaryCard({ today }: { today: string }) {
   const [mealCount, setMealCount] = useState<number | null>(null)
+  const [bowel, setBowel] = useState<{ count: number; bleeding: number } | null>(null)
 
   useEffect(() => {
     let cancelled = false
+    // 실패하면 '–' 그대로 둔다. 401은 인터셉터가 처리한다.
     mealApi
       .listByPeriod(today, today)
       .then((meals) => !cancelled && setMealCount(meals.length))
-      .catch(() => {
-        // 실패하면 '–' 그대로 둔다. 401은 인터셉터가 처리한다.
-      })
+      .catch(() => {})
+    bowelApi
+      .listByPeriod(today, today)
+      .then((bowels) => !cancelled && setBowel({ count: bowels.length, bleeding: bowels.filter((b) => b.bleeding).length }))
+      .catch(() => {})
     return () => {
       cancelled = true
     }
@@ -35,7 +42,12 @@ export function TodaySummaryCard({ today }: { today: string }) {
           <Empty />
         </Column>
         <Column icon="water_drop" label="배변" color="text-bowel" className="border-l border-gray-100 pl-3">
-          <Empty />
+          {bowel === null ? <Empty /> : <Count value={bowel.count} unit="회" />}
+          {bowel !== null && bowel.bleeding > 0 && (
+            <span className="self-start">
+              <BleedingBadge label={`혈변 ${bowel.bleeding}회`} />
+            </span>
+          )}
         </Column>
       </div>
     </section>

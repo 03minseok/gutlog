@@ -69,7 +69,7 @@ class BowelRecordRepositoryTest {
         BowelRecord found = bowelRecordRepository.findById(saved.getId()).orElseThrow();
 
         assertThat(found.getBowelCondition()).isEqualTo(BristolType.TYPE_7);
-        assertThat(found.isBleeding()).isTrue();
+        assertThat(found.getBleeding()).isTrue();
         assertThat(found.getPainLevel()).isEqualTo(9);
         assertThat(found.getMemo()).isEqualTo("설사");
     }

@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { AuthProvider } from './auth/AuthProvider'
 import { GuestOnly, RequireAuth } from './auth/RequireAuth'
 import { ToastProvider } from './components/toast/ToastProvider'
+import { BowelFormPage } from './features/bowel/BowelFormPage'
 import { HomePage } from './features/home/HomePage'
 import { MealFormPage } from './features/meal/MealFormPage'
 import { MyPage } from './features/mypage/MyPage'
@@ -32,6 +33,8 @@ export default function App() {
               {/* 기록 입력 화면에는 하단 탭이 없다. */}
               <Route path="/record/meal/new" element={<MealFormPage />} />
               <Route path="/record/meal/:id/edit" element={<MealFormPage />} />
+              <Route path="/record/bowel/new" element={<BowelFormPage />} />
+              <Route path="/record/bowel/:id/edit" element={<BowelFormPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -65,3 +65,8 @@ export function relativeDayLabel(dateParam: string, today: string = todayParam()
   if (dateParam === addDays(today, -1)) return '어제'
   return null
 }
+
+/** 'yyyy-MM-dd'끼리 비교: date가 today보다 뒤면 true */
+export function isFutureDate(date: string, today: string): boolean {
+  return date > today
+}

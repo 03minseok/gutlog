@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record BowelResponse(
 		Long id,
 		LocalDateTime bowelAt,
-		boolean bleeding,
+		Boolean bleeding,
 		BristolType bowelCondition,
 		Integer painLevel,
 		String memo
@@ -17,7 +17,7 @@ public record BowelResponse(
 		return new BowelResponse(
 				bowelRecord.getId(),
 				bowelRecord.getBowelAt(),
-				bowelRecord.isBleeding(),
+				bowelRecord.getBleeding(),
 				bowelRecord.getBowelCondition(),
 				bowelRecord.getPainLevel(),
 				bowelRecord.getMemo()

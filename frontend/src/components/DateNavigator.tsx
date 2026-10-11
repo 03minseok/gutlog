@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { Icon } from '../../components/Icon'
-import { addDays, formatDateLabel, relativeDayLabel } from '../../lib/date'
+import { Icon } from './Icon'
+import { addDays, formatDateLabel, relativeDayLabel } from '../lib/date'
 
 interface DateNavigatorProps {
   /** 'yyyy-MM-dd' */

@@ -11,7 +11,8 @@ public record BowelCreateRequest(
 		@NotNull(message = "배변 시간은 필수입니다.")
 		LocalDateTime bowelAt,
 
-		boolean bleeding,
+		@NotNull(message = "혈변 여부는 필수입니다.")
+		Boolean bleeding,
 
 		@NotNull(message = "배변 상태는 필수입니다.")
 		BristolType bowelCondition,

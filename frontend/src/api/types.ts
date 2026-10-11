@@ -18,3 +18,9 @@ export class ApiError extends Error {
     this.status = status
   }
 }
+
+/** 404 (없는 기록, 또는 남의 기록) */
+export const isNotFound = (err: unknown) => err instanceof ApiError && err.status === 404
+
+/** 화면에 보여줄 오류 문구. ApiError가 아니면 fallback */
+export const messageOf = (err: unknown, fallback: string) => (err instanceof ApiError ? err.message : fallback)

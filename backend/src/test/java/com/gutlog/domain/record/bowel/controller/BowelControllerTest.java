@@ -146,6 +146,18 @@ class BowelControllerTest {
         }
 
         @Test
+        @DisplayName("실패 - 혈변 여부가 없으면 400 (false로 저장되지 않는다)")
+        void noBleeding() throws Exception {
+            create(myToken, """
+                    {"bowelAt": "2026-10-06T08:30:00", "bowelCondition": "TYPE_4", "painLevel": 0}
+                    """)
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("혈변 여부는 필수입니다."));
+
+            assertThat(bowelRecordRepository.count()).isZero();
+        }
+
+        @Test
         @DisplayName("실패 - 배변 상태가 없으면 400")
         void noBowelCondition() throws Exception {
             create(myToken, """

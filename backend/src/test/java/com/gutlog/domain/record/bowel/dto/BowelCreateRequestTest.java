@@ -69,6 +69,13 @@ class BowelCreateRequestTest {
     }
 
     @Test
+    @DisplayName("혈변 여부가 없으면 실패")
+    void bleedingNull() {
+        assertThat(messages(new BowelCreateRequest(BOWEL_AT, null, BristolType.TYPE_4, 0, null)))
+                .containsExactly("혈변 여부는 필수입니다.");
+    }
+
+    @Test
     @DisplayName("배변 상태가 없으면 실패")
     void bowelConditionNull() {
         assertThat(messages(new BowelCreateRequest(BOWEL_AT, false, null, 0, null)))
