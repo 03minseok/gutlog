@@ -27,7 +27,7 @@ public class BowelRecord extends BaseTimeEntity {
 	private LocalDateTime bowelAt;
 
 	@Column(nullable = false)
-	private boolean bleeding;
+	private Boolean bleeding;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -39,7 +39,7 @@ public class BowelRecord extends BaseTimeEntity {
 	@Column(length = 500)
 	private String memo;
 
-	private BowelRecord(User user, LocalDateTime bowelAt, boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
+	private BowelRecord(User user, LocalDateTime bowelAt, Boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
 		this.user = user;
 		this.bowelAt = bowelAt;
 		this.bleeding = bleeding;
@@ -48,11 +48,11 @@ public class BowelRecord extends BaseTimeEntity {
 		this.memo = memo;
 	}
 
-	public static BowelRecord create(User user, LocalDateTime bowelAt, boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
+	public static BowelRecord create(User user, LocalDateTime bowelAt, Boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
 		return new BowelRecord(user, bowelAt, bleeding, bowelCondition, painLevel, memo);
 	}
 
-	public void update(LocalDateTime bowelAt, boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
+	public void update(LocalDateTime bowelAt, Boolean bleeding, BristolType bowelCondition, Integer painLevel, String memo) {
 		this.bowelAt = bowelAt;
 		this.bleeding = bleeding;
 		this.bowelCondition = bowelCondition;
