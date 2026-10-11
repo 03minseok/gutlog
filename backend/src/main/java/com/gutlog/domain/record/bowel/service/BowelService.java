@@ -24,7 +24,7 @@ public class BowelService {
 	private final UserRepository userRepository;
 
 	//조회
-	public BowelResponse getBowelRecord(Long bowelRecordId, Long userId){
+	public BowelResponse getBowelRecord(Long userId, Long bowelRecordId){
 		BowelRecord bowelRecord = findMyBowel(userId, bowelRecordId);
 		return BowelResponse.fromEntity(bowelRecord);
 	}
