@@ -8,45 +8,34 @@ interface BleedingChoiceProps {
 }
 
 const OPTIONS = [
-  { value: false, label: '없음' },
-  { value: true, label: '있음' },
+  { value: false, label: '없음', note: '보이지 않았어요', icon: 'do_not_disturb_on' },
+  { value: true, label: '있음', note: '피가 섞여 있었어요', icon: 'water_drop' },
 ] as const
 
 /**
- * 혈변 — 행 전체 카드(min-h 64, rounded-tile, 1.5px). 시안은 토글(기본 꺼짐)이지만,
- * "고르지 않음"을 표현하려고 오른쪽에 없음/있음 2칸 선택을 둔다. 기본값 없음.
- * 있음: danger-bg / danger-border, 아이콘·제목 danger.
+ * 혈변 — "없음 / 있음" 2칸 큰 선택(min-h 56). 기본값 없음: 고르지 않으면 저장할 수 없다.
+ * 없음 선택: sky-100 면 + sky-700 테두리 + check_circle.
+ * 있음 선택: blood-bg 면 + blood 테두리 + 채운 물방울 + blood 글자. (빨강은 혈변에만 쓴다)
+ * 응급 기호는 쓰지 않는다 — 눈에 띄되 불안을 키우지 않게.
  */
 export function BleedingChoice({ value, onChange }: BleedingChoiceProps) {
   const titleId = useId()
-  const bleeding = value === true
-  const description = value === null ? '피가 보였는지 골라 주세요' : bleeding ? '피가 섞여 있었어요' : '피가 보이지 않았어요'
 
   return (
-    <div
-      className={
-        'flex min-h-16 items-center justify-between gap-3 rounded-tile border-[1.5px] py-2.5 pr-2.5 pl-4 transition-colors ' +
-        (bleeding ? 'border-danger-border bg-danger-bg' : 'border-gray-200 bg-white')
-      }
-    >
-      <span className="flex min-w-0 items-center gap-2.5">
-        <Icon name="emergency" size={22} className={`flex-none ${bleeding ? 'text-danger' : 'text-gray-300'}`} />
-        <span className="flex min-w-0 flex-col gap-0.5">
-          <span id={titleId} className={`text-[16px] font-bold ${bleeding ? 'text-danger' : 'text-ink'}`}>
-            혈변
-          </span>
-          <span className="text-[13px] text-gray-500">{description}</span>
-        </span>
+    <div className="flex flex-col gap-2">
+      <span id={titleId} className="text-body font-bold">
+        혈변이 있었나요?
       </span>
-
-      <div role="radiogroup" aria-labelledby={titleId} className="flex flex-none gap-1 rounded-btn bg-gray-100 p-1">
+      <div role="radiogroup" aria-labelledby={titleId} className="grid grid-cols-2 gap-2">
         {OPTIONS.map((option) => {
           const selected = option.value === value
           const tone = !selected
-            ? 'bg-transparent font-medium text-gray-700'
+            ? 'border-gray-300 bg-white hover:border-gray-400'
             : option.value
-              ? 'bg-danger font-bold text-white shadow-seg'
-              : 'bg-white font-bold text-blue-700 shadow-seg'
+              ? 'border-blood bg-blood-bg'
+              : 'border-sky-700 bg-sky-100'
+          const iconName = selected && !option.value ? 'check_circle' : option.icon
+          const iconColor = !selected ? 'text-gray-400' : option.value ? 'text-blood' : 'text-sky-700'
           return (
             <button
               key={option.label}
@@ -54,9 +43,13 @@ export function BleedingChoice({ value, onChange }: BleedingChoiceProps) {
               role="radio"
               aria-checked={selected}
               onClick={() => onChange(option.value)}
-              className={`h-10 w-[60px] rounded-[10px] text-[15px] transition-colors ${tone}`}
+              className={`flex min-h-14 items-center gap-2.5 rounded-tile border-[1.5px] px-3 text-left transition-colors ${tone}`}
             >
-              {option.label}
+              <Icon name={iconName} size={22} filled={selected} className={`flex-none ${iconColor}`} />
+              <span className="flex min-w-0 flex-col">
+                <span className={`text-body font-bold ${selected && option.value ? 'text-blood' : 'text-ink'}`}>{option.label}</span>
+                <span className="text-caption text-gray-700">{option.note}</span>
+              </span>
             </button>
           )
         })}

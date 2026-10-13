@@ -23,10 +23,14 @@ export const PAIN_MAX = 10
 /** 백엔드 검증 @Size(max = 500)과 같다. */
 export const MEMO_MAX_LENGTH = 500
 
-/** 시안: 0 없음, 1–3 약함 (blue-700), 4–6 중간 (warn), 7–10 심함 (danger) */
+/**
+ * 통증 정도 문구. 빨강은 혈변 전용이라 통증은 색으로 구분하지 않고 문구로만 전달한다.
+ * 0 없음, 1–3 약함, 4–6 중간, 7–10 심함
+ */
 export function painLevelInfo(level: number): { label: string; color: string } {
-  if (level === 0) return { label: '없음', color: 'text-blue-700' }
-  if (level <= 3) return { label: '약함', color: 'text-blue-700' }
-  if (level <= 6) return { label: '중간', color: 'text-warn' }
-  return { label: '심함', color: 'text-danger' }
+  const color = 'text-gray-700'
+  if (level === 0) return { label: '없음', color }
+  if (level <= 3) return { label: '약함', color }
+  if (level <= 6) return { label: '중간', color }
+  return { label: '심함', color }
 }

@@ -34,14 +34,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col gap-10 bg-white px-6 pt-14 pb-8">
-      <div className="flex flex-col items-center gap-3.5">
-        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-[22px] bg-blue-600 text-[38px] font-bold tracking-[-0.02em] text-white">
-          g
+    <div className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col gap-9 bg-white px-5 pt-16 pb-[max(24px,env(safe-area-inset-bottom))]">
+      <div className="flex flex-col gap-4">
+        {/* 로고 자리: 앱 이름 첫 글자. 출시 전 이름이 바뀌면 함께 바꾼다. */}
+        <div
+          aria-hidden="true"
+          className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-sky-100 text-heading font-bold text-ink"
+        >
+          것
         </div>
-        <div className="flex flex-col items-center gap-1">
-          <h1 className="text-[28px] font-bold tracking-[-0.02em]">것로그</h1>
-          <p className="text-[15px] text-gray-500">매일의 장 건강을 기록해요</p>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-title font-bold tracking-[-0.015em]">것로그</h1>
+          <p className="text-body text-gray-500">매일의 장 건강을 가볍게 기록해요</p>
         </div>
       </div>
 
@@ -50,7 +54,6 @@ export function LoginPage() {
           label="아이디"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="아이디 입력"
           autoComplete="username"
           autoCapitalize="none"
           spellCheck={false}
@@ -60,19 +63,22 @@ export function LoginPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호 입력"
           autoComplete="current-password"
         />
-        {error && <FieldHint tone="error">{error}</FieldHint>}
+        {error && (
+          <div className="rounded-input border border-error-border bg-error-bg px-3 py-2.5">
+            <FieldHint tone="error">{error}</FieldHint>
+          </div>
+        )}
         <Button type="submit" disabled={!canSubmit} className="mt-2">
           로그인
         </Button>
       </form>
 
       {/* 카카오·네이버 로그인, 아이디·비밀번호 찾기는 API가 없어 표시하지 않는다. (CLAUDE.md) */}
-      <div className="mt-auto flex items-center justify-center gap-1.5 pt-1 text-[15px] text-gray-500">
+      <div className="mt-auto flex items-center justify-center gap-1.5 pt-1 text-body text-gray-500">
         아직 회원이 아니신가요?
-        <Link to="/signup" className="px-1 py-3 font-bold text-blue-600 hover:text-blue-700 hover:underline">
+        <Link to="/signup" className="inline-flex min-h-11 items-center px-1 font-bold text-sky-700 hover:text-sky-800 hover:underline">
           회원가입
         </Link>
       </div>

@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import { mealApi, type Meal } from '../../api/meal'
 import { Icon } from '../../components/Icon'
 import { splitDateTime } from '../../lib/date'
-import { RecordSection } from '../record/RecordSection'
+import { EmptyWithLink, RecordSection } from '../record/RecordSection'
 import { useDayRecords } from '../record/useDayRecords'
 
 /** 하루치 식사 목록. 날짜가 바뀌면 다시 불러온다. */
@@ -14,7 +14,7 @@ export function MealList({ date }: { date: string }) {
       title="식사"
       icon="restaurant"
       iconBox="bg-meal-bg text-meal"
-      emptyMessage="이 날의 식사 기록이 없어요"
+      emptyMessage={<EmptyWithLink message="이 날의 식사 기록이 없어요" to={`/record/meal/new?date=${date}`} label="식사 기록하기" />}
       state={state}
       onRetry={reload}
       getKey={(meal) => meal.id}
@@ -23,23 +23,18 @@ export function MealList({ date }: { date: string }) {
   )
 }
 
+/** 식사 카드: 시간 + 음식 이름(가운뎃점으로 이어 씀). 음식을 칩으로 그리면 각각 누를 수 있어 보여서 글자로 쓴다. */
 function MealCard({ meal }: { meal: Meal }) {
   const { time } = splitDateTime(meal.eatenAt)
   return (
     <Link
       to={`/record/meal/${meal.id}/edit`}
       aria-label={`${time} 식사: ${meal.foods.join(', ')}. 수정하기`}
-      className="flex items-start gap-3 rounded-card border border-gray-200 bg-white py-4 pr-2 pl-5 hover:border-gray-300"
+      className="flex min-h-14 items-center gap-3 rounded-card border border-gray-200 bg-white py-3 pr-2 pl-4 hover:border-gray-300"
     >
-      <span className="w-[52px] flex-none pt-1.5 text-[17px] font-bold tabular-nums">{time}</span>
-      <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
-        {meal.foods.map((food) => (
-          <li key={food} className="max-w-full truncate rounded-full bg-meal-bg px-3 py-1.5 text-[14px] font-semibold text-meal">
-            {food}
-          </li>
-        ))}
-      </ul>
-      <Icon name="chevron_right" className="flex-none self-center text-gray-400" />
+      <span className="w-12 flex-none self-start text-body font-semibold tabular-nums">{time}</span>
+      <p className="min-w-0 flex-1 self-start text-body break-keep text-ink">{meal.foods.join(' · ')}</p>
+      <Icon name="chevron_right" size={20} className="flex-none text-gray-400" />
     </Link>
   )
 }

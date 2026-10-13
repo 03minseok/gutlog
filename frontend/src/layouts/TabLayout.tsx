@@ -16,8 +16,8 @@ export function TabLayout() {
 /** 탭 화면 상단 제목 (통계 시안 기준: 24/700, padding 12px 20px). */
 export function TabHeader({ title }: { title: string }) {
   return (
-    <header className="px-5 py-3">
-      <h1 className="text-[24px] font-bold tracking-[-0.015em]">{title}</h1>
+    <header className="px-4 py-3">
+      <h1 className="text-title font-bold tracking-[-0.015em]">{title}</h1>
     </header>
   )
 }

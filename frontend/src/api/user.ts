@@ -8,6 +8,8 @@ export type IbdType =
   | 'CROHNS_DISEASE'
   | 'INTESTINAL_BEHCETS'
   | 'INTESTINAL_TUBERCULOSIS'
+/** 권한. 회원 유형(Role)과 별개다. ADMIN은 DB에서 직접 지정하고, 바뀌면 다시 로그인해야 반영된다. */
+export type Authority = 'USER' | 'ADMIN'
 
 export interface User {
   id: number
@@ -15,6 +17,7 @@ export interface User {
   nickname: string
   role: Role
   ibdType: IbdType | null
+  authority: Authority
 }
 
 export interface SignupRequest {

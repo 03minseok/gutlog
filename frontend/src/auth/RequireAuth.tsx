@@ -18,3 +18,16 @@ export function GuestOnly() {
   if (isLoggedIn) return <Navigate to="/" replace />
   return <Outlet />
 }
+
+/**
+ * 관리자 화면. 일반 사용자는 홈으로 보낸다. (화면 흐름용이며 실제 권한 검사는 백엔드가 403으로 한다)
+ * 내 정보(/me)를 받기 전에는 판단할 수 없어서 잠시 비워 둔다.
+ */
+export function RequireAdmin() {
+  const { user } = useAuth()
+  if (!user) {
+    return <p className="px-4 py-10 text-center text-body text-gray-500">불러오는 중…</p>
+  }
+  if (user.authority !== 'ADMIN') return <Navigate to="/" replace />
+  return <Outlet />
+}

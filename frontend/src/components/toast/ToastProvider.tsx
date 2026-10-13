@@ -5,8 +5,9 @@ import { ToastContext } from './ToastContext'
 const DURATION_MS = 1800
 
 /**
- * 시안의 Toast: 하단 탭 위(bottom 108px), 좌우 20, min-h 52, rounded-btn, ink 배경,
- * 흰 글씨 15/500, check_circle 아이콘 #7FD6C9, 1.8초 후 사라짐.
+ * 토스트: 화면 위쪽(safe-area + 12px), 좌우 16, min-h 48, rounded-btn, ink 배경,
+ * 흰 글씨 15/500, check_circle 아이콘 sky-300, 1.8초 후 사라짐.
+ * 위쪽에 띄워 방금 저장한 목록 카드나 하단 버튼을 가리지 않는다.
  */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState<string | null>(null)
@@ -31,13 +32,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[108px] z-30 mx-auto max-w-[430px] px-5">
+      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 top-[max(12px,env(safe-area-inset-top))] z-50 mx-auto max-w-[430px] px-4">
         {message && (
           <div
             key={id}
-            className="flex min-h-[52px] items-center gap-2.5 rounded-btn bg-ink px-4 text-[15px] font-medium text-white shadow-toast"
+            className="flex min-h-12 items-center gap-2 rounded-btn bg-ink px-4 text-body font-medium text-white shadow-toast"
           >
-            <Icon name="check_circle" size={20} className="text-[#7FD6C9]" />
+            <Icon name="check_circle" size={20} filled className="flex-none text-sky-300" />
             {message}
           </div>
         )}

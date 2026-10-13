@@ -3,10 +3,11 @@ import { Icon } from './Icon'
 
 type Tone = 'neutral' | 'ok' | 'error'
 
+// 오류는 빨강(혈변 전용) 대신 황토색 + error 아이콘으로 표시한다.
 const TONE: Record<Tone, { color: string; icon: string }> = {
   neutral: { color: 'text-gray-500', icon: 'info' },
   ok: { color: 'text-ok', icon: 'check_circle' },
-  error: { color: 'text-danger', icon: 'error' },
+  error: { color: 'text-error', icon: 'error' },
 }
 
 interface FieldHintProps {
@@ -22,9 +23,9 @@ export function FieldHint({ tone = 'neutral', id, children }: FieldHintProps) {
     <span
       id={id}
       role={tone === 'error' ? 'alert' : undefined}
-      className={`flex items-center gap-1 text-[13px] font-medium ${color}`}
+      className={`flex items-start gap-1 text-label font-medium ${color}`}
     >
-      <Icon name={icon} size={16} />
+      <Icon name={icon} size={16} filled={tone !== 'neutral'} className="mt-px flex-none" />
       {children}
     </span>
   )

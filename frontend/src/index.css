@@ -1,74 +1,94 @@
 @import 'tailwindcss';
 
 /*
- * 디자인 토큰 — docs/design/README.md "Design Tokens" 값을 그대로 옮겼다.
- * Tailwind 기본 색 팔레트는 모두 지우고(--color-*: initial) 시안 색만 쓴다.
+ * 디자인 토큰 — docs/design/README.md "디자인 토큰" 기준 (모노 + 하늘).
+ * Tailwind 기본 색 팔레트는 모두 지우고(--color-*: initial) 아래 색만 쓴다.
  * 그래서 bg-red-500 같은 기본 클래스는 동작하지 않는다.
+ *
+ * 색 역할
+ * - ink: 본문 글자이자 주 버튼 색. 파란색 대신 먹색으로 절제한다.
+ * - sky: 강조 글자·링크·활성 탭(700), 선택된 면(100), 옅은 면(50). 파스텔은 면에만 쓴다.
+ * - blood: 혈변 전용. 다른 의미(오류·삭제·통증)에 쓰지 않는다.
+ * - error: 입력·요청 오류. 빨강 대신 황토색 + 아이콘·문구.
  */
 @theme {
   --color-*: initial;
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --color-ink: #16202e;
+  --color-ink: #1b2430;
+  --color-ink-hover: #2a3442;
+  --color-ink-pressed: #0f151d;
 
-  --color-gray-700: #3f4a5a;
-  --color-gray-500: #6b7686;
-  --color-gray-400: #8a94a3;
-  --color-gray-300: #c9d0da;
-  --color-gray-200: #e3e7ed;
-  --color-gray-150: #e9edf2;
-  --color-gray-100: #f1f3f6;
-  --color-gray-50: #f7f9fb;
+  --color-gray-700: #3e4753;
+  --color-gray-500: #5b6470; /* 보조 글자 — gray-50 위 5.5:1 */
+  --color-gray-450: #6b737e; /* placeholder — 흰색 위 4.8:1 */
+  --color-gray-400: #8b939e; /* 입력 테두리·비선택 아이콘 — 흰색 위 3.1:1 */
+  --color-gray-300: #c8cdd4;
+  --color-gray-200: #e4e7eb; /* 구분선 */
+  --color-gray-150: #e7e9ec; /* 비활성 버튼 면 */
+  --color-gray-100: #f0f2f5; /* 보조 면 */
+  --color-gray-50: #f4f5f7; /* 탭 화면 바탕 */
 
-  --color-blue-800: #16408c;
-  --color-blue-700: #1e4fa8;
-  --color-blue-600: #2b63cc;
-  --color-blue-300: #8fb0ec;
-  --color-blue-100: #e6eefb;
-  --color-blue-50: #f3f7fd;
+  --color-sky-800: #175a8f;
+  --color-sky-700: #1f6fae; /* 강조 글자·링크·활성 탭 — 흰색 위 5.3:1 */
+  --color-sky-300: #8cc6ef;
+  --color-sky-100: #d3ecfb; /* 선택된 면 */
+  --color-sky-50: #eaf5fd;
 
-  --color-bowel: #0b6e8c;
-  --color-bowel-mid: #5bb5d0;
-  --color-bowel-soft: #9ed3e3;
-  --color-bowel-bg: #e3f3f8;
-
-  --color-meal: #1f7a4d;
-  --color-meal-mid: #6dbf93;
-  --color-meal-bg: #e5f4ec;
-
-  --color-med: #5b3fb8;
+  --color-meal: #2c7a4b;
+  --color-meal-bg: #e2f3e8;
+  --color-bowel: #0e6e86;
+  --color-bowel-bg: #ddf2f6;
+  --color-med: #6550c0;
   --color-med-mid: #a392e4;
   --color-med-bg: #eeeafb;
 
-  --color-danger: #b42d32;
-  --color-danger-bg: #fceaea;
-  --color-danger-border: #f2c4c6;
+  --color-blood: #c0343d; /* 혈변 전용 */
+  --color-blood-bg: #fdecee;
+  --color-blood-border: #f2c3c7;
 
-  --color-warn: #a34b0b;
-  --color-warn-bar: #d9772b;
-  --color-warn-bg: #fdf0e4;
+  --color-error: #8a5300; /* 입력·요청 오류 */
+  --color-error-bg: #fdf1da;
+  --color-error-border: #e2bf7f;
 
   --color-ok: #136b61;
   --color-ok-bg: #e3f3f1;
 
-  --radius-input: 12px;
-  --radius-btn: 14px;
-  --radius-tile: 16px;
-  --radius-card: 20px;
-  --radius-sheet: 24px;
+  --radius-input: 10px;
+  --radius-btn: 12px;
+  --radius-tile: 12px;
+  --radius-card: 16px;
+  --radius-sheet: 20px;
 
   --font-sans: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
 
-  --shadow-seg: 0 1px 3px rgba(22, 32, 46, 0.12);
-  --shadow-toast: 0 8px 20px rgba(22, 32, 46, 0.2);
-  --shadow-fab: 0 6px 16px rgba(43, 99, 204, 0.28);
+  /* 글자 크기 8단계 — 이 밖의 크기는 쓰지 않는다. */
+  --text-num: 26px;
+  --text-num--line-height: 1;
+  --text-title: 22px;
+  --text-title--line-height: 1.36;
+  --text-heading: 18px;
+  --text-heading--line-height: 1.4;
+  --text-section: 16px;
+  --text-section--line-height: 1.45;
+  --text-body: 15px;
+  --text-body--line-height: 1.5;
+  --text-label: 13px;
+  --text-label--line-height: 1.45;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+  --text-tab: 11px;
+  --text-tab--line-height: 1.2;
+
+  --shadow-seg: 0 1px 2px rgba(27, 36, 48, 0.1);
+  --shadow-toast: 0 8px 24px rgba(27, 36, 48, 0.18);
 }
 
 @layer base {
   html,
   body {
-    @apply bg-gray-100 font-sans text-ink antialiased;
+    @apply bg-gray-200 font-sans text-body text-ink antialiased;
   }
 
   input,
@@ -79,7 +99,7 @@
 
   input::placeholder,
   textarea::placeholder {
-    @apply text-gray-400;
+    @apply text-gray-450;
   }
 
   button:not(:disabled) {

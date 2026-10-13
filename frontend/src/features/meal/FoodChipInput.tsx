@@ -21,6 +21,7 @@ interface FoodChipInputProps {
  * - 콤마나 엔터로 입력한 글자 그대로 칩을 만든다.
  * - 후보를 누르거나 ↑↓로 고르고 엔터를 치면 그 후보를 칩으로 만든다.
  * - 한글 조합 중에는 엔터·방향키를 무시한다. (조합 중 엔터를 처리하면 글자가 반만 들어가거나 두 번 추가된다)
+ * - 입력칸이 비어 있고 목록이 닫혀 있으면 "자주 먹은 음식"을 버튼으로 보여준다. (누르면 바로 칩으로 추가)
  */
 export function FoodChipInput({
   label,
@@ -100,24 +101,24 @@ export function FoodChipInput({
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={inputId} className="text-[15px] font-bold">
+      <label htmlFor={inputId} className="text-body font-bold">
         {label}
       </label>
       <div
         onClick={() => inputRef.current?.focus()}
         className={
-          'flex min-h-14 cursor-text flex-wrap items-center gap-2 rounded-input border-[1.5px] bg-white px-3 py-2.5 ' +
+          'flex min-h-12 cursor-text flex-wrap items-center gap-1.5 rounded-input border-[1.5px] bg-white px-2 py-1 ' +
           'transition-[border-color,box-shadow] focus-within:ring-[3px] ' +
           (error
-            ? 'border-danger focus-within:ring-danger-bg'
-            : 'border-gray-200 focus-within:border-blue-600 focus-within:ring-blue-100')
+            ? 'border-error focus-within:ring-error-bg'
+            : 'border-gray-400 focus-within:border-sky-700 focus-within:ring-sky-100')
         }
       >
         <ul className="contents" aria-label="입력한 음식">
           {foods.map((food, index) => (
             <li
               key={food}
-              className="flex h-9 max-w-full items-center gap-0.5 rounded-full bg-meal-bg pr-1 pl-3 text-[15px] font-semibold text-meal"
+              className="flex h-9 max-w-full items-center rounded-full bg-meal-bg pl-3 text-body font-semibold text-meal"
             >
               <span className="truncate">{food}</span>
               <button
@@ -127,9 +128,10 @@ export function FoodChipInput({
                   onRemove(index)
                 }}
                 aria-label={`${food} 삭제`}
-                className="flex h-8 w-8 flex-none items-center justify-center rounded-full hover:bg-white/60"
+                // 칩(36px)보다 크게 44×44 누르는 영역을 둔다.
+                className="-my-1 flex h-11 w-11 flex-none items-center justify-center rounded-full hover:bg-white/60"
               >
-                <Icon name="close" size={18} />
+                <Icon name="close" size={16} />
               </button>
             </li>
           ))}
@@ -158,13 +160,13 @@ export function FoodChipInput({
           placeholder={foods.length === 0 ? '예: 떡볶이, 우유' : '음식 추가'}
           aria-invalid={error ? true : undefined}
           aria-describedby={hintId}
-          className="h-9 min-w-[120px] flex-1 bg-transparent text-[17px] text-ink outline-none"
+          className="h-9 min-w-[120px] flex-1 bg-transparent px-1.5 text-body text-ink outline-none"
         />
       </div>
 
       {/* 후보 목록: 아래 내용을 밀어내며 펼친다. (스크롤 영역에 잘리거나 키보드에 가리지 않게) */}
       <div hidden={!open} className="overflow-hidden rounded-input border border-gray-200 bg-white py-1">
-        {query === '' && <p className="px-4 pt-2 pb-1 text-[13px] font-semibold text-gray-500">자주 먹은 음식</p>}
+        {query === '' && <p className="px-3.5 pt-2 pb-1 text-caption font-semibold text-gray-500">자주 먹은 음식</p>}
         <ul id={listId} role="listbox" aria-label="음식 추천">
           {open &&
             suggestions.map((name, index) => (
@@ -178,11 +180,11 @@ export function FoodChipInput({
                 onClick={() => select(name)}
                 onMouseEnter={() => setActiveIndex(index)}
                 className={
-                  'flex min-h-12 cursor-pointer items-center gap-3 px-4 text-[16px] ' +
-                  (index === active ? 'bg-blue-50 text-blue-700' : 'text-ink')
+                  'flex min-h-11 cursor-pointer items-center gap-2.5 px-3.5 text-body ' +
+                  (index === active ? 'bg-sky-100 text-ink' : 'text-ink')
                 }
               >
-                <Icon name={query === '' ? 'history' : 'search'} size={20} className="flex-none text-gray-400" />
+                <Icon name={query === '' ? 'history' : 'search'} size={18} className="flex-none text-gray-500" />
                 <span className="min-w-0 truncate">
                   <Highlight text={name} query={query} />
                 </span>
@@ -198,6 +200,28 @@ export function FoodChipInput({
           <FieldHint>콤마(,)나 엔터로 여러 개 입력할 수 있어요</FieldHint>
         )}
       </div>
+
+      {/* 자주 먹은 음식: 입력칸을 누르기 전에도 보여서 한 번에 추가할 수 있다. 입력칸이 열려 있으면 위 목록이 대신한다. */}
+      {!open && query === '' && suggestions.length > 0 && (
+        <div className="mt-2 flex flex-col gap-2">
+          <p className="text-caption font-semibold text-gray-500">자주 먹은 음식</p>
+          <ul className="flex flex-wrap gap-2" aria-label="자주 먹은 음식">
+            {suggestions.map((name) => (
+              <li key={name} className="max-w-full">
+                <button
+                  type="button"
+                  onClick={() => select(name)}
+                  aria-label={`${name} 추가`}
+                  className="flex min-h-11 max-w-full items-center gap-1 rounded-full border border-gray-300 bg-white pr-3.5 pl-2.5 text-body text-ink hover:border-gray-400"
+                >
+                  <Icon name="add" size={16} className="flex-none text-gray-500" />
+                  <span className="truncate">{name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }

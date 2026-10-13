@@ -168,7 +168,7 @@ export function BowelFormPage() {
       action={isEdit && <DeleteAction onClick={() => setConfirmOpen(true)} disabled={submitting || deleting} />}
     >
       <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-1 flex-col gap-7 overflow-y-auto px-5 pt-5 pb-6">
+        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pt-4 pb-6">
           <DateTimeFields
             date={values.date}
             time={values.time}
@@ -184,8 +184,8 @@ export function BowelFormPage() {
           <PainScale value={values.painLevel} onChange={(painLevel) => update({ painLevel })} />
 
           <div className="flex flex-col gap-2">
-            <label htmlFor={memoId} className="text-[15px] font-bold">
-              메모 <span className="font-medium text-gray-500">(선택)</span>
+            <label htmlFor={memoId} className="text-body font-bold">
+              메모 <span className="ml-1 text-caption font-medium text-gray-500">선택</span>
             </label>
             <textarea
               id={memoId}
@@ -195,15 +195,15 @@ export function BowelFormPage() {
               maxLength={MEMO_MAX_LENGTH}
               placeholder="급박감, 잔변감, 점액 등 특이사항"
               aria-describedby={memoCountId}
-              className="resize-none rounded-input border-[1.5px] border-gray-200 px-4 py-3.5 text-[16px] leading-[1.5] text-ink outline-none transition-[border-color,box-shadow] focus:border-blue-600 focus:ring-[3px] focus:ring-blue-100"
+              className="resize-none rounded-input border-[1.5px] border-gray-400 px-3.5 py-3 text-body text-ink outline-none transition-[border-color,box-shadow] focus:border-sky-700 focus:ring-[3px] focus:ring-sky-100"
             />
-            <span id={memoCountId} className="self-end text-[13px] font-medium text-gray-500 tabular-nums">
+            <span id={memoCountId} className="self-end text-caption font-medium text-gray-500 tabular-nums">
               {MEMO_MAX_LENGTH - values.memo.length}자 남음
             </span>
           </div>
         </div>
 
-        <div className="flex flex-none flex-col gap-2 border-t border-gray-100 px-5 pt-3 pb-8">
+        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-[max(16px,env(safe-area-inset-bottom))]">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {missing ?? '저장'}

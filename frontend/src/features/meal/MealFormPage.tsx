@@ -169,7 +169,7 @@ export function MealFormPage() {
       action={isEdit && <DeleteAction onClick={() => setConfirmOpen(true)} disabled={submitting || deleting} />}
     >
       <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-1 flex-col gap-7 overflow-y-auto px-5 pt-5 pb-6">
+        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pt-4 pb-6">
           <DateTimeFields
             date={values.date}
             time={values.time}
@@ -193,7 +193,7 @@ export function MealFormPage() {
           />
         </div>
 
-        <div className="flex flex-none flex-col gap-2 border-t border-gray-100 px-5 pt-3 pb-8">
+        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-[max(16px,env(safe-area-inset-bottom))]">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {hasFoods ? '저장' : '음식을 입력하세요'}

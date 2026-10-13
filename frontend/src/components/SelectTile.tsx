@@ -8,9 +8,9 @@ interface SelectTileProps {
 }
 
 /**
- * 큰 선택 타일 (min-h 88, rounded-tile).
- * 비선택: 1.5px gray-200 / 흰 배경, 선택: 2px blue-600 / blue-50 배경 / blue-700 글자 + check_circle.
- * 라디오 그룹 안에서 쓴다.
+ * 선택 타일 (min-h 64, rounded-tile). 라디오 그룹 안에서 쓴다.
+ * 비선택: 1.5px gray-300 / 흰 배경 / 빈 원 gray-400.
+ * 선택: 1.5px sky-700 / sky-100 배경 / check_circle sky-700 + 굵은 글자 — 색만으로 구분하지 않도록 아이콘을 바꾼다.
  */
 export function SelectTile({ title, description, selected, onSelect }: SelectTileProps) {
   return (
@@ -20,19 +20,20 @@ export function SelectTile({ title, description, selected, onSelect }: SelectTil
       aria-checked={selected}
       onClick={onSelect}
       className={
-        'flex min-h-[88px] flex-col justify-between gap-1.5 rounded-tile px-4 py-3.5 text-left transition-colors ' +
-        (selected ? 'border-2 border-blue-600 bg-blue-50' : 'border-[1.5px] border-gray-200 bg-white')
+        'flex min-h-16 flex-col justify-center gap-0.5 rounded-tile border-[1.5px] px-3.5 py-3 text-left transition-colors ' +
+        (selected ? 'border-sky-700 bg-sky-100' : 'border-gray-300 bg-white hover:border-gray-400')
       }
     >
       <span className="flex w-full items-center justify-between gap-2">
-        <span className={`text-[18px] font-bold ${selected ? 'text-blue-700' : 'text-ink'}`}>{title}</span>
+        <span className={`text-body ${selected ? 'font-bold' : 'font-semibold'} text-ink`}>{title}</span>
         <Icon
           name={selected ? 'check_circle' : 'radio_button_unchecked'}
-          size={22}
-          className={selected ? 'text-blue-700' : 'text-ink'}
+          size={20}
+          filled={selected}
+          className={selected ? 'text-sky-700' : 'text-gray-400'}
         />
       </span>
-      {description && <span className="text-[14px] text-gray-700">{description}</span>}
+      {description && <span className="text-caption text-gray-500">{description}</span>}
     </button>
   )
 }

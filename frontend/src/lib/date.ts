@@ -70,3 +70,23 @@ export function relativeDayLabel(dateParam: string, today: string = todayParam()
 export function isFutureDate(date: string, today: string): boolean {
   return date > today
 }
+
+/** 'yyyy-MM-dd' → '10월 8일' */
+export function formatShortDate(dateParam: string): string {
+  const date = parseDateParam(dateParam)
+  return date ? `${date.getMonth() + 1}월 ${date.getDate()}일` : dateParam
+}
+
+/** to - from 일 수 ('yyyy-MM-dd'끼리) */
+export function daysBetween(from: string, to: string): number {
+  const a = parseDateParam(from)
+  const b = parseDateParam(to)
+  if (!a || !b) return 0
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000)
+}
+
+/** 'yyyy-MM-dd' → '10월 8일 (목)' (입력칸 표시용) */
+export function formatDateWithDay(dateParam: string): string {
+  const date = parseDateParam(dateParam)
+  return date ? `${date.getMonth() + 1}월 ${date.getDate()}일 (${WEEKDAYS[date.getDay()]})` : dateParam
+}

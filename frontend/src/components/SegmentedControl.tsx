@@ -11,8 +11,8 @@ interface SegmentedControlProps<T extends string> {
 }
 
 /**
- * 트랙 gray-100, p-1, rounded-btn, gap-1. 항목 h-12, rounded-[10px].
- * 선택: 흰 배경 + blue-700 700 + shadow-seg / 비선택: gray-700 500.
+ * 트랙 gray-100, p-1, rounded-btn, gap-1. 항목 h-11, rounded-input.
+ * 선택: 흰 배경 + ink 700 + shadow-seg / 비선택: gray-500 500.
  */
 export function SegmentedControl<T extends string>({ label, options, value, onChange }: SegmentedControlProps<T>) {
   return (
@@ -32,8 +32,8 @@ export function SegmentedControl<T extends string>({ label, options, value, onCh
             aria-checked={selected}
             onClick={() => onChange(option.value)}
             className={
-              'h-12 rounded-[10px] text-[16px] transition-colors ' +
-              (selected ? 'bg-white font-bold text-blue-700 shadow-seg' : 'bg-transparent font-medium text-gray-700')
+              'h-11 rounded-input text-body transition-colors ' +
+              (selected ? 'bg-white font-bold text-ink shadow-seg' : 'bg-transparent font-medium text-gray-500 hover:text-ink')
             }
           >
             {option.label}

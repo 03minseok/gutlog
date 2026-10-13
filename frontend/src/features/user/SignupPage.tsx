@@ -53,6 +53,22 @@ export function SignupPage() {
     hasRequiredAgreements(agreements) &&
     !submitting
 
+  // 가입 버튼이 비활성일 때 무엇이 빠졌는지 버튼 문구로 알려준다. (화면 순서대로 첫 항목, 배변 기록 화면과 같은 방식)
+  const missing =
+    usernameCheck.state !== 'available'
+      ? '아이디 중복 확인을 해 주세요'
+      : !passwordOk
+        ? '비밀번호 조건을 확인해 주세요'
+        : !isValidNickname(nickname)
+          ? '닉네임을 확인해 주세요'
+          : role === null
+            ? '회원 유형을 선택해 주세요'
+            : isPatient && ibdType === null
+              ? '질환 종류를 선택해 주세요'
+              : !hasRequiredAgreements(agreements)
+                ? '필수 약관에 동의해 주세요'
+                : null
+
   function handleUsernameChange(value: string) {
     setUsername(value)
     // 아이디를 바꾸면 중복 확인을 다시 해야 한다.
@@ -111,14 +127,14 @@ export function SignupPage() {
       noValidate
       className="mx-auto flex h-dvh w-full max-w-[430px] flex-col bg-white"
     >
-      <header className="flex h-14 flex-none items-center px-2">
-        <Link to="/login" aria-label="뒤로" className="flex h-12 w-12 items-center justify-center rounded-input text-ink">
-          <Icon name="arrow_back_ios_new" />
+      <header className="flex h-13 flex-none items-center gap-1 border-b border-gray-200 px-1.5">
+        <Link to="/login" aria-label="뒤로" className="flex h-11 w-11 items-center justify-center rounded-input text-ink hover:bg-gray-100">
+          <Icon name="arrow_back_ios_new" size={20} />
         </Link>
-        <h1 className="text-[17px] font-semibold">회원가입</h1>
+        <h1 className="text-section font-bold">회원가입</h1>
       </header>
 
-      <div className="flex flex-1 flex-col gap-[22px] overflow-y-auto px-6 pt-3 pb-6">
+      <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pt-4 pb-6">
         <TextInput
           label="아이디"
           value={username}
@@ -163,7 +179,7 @@ export function SignupPage() {
         />
 
         <div className="flex flex-col gap-2">
-          <span className="text-[14px] font-semibold text-gray-700">
+          <span className="text-label font-semibold text-gray-700">
             회원 유형
           </span>
           <SegmentedControl label="회원 유형" options={ROLE_OPTIONS} value={role} onChange={setRole} />
@@ -171,29 +187,28 @@ export function SignupPage() {
 
         {isPatient && (
           <div className="flex flex-col gap-2">
-            <span className="text-[14px] font-semibold text-gray-700">질환 종류</span>
+            <span className="text-label font-semibold text-gray-700">질환 종류</span>
             <div role="radiogroup" aria-label="질환 종류" className="grid grid-cols-2 gap-2">
               {IBD_TYPE_OPTIONS.map((option) => (
                 <SelectTile
                   key={option.value}
                   title={option.label}
-                  description={option.description}
                   selected={ibdType === option.value}
                   onSelect={() => setIbdType(option.value)}
                 />
               ))}
             </div>
-            <span className="text-[13px] text-gray-500">선택한 질환에 맞춰 기록 항목이 구성돼요. 나중에 바꿀 수 있어요.</span>
+            <span className="text-caption text-gray-500">선택한 질환에 맞춰 기록 항목이 구성돼요. 나중에 바꿀 수 있어요.</span>
           </div>
         )}
 
         <TermsAgreement value={agreements} onChange={setAgreements} />
       </div>
 
-      <div className="flex flex-none flex-col gap-2 border-t border-gray-100 px-6 pt-3 pb-8">
+      <div className="flex flex-none flex-col gap-2 border-t border-gray-200 px-4 pt-2.5 pb-[max(16px,env(safe-area-inset-bottom))]">
         {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
         <Button type="submit" disabled={!canSubmit}>
-          가입하기
+          {missing ?? '가입하기'}
         </Button>
       </div>
     </form>

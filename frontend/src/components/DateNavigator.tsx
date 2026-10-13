@@ -32,7 +32,7 @@ export function DateNavigator({ date, max, onChange }: DateNavigatorProps) {
         type="button"
         onClick={() => onChange(addDays(date, -1))}
         aria-label="이전 날"
-        className="flex h-12 w-12 items-center justify-center rounded-input text-gray-700 hover:bg-gray-50"
+        className="flex h-11 w-11 items-center justify-center rounded-input text-gray-700 hover:bg-gray-100"
       >
         <Icon name="chevron_left" />
       </button>
@@ -41,12 +41,12 @@ export function DateNavigator({ date, max, onChange }: DateNavigatorProps) {
         <button
           type="button"
           onClick={openPicker}
-          className="flex h-12 items-center gap-2 rounded-input px-3 hover:bg-gray-50"
+          className="flex h-11 items-center gap-2 rounded-input px-3 hover:bg-gray-100"
           aria-label={`${formatDateLabel(date)}, 날짜 선택`}
         >
-          <span className="text-[17px] font-bold tabular-nums">{formatDateLabel(date)}</span>
+          <span className="text-section font-bold tabular-nums">{formatDateLabel(date)}</span>
           {relative && (
-            <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[13px] font-semibold text-blue-700">{relative}</span>
+            <span className="rounded-full bg-sky-100 px-2 py-0.5 text-caption font-semibold text-sky-800">{relative}</span>
           )}
         </button>
         <input
@@ -66,7 +66,7 @@ export function DateNavigator({ date, max, onChange }: DateNavigatorProps) {
         onClick={() => onChange(addDays(date, 1))}
         disabled={!canGoNext}
         aria-label="다음 날"
-        className="flex h-12 w-12 items-center justify-center rounded-input text-gray-700 hover:bg-gray-50 disabled:text-gray-300 disabled:hover:bg-transparent"
+        className="flex h-11 w-11 items-center justify-center rounded-input text-gray-700 hover:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-transparent"
       >
         <Icon name="chevron_right" />
       </button>

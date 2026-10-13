@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from 'react'
-import { Button } from '../../components/Button'
+import { Link } from 'react-router'
 import { FieldHint } from '../../components/FieldHint'
 import { Icon } from '../../components/Icon'
 import type { DayRecordsState } from './useDayRecords'
@@ -9,46 +9,75 @@ interface RecordSectionProps<T> {
   icon: string
   /** 아이콘 박스 색 (예: 'bg-meal-bg text-meal') */
   iconBox: string
-  emptyMessage: string
+  /** 빈 상태 안내 (문구 또는 안내 + 링크) */
+  emptyMessage: ReactNode
   state: DayRecordsState<T>
   onRetry: () => void
   /** 헤더의 "N회" 오른쪽에 붙는 요소 (예: 혈변 배지) */
   badge?: ReactNode
+  /** 헤더 숫자를 바꾼다. 기본은 "N회" (예: 복약은 "2 / 3") */
+  countLabel?: string
+  /** 헤더 오른쪽 끝 (예: "내 약 관리" 링크) */
+  action?: ReactNode
   getKey: (item: T) => number
   renderItem: (item: T) => ReactNode
 }
 
 /** 기록 탭의 하루치 섹션: 헤더(아이콘·제목·N회) + 로딩·오류(다시 시도)·빈 상태·카드 목록 */
-export function RecordSection<T>({ title, icon, iconBox, emptyMessage, state, onRetry, badge, getKey, renderItem }: RecordSectionProps<T>) {
+export function RecordSection<T>({
+  title,
+  icon,
+  iconBox,
+  emptyMessage,
+  state,
+  onRetry,
+  badge,
+  countLabel,
+  action,
+  getKey,
+  renderItem,
+}: RecordSectionProps<T>) {
   const titleId = useId()
   return (
     <section className="flex flex-col gap-3" aria-labelledby={titleId}>
       <div className="flex items-center gap-2 px-1">
-        <span className={`flex h-[30px] w-[30px] items-center justify-center rounded-[9px] ${iconBox}`}>
-          <Icon name={icon} size={18} />
+        <span className={`flex h-7 w-7 items-center justify-center rounded-[8px] ${iconBox}`}>
+          <Icon name={icon} size={16} />
         </span>
-        <h2 id={titleId} className="text-[17px] font-bold">
+        <h2 id={titleId} className="text-section font-bold">
           {title}
         </h2>
         {state.status === 'ready' && (
-          <span className="text-[15px] font-medium text-gray-500 tabular-nums">{state.items.length}회</span>
+          <span className="text-label font-medium text-gray-500 tabular-nums">{countLabel ?? `${state.items.length}회`}</span>
         )}
         {state.status === 'ready' && badge}
+        {action && <span className="ml-auto">{action}</span>}
       </div>
 
-      {state.status === 'loading' && <p className="px-1 py-6 text-center text-[15px] text-gray-500">불러오는 중…</p>}
+      {/* 불러오는 중: 카드 모양 자리만 잡아 두어 데이터가 와도 화면이 덜 출렁이게 한다. */}
+      {state.status === 'loading' && (
+        <div role="status" aria-label="불러오는 중" className="flex h-16 items-center gap-3 rounded-card border border-gray-200 bg-white px-4">
+          <span className="h-4 w-12 animate-pulse rounded-input bg-gray-100" />
+          <span className="h-4 flex-1 animate-pulse rounded-input bg-gray-100" />
+        </div>
+      )}
 
       {state.status === 'error' && (
-        <div className="flex flex-col items-start gap-3 rounded-card border border-gray-200 bg-white p-5">
+        <div className="flex min-h-14 items-center justify-between gap-2 rounded-card border border-error-border bg-error-bg py-1.5 pr-1.5 pl-4">
           <FieldHint tone="error">{state.message}</FieldHint>
-          <Button variant="outline" onClick={onRetry}>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="flex h-11 flex-none items-center gap-1 rounded-input px-3 text-label font-semibold text-ink hover:bg-white/70"
+          >
+            <Icon name="refresh" size={18} />
             다시 시도
-          </Button>
+          </button>
         </div>
       )}
 
       {state.status === 'ready' && state.items.length === 0 && (
-        <p className="rounded-card border border-gray-200 bg-white px-5 py-8 text-center text-[15px] text-gray-500">{emptyMessage}</p>
+        <div className="rounded-card border border-dashed border-gray-300 px-4 py-5 text-center text-body text-gray-500">{emptyMessage}</div>
       )}
 
       {state.status === 'ready' && state.items.length > 0 && (
@@ -59,5 +88,18 @@ export function RecordSection<T>({ title, icon, iconBox, emptyMessage, state, on
         </ul>
       )}
     </section>
+  )
+}
+
+/** 빈 상태 안내 + 바로 기록 링크 (섹션마다 같은 모양) */
+export function EmptyWithLink({ message, to, label }: { message: string; to: string; label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <p>{message}</p>
+      <Link to={to} className="inline-flex min-h-11 items-center gap-1 px-2 text-body font-semibold text-sky-700 hover:text-sky-800">
+        <Icon name="add" size={18} />
+        {label}
+      </Link>
+    </div>
   )
 }

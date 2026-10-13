@@ -11,8 +11,9 @@ interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'id
 }
 
 /**
- * h-14, 1.5px gray-200 테두리, rounded-input, 17px.
- * focus: blue-600 테두리 + 3px blue-100 링. type="password"면 오른쪽에 보기 토글이 생긴다.
+ * h-12, 1.5px gray-400 테두리(흰색 위 3.1:1), rounded-input, 15px.
+ * focus: sky-700 테두리 + 3px sky-100 링. 오류: error 테두리.
+ * type="password"면 오른쪽에 보기 토글이 생긴다.
  */
 export function TextInput({ label, trailing, hint, invalid = false, type = 'text', className = '', ...rest }: TextInputProps) {
   const id = useId()
@@ -21,12 +22,12 @@ export function TextInput({ label, trailing, hint, invalid = false, type = 'text
   const [visible, setVisible] = useState(false)
 
   const border = invalid
-    ? 'border-danger focus:border-danger focus:ring-danger-bg'
-    : 'border-gray-200 focus:border-blue-600 focus:ring-blue-100'
+    ? 'border-error focus:border-error focus:ring-error-bg'
+    : 'border-gray-400 focus:border-sky-700 focus:ring-sky-100'
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[14px] font-semibold text-gray-700">
+      <label htmlFor={id} className="text-label font-semibold text-gray-700">
         {label}
       </label>
       <div className="flex gap-2">
@@ -37,8 +38,8 @@ export function TextInput({ label, trailing, hint, invalid = false, type = 'text
             aria-invalid={invalid || undefined}
             aria-describedby={hint ? hintId : undefined}
             className={
-              `h-14 min-w-0 flex-1 rounded-input border-[1.5px] bg-white px-4 text-[17px] text-ink outline-none ` +
-              `transition-[border-color,box-shadow] focus:ring-[3px] ${border} ${isPassword ? 'pr-14' : ''} ${className}`
+              `h-12 min-w-0 flex-1 rounded-input border-[1.5px] bg-white px-3.5 text-body text-ink outline-none ` +
+              `transition-[border-color,box-shadow] focus:ring-[3px] ${border} ${isPassword ? 'pr-12' : ''} ${className}`
             }
             {...rest}
           />
@@ -48,9 +49,9 @@ export function TextInput({ label, trailing, hint, invalid = false, type = 'text
               onClick={() => setVisible((v) => !v)}
               aria-label={visible ? '비밀번호 숨기기' : '비밀번호 보기'}
               aria-pressed={visible}
-              className="absolute top-1 right-1 flex h-12 w-12 items-center justify-center rounded-[10px] text-gray-500"
+              className="absolute top-0.5 right-0.5 flex h-11 w-11 items-center justify-center rounded-input text-gray-500"
             >
-              <Icon name={visible ? 'visibility_off' : 'visibility'} />
+              <Icon name={visible ? 'visibility_off' : 'visibility'} size={20} />
             </button>
           )}
         </div>

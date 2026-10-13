@@ -20,17 +20,17 @@ export function TermsAgreement({ value, onChange }: TermsAgreementProps) {
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-2 text-[14px] font-semibold text-gray-700">약관 동의</legend>
-      <div className="overflow-hidden rounded-tile border-[1.5px] border-gray-200">
+      <legend className="mb-1.5 text-label font-semibold text-gray-700">약관 동의</legend>
+      <div className="overflow-hidden rounded-tile border border-gray-300">
         <button
           type="button"
           role="checkbox"
           aria-checked={allOn}
           onClick={toggleAll}
-          className={`flex min-h-[60px] w-full items-center gap-3 border-b border-gray-200 px-4 text-left ${allOn ? 'bg-blue-50' : 'bg-white'}`}
+          className={`flex min-h-13 w-full items-center gap-2.5 border-b border-gray-200 px-3.5 text-left ${allOn ? 'bg-sky-100' : 'bg-white'}`}
         >
-          <Icon name="check_circle" size={26} filled className={allOn ? 'text-blue-600' : 'text-gray-300'} />
-          <span className="text-[17px] font-bold text-ink">전체 동의</span>
+          <Icon name="check_circle" size={22} filled className={allOn ? 'text-sky-700' : 'text-gray-400'} />
+          <span className="text-section font-bold text-ink">전체 동의</span>
         </button>
         <div className="flex flex-col py-1">
           {TERMS.map((term) => {
@@ -42,11 +42,11 @@ export function TermsAgreement({ value, onChange }: TermsAgreementProps) {
                 role="checkbox"
                 aria-checked={checked}
                 onClick={() => onChange({ ...value, [term.key]: !checked })}
-                className="flex min-h-12 w-full items-center gap-3 px-4 text-left"
+                className="flex min-h-11 w-full items-center gap-2.5 px-3.5 text-left"
               >
-                <Icon name="check" size={22} className={checked ? 'text-blue-600' : 'text-gray-300'} />
-                <span className="text-[15px] leading-[1.4] text-ink">
-                  <span className={`font-semibold ${term.required ? 'text-blue-600' : 'text-gray-500'}`}>
+                <Icon name="check" size={20} className={checked ? 'text-sky-700' : 'text-gray-400'} />
+                <span className="text-body text-ink">
+                  <span className={`font-semibold ${term.required ? 'text-gray-700' : 'text-gray-500'}`}>
                     {term.required ? '[필수]' : '[선택]'}
                   </span>{' '}
                   {term.label}

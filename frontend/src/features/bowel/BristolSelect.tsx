@@ -9,18 +9,19 @@ interface BristolSelectProps {
 }
 
 /**
- * 배변 형태 — 2열 타일(min-h 56, rounded-btn), 라벨 16 + 설명 12 gray-500, 선택 시 check.
- * 비선택: 1.5px gray-200 / 흰 배경, 선택: 2px blue-600 / blue-50 / blue-700 700.
+ * 배변 형태 — 1형부터 7형까지 한 줄씩 쌓은 목록(한 카드 안, 줄 사이 구분선). 설명이 늘 보여 고르기 전에도 차이를 알 수 있다.
+ * 줄: min-h 44, "n형" 600 + 설명 + 오른쪽 라디오 아이콘.
+ * 선택: sky-100 면 + "n형" 700 + check_circle(sky-700) — 색만으로 구분하지 않도록 아이콘도 바꾼다.
  */
 export function BristolSelect({ value, onChange }: BristolSelectProps) {
   const labelId = useId()
   return (
     <div className="flex flex-col gap-2">
-      <span id={labelId} className="text-[15px] font-bold">
-        배변 형태
+      <span id={labelId} className="text-body font-bold">
+        배변 형태 <span className="ml-1 text-caption font-medium text-gray-500">브리스톨 척도</span>
       </span>
-      <div role="radiogroup" aria-labelledby={labelId} className="grid grid-cols-2 gap-2">
-        {BRISTOL_OPTIONS.map((option) => {
+      <div role="radiogroup" aria-labelledby={labelId} className="overflow-hidden rounded-card border border-gray-300 bg-white">
+        {BRISTOL_OPTIONS.map((option, index) => {
           const selected = option.value === value
           return (
             <button
@@ -30,15 +31,21 @@ export function BristolSelect({ value, onChange }: BristolSelectProps) {
               aria-checked={selected}
               onClick={() => onChange(option.value)}
               className={
-                'flex min-h-14 items-center justify-between gap-2 rounded-btn px-3.5 py-2.5 text-left transition-colors ' +
-                (selected ? 'border-2 border-blue-600 bg-blue-50' : 'border-[1.5px] border-gray-200 bg-white')
+                'flex min-h-11 w-full items-center gap-2.5 px-3.5 py-1.5 text-left transition-colors ' +
+                (index > 0 ? 'border-t border-gray-200 ' : '') +
+                (selected ? 'bg-sky-100' : 'hover:bg-gray-50')
               }
             >
-              <span className="flex min-w-0 flex-col gap-0.5">
-                <span className={`text-[16px] ${selected ? 'font-bold text-blue-700' : 'font-semibold text-ink'}`}>{option.type}</span>
-                <span className="text-[12px] text-gray-500">{option.description}</span>
+              <span className="min-w-0 flex-1 text-body">
+                <span className={selected ? 'font-bold' : 'font-semibold'}>{option.type}</span>
+                <span className="text-gray-700"> · {option.description}</span>
               </span>
-              <Icon name="check" size={20} className={`flex-none text-blue-700 ${selected ? '' : 'opacity-0'}`} />
+              <Icon
+                name={selected ? 'check_circle' : 'radio_button_unchecked'}
+                size={20}
+                filled={selected}
+                className={`flex-none ${selected ? 'text-sky-700' : 'text-gray-400'}`}
+              />
             </button>
           )
         })}
