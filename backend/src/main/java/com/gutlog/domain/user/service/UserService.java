@@ -47,7 +47,7 @@ public class UserService {
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
-        String accessToken = jwtProvider.createToken(user.getId());
+        String accessToken = jwtProvider.createToken(user.getId(), user.getAuthority());
         return LoginResponse.of(accessToken, UserResponse.fromEntity(user));
     }
 

@@ -4,6 +4,7 @@ import com.gutlog.domain.user.dto.request.LoginRequest;
 import com.gutlog.domain.user.dto.request.SignupRequest;
 import com.gutlog.domain.user.dto.response.LoginResponse;
 import com.gutlog.domain.user.dto.response.UserResponse;
+import com.gutlog.domain.user.entity.Authority;
 import com.gutlog.domain.user.entity.IbdType;
 import com.gutlog.domain.user.entity.Role;
 import com.gutlog.domain.user.entity.User;
@@ -131,7 +132,7 @@ class UserServiceTest {
             User user = userWithId(1L, "gutlog", "ENCODED");
             given(userRepository.findByUsername("gutlog")).willReturn(Optional.of(user));
             given(passwordEncoder.matches("password123", "ENCODED")).willReturn(true);
-            given(jwtProvider.createToken(1L)).willReturn("jwt-token");
+            given(jwtProvider.createToken(1L, Authority.USER)).willReturn("jwt-token");
 
             LoginResponse response = userService.login(request);
 
@@ -150,7 +151,7 @@ class UserServiceTest {
                     .extracting(UserServiceTest::errorCodeOf)
                     .isEqualTo(ErrorCode.LOGIN_FAILED);
 
-            verify(jwtProvider, never()).createToken(anyLong());
+            verify(jwtProvider, never()).createToken(anyLong(), any());
         }
 
         @Test
@@ -165,7 +166,7 @@ class UserServiceTest {
                     .extracting(UserServiceTest::errorCodeOf)
                     .isEqualTo(ErrorCode.LOGIN_FAILED);
 
-            verify(jwtProvider, never()).createToken(anyLong());
+            verify(jwtProvider, never()).createToken(anyLong(), any());
         }
     }
 

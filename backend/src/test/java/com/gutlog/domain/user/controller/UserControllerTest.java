@@ -1,5 +1,6 @@
 package com.gutlog.domain.user.controller;
 
+import com.gutlog.domain.user.entity.Authority;
 import com.gutlog.global.config.JwtProvider;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
@@ -236,7 +237,7 @@ class UserControllerTest {
         @Test
         @DisplayName("실패 - 토큰은 유효하지만 유저가 없으면 404")
         void userDeleted() throws Exception {
-            String token = jwtProvider.createToken(999_999L);
+            String token = jwtProvider.createToken(999_999L, Authority.USER);
 
             mockMvc.perform(get("/api/users/me").header("Authorization", "Bearer " + token))
                     .andExpect(status().isNotFound())
