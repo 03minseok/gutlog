@@ -1,11 +1,10 @@
-// [권한] 직접 작성 연습용. '// [권한]' 주석은 권한 기능용 테스트다. 권한 코드를 다시 작성한 뒤 주석을 풀어 확인한다.
 package com.gutlog.domain.user.service;
 
 import com.gutlog.domain.user.dto.request.LoginRequest;
 import com.gutlog.domain.user.dto.request.SignupRequest;
 import com.gutlog.domain.user.dto.response.LoginResponse;
 import com.gutlog.domain.user.dto.response.UserResponse;
-// [권한] import com.gutlog.domain.user.entity.Authority;
+import com.gutlog.domain.user.entity.Authority;
 import com.gutlog.domain.user.entity.IbdType;
 import com.gutlog.domain.user.entity.Role;
 import com.gutlog.domain.user.entity.User;
@@ -133,8 +132,7 @@ class UserServiceTest {
             User user = userWithId(1L, "gutlog", "ENCODED");
             given(userRepository.findByUsername("gutlog")).willReturn(Optional.of(user));
             given(passwordEncoder.matches("password123", "ENCODED")).willReturn(true);
-            // [권한] given(jwtProvider.createToken(1L, Authority.USER)).willReturn("jwt-token");
-            given(jwtProvider.createToken(1L)).willReturn("jwt-token");
+            given(jwtProvider.createToken(1L, Authority.USER)).willReturn("jwt-token");
 
             LoginResponse response = userService.login(request);
 
@@ -153,8 +151,7 @@ class UserServiceTest {
                     .extracting(UserServiceTest::errorCodeOf)
                     .isEqualTo(ErrorCode.LOGIN_FAILED);
 
-            // [권한] verify(jwtProvider, never()).createToken(anyLong(), any());
-            verify(jwtProvider, never()).createToken(anyLong());
+            verify(jwtProvider, never()).createToken(anyLong(), any());
         }
 
         @Test
@@ -169,8 +166,7 @@ class UserServiceTest {
                     .extracting(UserServiceTest::errorCodeOf)
                     .isEqualTo(ErrorCode.LOGIN_FAILED);
 
-            // [권한] verify(jwtProvider, never()).createToken(anyLong(), any());
-            verify(jwtProvider, never()).createToken(anyLong());
+            verify(jwtProvider, never()).createToken(anyLong(), any());
         }
     }
 

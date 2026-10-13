@@ -1,7 +1,6 @@
-// [권한] 직접 작성 연습용. '// [권한]' 주석은 권한 기능용 테스트다. 권한 코드를 다시 작성한 뒤 주석을 풀어 확인한다.
 package com.gutlog.domain.user.controller;
 
-// [권한] import com.gutlog.domain.user.entity.Authority;
+import com.gutlog.domain.user.entity.Authority;
 import com.gutlog.global.config.JwtProvider;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
@@ -238,8 +237,7 @@ class UserControllerTest {
         @Test
         @DisplayName("실패 - 토큰은 유효하지만 유저가 없으면 404")
         void userDeleted() throws Exception {
-            // [권한] String token = jwtProvider.createToken(999_999L, Authority.USER);
-            String token = jwtProvider.createToken(999_999L);
+            String token = jwtProvider.createToken(999_999L, Authority.USER);
 
             mockMvc.perform(get("/api/users/me").header("Authorization", "Bearer " + token))
                     .andExpect(status().isNotFound())
