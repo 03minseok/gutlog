@@ -2,17 +2,18 @@
 package com.gutlog.domain.user.dto.response;
 
 // [권한] import com.gutlog.domain.user.entity.Authority;
+import com.gutlog.domain.user.entity.Authority;
 import com.gutlog.domain.user.entity.IbdType;
 import com.gutlog.domain.user.entity.Role;
 import com.gutlog.domain.user.entity.User;
 
 public record UserResponse(
-        Long id,
-        String username,
-        String nickname,
-        Role role,
-        IbdType ibdType
-        // [권한] , Authority authority   // 프론트가 관리자 메뉴를 보여줄지 판단할 때 쓴다
+		Long id,
+		String username,
+		String nickname,
+		Role role,
+		IbdType ibdType,
+    Authority authority   // 프론트가 관리자 메뉴를 보여줄지 판단할 때 쓴다
 ) {
     public static UserResponse fromEntity(User user){
         return new UserResponse(
@@ -20,8 +21,8 @@ public record UserResponse(
                 user.getUsername(),
                 user.getNickname(),
                 user.getRole(),
-                user.getIbdType()
-                // [권한] , user.getAuthority()
+                user.getIbdType(),
+                user.getAuthority()
         );
     }
 }
