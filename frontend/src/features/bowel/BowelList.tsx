@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
 import { bowelApi, type Bowel } from '../../api/bowel'
 import { Icon } from '../../components/Icon'
+import { useRecordFormLinkState } from '../../components/recordForm'
 import { splitDateTime } from '../../lib/date'
-import { EmptyWithLink, RecordSection } from '../record/RecordSection'
+import { AddRecordLink, EmptyWithLink, RecordSection } from '../record/RecordSection'
 import { useDayRecords } from '../record/useDayRecords'
 import { BleedingBadge } from './BleedingBadge'
 import { bristolLabel, painLevelInfo } from './constants'
@@ -21,6 +22,7 @@ export function BowelList({ date }: { date: string }) {
       state={state}
       onRetry={reload}
       badge={bleedingCount > 0 && <BleedingBadge label={`혈변 ${bleedingCount}회`} />}
+      action={<AddRecordLink to={`/record/bowel/new?date=${date}`} label="배변" />}
       getKey={(bowel) => bowel.id}
       renderItem={(bowel) => <BowelCard bowel={bowel} />}
     />
@@ -28,6 +30,7 @@ export function BowelList({ date }: { date: string }) {
 }
 
 function BowelCard({ bowel }: { bowel: Bowel }) {
+  const formLinkState = useRecordFormLinkState()
   const { time } = splitDateTime(bowel.bowelAt)
   const condition = bristolLabel(bowel.bowelCondition)
   const pain = painLevelInfo(bowel.painLevel)
@@ -35,6 +38,7 @@ function BowelCard({ bowel }: { bowel: Bowel }) {
 
   return (
     <Link
+      state={formLinkState}
       to={`/record/bowel/${bowel.id}/edit`}
       aria-label={`${summary}. 수정하기`}
       className={

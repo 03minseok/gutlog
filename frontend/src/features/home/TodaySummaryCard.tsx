@@ -1,8 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { Link } from 'react-router'
 import { bowelApi } from '../../api/bowel'
 import { mealApi } from '../../api/meal'
 import { medicationApi } from '../../api/medication'
 import { Icon } from '../../components/Icon'
+import { useRecordFormLinkState } from '../../components/recordForm'
 import { splitDateTime } from '../../lib/date'
 
 /** 요청 하나의 상태. 로딩·실패·결과를 화면에서 구분해 보여준다. */
@@ -21,7 +23,10 @@ interface BowelSummary {
 /**
  * 오늘의 기록 카드. 요약 API가 아직 없어서
  * 식사·배변은 오늘 하루 기간 조회 결과의 개수, 복약은 날짜별 조회의 n / m(DAILY 약의 회차만)으로 채운다.
- * - 불러오는 중: 회색 막대, 실패: "–" + "불러오지 못했어요", 매일 먹는 약 없음(m = 0): "–" + "매일 먹는 약 없음"
+ * - 불러오는 중: 회색 막대, 실패: "불러오지 못함", 매일 먹는 약 없음(m = 0): "약 없음" — 숫자와 같은 높이 한 줄로 써서 칸 높이를 맞춘다.
+ * - 식사·복약·배변은 각자 카테고리 배경색 칸으로 나눠 구분하고, 칸을 누르면 바로 기록하러 간다.
+ *   식사·배변 → 입력 화면, 복약 → 기록 탭(복약은 따로 입력 화면 없이 섹션에서 체크한다).
+ * - 오른쪽 위 "바로가기"는 기록 탭(오늘)으로 이동한다.
  * - 오늘 혈변 기록이 있으면 카드 아래에 혈변 줄(물방울 아이콘 + 횟수 + 마지막 시각)을 보여준다.
  */
 export function TodaySummaryCard({ today }: { today: string }) {
@@ -61,26 +66,33 @@ export function TodaySummaryCard({ today }: { today: string }) {
     }
   }, [today])
 
-  const nothingYet = meal.status === 'ready' && meal.value === 0 && bowel.status === 'ready' && bowel.value.count === 0
-
   return (
     <section className="flex flex-col gap-3.5 rounded-card border border-gray-200 bg-white p-4" aria-labelledby="today-summary">
-      <h2 id="today-summary" className="text-section font-bold">
-        오늘의 기록
-      </h2>
-      <div className="grid grid-cols-3">
-        <Column icon="restaurant" label="식사" color="text-meal" className="pr-2.5">
+      <div className="flex items-center justify-between">
+        <h2 id="today-summary" className="text-section font-bold">
+          오늘의 기록
+        </h2>
+        <Link
+          to="/record"
+          className="-mr-2 flex h-11 items-center gap-0.5 rounded-input pr-1 pl-2.5 text-label font-semibold text-sky-700"
+        >
+          바로가기
+          <Icon name="chevron_right" size={18} />
+        </Link>
+      </div>
+      <div className="-mt-1 grid grid-cols-3 gap-2">
+        <Column to="/record/meal/new" icon="restaurant" label="식사" action="기록하기" color="text-meal" className="bg-meal-bg">
           <Value load={meal} render={(count) => <Count value={count} unit="회" />} />
         </Column>
-        <Column icon="medication" label="복약" color="text-med" className="border-l border-gray-200 px-2.5">
+        <Column to="/record" icon="medication" label="복약" action="체크하기" color="text-med" className="bg-med-bg">
           <Value
             load={medication}
             render={({ taken, total }) =>
-              total === 0 ? <Empty note="매일 먹는 약 없음" /> : <Count value={taken} unit={`/ ${total}`} />
+              total === 0 ? <Empty note="약 없음" /> : <Count value={taken} unit={`/ ${total}`} />
             }
           />
         </Column>
-        <Column icon="waves" label="배변" color="text-bowel" className="border-l border-gray-200 pl-2.5">
+        <Column to="/record/bowel/new" icon="waves" label="배변" action="기록하기" color="text-bowel" className="bg-bowel-bg">
           <Value load={bowel} render={({ count }) => <Count value={count} unit="회" />} />
         </Column>
       </div>
@@ -96,48 +108,60 @@ export function TodaySummaryCard({ today }: { today: string }) {
           )}
         </p>
       )}
-
-      {nothingYet && <p className="text-label text-gray-500">아직 오늘 기록이 없어요. 아래 버튼으로 바로 기록해 보세요.</p>}
     </section>
   )
 }
 
 function Value<T>({ load, render }: { load: Load<T>; render: (value: T) => ReactNode }) {
   if (load.status === 'loading') {
-    return <span className="block h-[26px] w-12 animate-pulse rounded-input bg-gray-100" aria-label="불러오는 중" />
+    return <span className="block h-[25px] w-10 animate-pulse rounded-input bg-white/70" aria-label="불러오는 중" />
   }
-  if (load.status === 'error') return <Empty note="불러오지 못했어요" />
+  if (load.status === 'error') return <Empty note="불러오지 못함" />
   return render(load.value)
 }
 
-function Column({ icon, label, color, className, children }: { icon: string; label: string; color: string; className: string; children: ReactNode }) {
+interface ColumnProps {
+  to: string
+  icon: string
+  label: string
+  /** 화면 낭독기용 동작 이름 (예: "기록하기") */
+  action: string
+  color: string
+  className: string
+  children: ReactNode
+}
+
+/** 카테고리 칸. 칸 전체가 링크다. 내용 높이만큼만 차지한다. */
+function Column({ to, icon, label, action, color, className, children }: ColumnProps) {
+  const formLinkState = useRecordFormLinkState()
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <Link
+      to={to}
+      state={to.startsWith('/record/') ? formLinkState : undefined}
+      className={`flex flex-col gap-1.5 rounded-tile p-3 focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:outline-none ${className}`}
+    >
       <span className={`flex items-center gap-1 text-label font-semibold ${color}`}>
         <Icon name={icon} size={16} />
         {label}
+        <span className="sr-only">{action}</span>
+        <Icon name="chevron_right" size={16} className="ml-auto" />
       </span>
       {children}
-    </div>
+    </Link>
   )
 }
 
+/** 숫자와 단위를 같은 크기(18/700)로 쓴다. */
 function Count({ value, unit }: { value: number; unit: string }) {
   return (
-    <span className="text-num font-semibold tracking-[-0.02em] tabular-nums">
+    <span className="text-heading font-bold tabular-nums">
       {value}
-      <span className="text-label font-medium tracking-normal text-gray-500"> {unit}</span>
+      {unit.startsWith('/') ? ` ${unit}` : unit}
     </span>
   )
 }
 
+/** 값이 없을 때: 숫자 자리(18px 줄 높이)에 한 줄 안내. 세 칸 높이가 같게 유지된다. */
 function Empty({ note }: { note: string }) {
-  return (
-    <span className="flex flex-col gap-1">
-      <span className="text-num font-semibold text-gray-400" aria-hidden="true">
-        –
-      </span>
-      <span className="text-caption text-gray-500">{note}</span>
-    </span>
-  )
+  return <span className="flex h-[25px] items-center text-label font-semibold whitespace-nowrap text-gray-500">{note}</span>
 }

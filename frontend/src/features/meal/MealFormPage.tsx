@@ -1,9 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { mealApi } from '../../api/meal'
 import { isNotFound, messageOf } from '../../api/types'
 import { Button } from '../../components/Button'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { useCloseRecordForm } from '../../components/recordForm'
 import { FieldHint } from '../../components/FieldHint'
 import { NotFoundView } from '../../components/NotFoundView'
 import { DateTimeFields, DeleteAction, FormLoadStatus, RecordFormScreen } from '../../components/RecordFormScreen'
@@ -33,7 +34,6 @@ export function MealFormPage() {
   // /record/meal/abc/edit 같은 주소는 요청 없이 바로 "찾을 수 없음"
   const invalidId = mealId !== null && (!Number.isInteger(mealId) || mealId <= 0)
   const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
   const { showToast } = useToast()
   const [today] = useState(todayParam)
 
@@ -77,7 +77,8 @@ export function MealFormPage() {
     }
   }, [mealId, invalidId])
 
-  const goToList = (date: string) => navigate(`/record?date=${date}`, { replace: true })
+  // 닫기: 보던 화면으로 돌아간다. 주소로 바로 들어왔으면 기록 탭(목록 날짜)으로. (components/recordForm.ts)
+  const closeForm = useCloseRecordForm(listDate)
 
   // --- 음식 칩 ---
   function commitFoods(text: string, remainder = '') {
@@ -116,7 +117,7 @@ export function MealFormPage() {
       if (mealId !== null) await mealApi.update(mealId, body)
       else await mealApi.create(body)
       showToast('식사를 저장했어요')
-      goToList(values.date)
+      closeForm(values.date)
     } catch (err) {
       if (isNotFound(err)) {
         setLoad({ status: 'notFound' })
@@ -133,7 +134,7 @@ export function MealFormPage() {
     try {
       await mealApi.remove(mealId)
       showToast('식사를 삭제했어요')
-      goToList(listDate)
+      closeForm(listDate)
     } catch (err) {
       setConfirmOpen(false)
       setDeleting(false)
@@ -143,7 +144,7 @@ export function MealFormPage() {
   }
 
   const title = isEdit ? '식사 수정' : '식사 기록'
-  const close = () => goToList(listDate)
+  const close = () => closeForm()
 
   if (load.status === 'notFound') {
     return (
@@ -193,7 +194,7 @@ export function MealFormPage() {
           />
         </div>
 
-        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-[max(16px,env(safe-area-inset-bottom))]">
+        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-3">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {hasFoods ? '저장' : '음식을 입력하세요'}

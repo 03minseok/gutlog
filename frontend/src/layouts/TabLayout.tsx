@@ -13,6 +13,31 @@ export function TabLayout() {
   )
 }
 
+/**
+ * 기록 입력 화면(식사·배변). 화면 높이에 맞춰 본문은 안에서 스크롤하고, 저장 버튼과 하단 탭은 아래에 고정된다.
+ */
+export function RecordFormLayout() {
+  return (
+    <div className="mx-auto flex h-dvh w-full max-w-[430px] flex-col bg-white">
+      <main className="flex min-h-0 flex-1 flex-col">
+        <Outlet />
+      </main>
+      <BottomTabBar />
+    </div>
+  )
+}
+
+/** 관리자 화면처럼 하단 탭 없이 쓰는 전체 화면. 화면 높이에 맞춰 본문은 안에서 스크롤한다. */
+export function FullScreenLayout() {
+  return (
+    <div className="mx-auto flex h-dvh w-full max-w-[430px] flex-col bg-white">
+      <main className="flex min-h-0 flex-1 flex-col">
+        <Outlet />
+      </main>
+    </div>
+  )
+}
+
 /** 탭 화면 상단 제목 (통계 시안 기준: 24/700, padding 12px 20px). */
 export function TabHeader({ title }: { title: string }) {
   return (

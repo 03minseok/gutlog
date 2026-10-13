@@ -214,7 +214,7 @@ export function UserMedicineFormPage() {
       action={isEdit && <DeleteAction onClick={() => setConfirmOpen(true)} disabled={submitting || deleting} />}
     >
       <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 pt-5 pb-6">
+        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 pt-4 pb-6">
           {isEdit && values.medicine ? (
             <div className="flex flex-col gap-1 rounded-tile bg-gray-50 px-4 py-3">
               <span className="text-body font-bold">{medicineTitle(values.medicine)}</span>
@@ -259,8 +259,8 @@ export function UserMedicineFormPage() {
                       aria-label={`하루 ${count}회`}
                       onClick={() => update({ dailyDoseCount: count })}
                       className={
-                        'h-11 rounded-input text-section tabular-nums transition-colors ' +
-                        (selected ? 'bg-ink font-bold text-white' : 'bg-gray-100 font-medium text-gray-700')
+                        'h-11 rounded-input text-body tabular-nums transition-colors ' +
+                        (selected ? 'bg-ink font-bold text-white' : 'bg-gray-100 font-medium text-gray-700 hover:bg-gray-150')
                       }
                     >
                       {count}
@@ -284,8 +284,8 @@ export function UserMedicineFormPage() {
                     aria-pressed={intervalDays === days}
                     onClick={() => update({ intervalDays: String(days) })}
                     className={
-                      'h-11 rounded-full px-3.5 text-label font-semibold transition-colors ' +
-                      (intervalDays === days ? 'bg-ink text-white' : 'bg-gray-100 text-gray-700')
+                      'h-11 rounded-full px-4 text-body font-semibold transition-colors ' +
+                      (intervalDays === days ? 'bg-ink text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-150')
                     }
                   >
                     {days % 7 === 0 ? `${days / 7}주` : `${days}일`}
@@ -294,7 +294,7 @@ export function UserMedicineFormPage() {
               </div>
               <div
                 className={
-                  'flex h-12 items-center gap-2 rounded-input border-[1.5px] px-4 focus-within:ring-[3px] ' +
+                  'flex h-12 items-center gap-2 rounded-input border-[1.5px] bg-white px-3.5 focus-within:ring-[3px] ' +
                   (intervalError ? 'border-error focus-within:ring-error-bg' : 'border-gray-400 focus-within:border-sky-700 focus-within:ring-sky-100')
                 }
               >
@@ -305,7 +305,7 @@ export function UserMedicineFormPage() {
                   onChange={(e) => update({ intervalDays: e.target.value.replace(/\D/g, '').slice(0, 3) })}
                   aria-invalid={intervalError ? true : undefined}
                   placeholder="14"
-                  className="w-16 min-w-0 flex-1 bg-transparent text-section font-semibold text-ink tabular-nums outline-none"
+                  className="w-16 min-w-0 flex-1 bg-transparent text-body font-semibold text-ink tabular-nums outline-none"
                 />
                 <span className="text-body text-gray-500">일마다</span>
               </div>
@@ -316,13 +316,13 @@ export function UserMedicineFormPage() {
           {values.medicine && (
             <div className="flex flex-col gap-2">
               <label htmlFor={doseId} className="text-body font-bold">
-                한 번에 얼마나? <span className="font-medium text-gray-500">(선택)</span>
+                한 번에 얼마나? <span className="ml-1 text-caption font-medium text-gray-500">선택</span>
               </label>
               <div className="flex items-center gap-2">
                 <StepButton icon="remove" label="줄이기" onClick={() => changeDose(-1)} />
                 <div
                   className={
-                    'flex h-12 min-w-0 flex-1 items-center gap-2 rounded-input border-[1.5px] px-4 focus-within:ring-[3px] ' +
+                    'flex h-12 min-w-0 flex-1 items-center gap-2 rounded-input border-[1.5px] bg-white px-3.5 focus-within:ring-[3px] ' +
                     (doseError ? 'border-error focus-within:ring-error-bg' : 'border-gray-400 focus-within:border-sky-700 focus-within:ring-sky-100')
                   }
                 >
@@ -333,7 +333,7 @@ export function UserMedicineFormPage() {
                     onChange={(e) => update({ doseAmount: e.target.value.replace(/[^\d.]/g, '').slice(0, 5) })}
                     aria-invalid={doseError ? true : undefined}
                     placeholder="1"
-                    className="min-w-0 flex-1 bg-transparent text-center text-section font-semibold text-ink tabular-nums outline-none"
+                    className="min-w-0 flex-1 bg-transparent text-center text-body font-semibold text-ink tabular-nums outline-none"
                   />
                   <span className="text-body text-gray-500">{unit}</span>
                 </div>
@@ -349,7 +349,7 @@ export function UserMedicineFormPage() {
 
           <div className="flex flex-col gap-2">
             <label htmlFor={memoId} className="text-body font-bold">
-              메모 <span className="font-medium text-gray-500">(선택)</span>
+              메모 <span className="ml-1 text-caption font-medium text-gray-500">선택</span>
             </label>
             <input
               id={memoId}
@@ -357,15 +357,15 @@ export function UserMedicineFormPage() {
               onChange={(e) => update({ doseMemo: e.target.value })}
               maxLength={DOSE_MEMO_MAX}
               placeholder="예: 식후 30분"
-              className="h-12 rounded-input border-[1.5px] border-gray-400 px-4 text-body text-ink outline-none focus:border-sky-700 focus:ring-[3px] focus:ring-sky-100"
+              className="h-12 rounded-input border-[1.5px] border-gray-400 bg-white px-3.5 text-body text-ink outline-none focus:border-sky-700 focus:ring-[3px] focus:ring-sky-100"
             />
-            <span className="self-end text-label font-medium text-gray-500 tabular-nums">
+            <span className="self-end text-caption font-medium text-gray-500 tabular-nums">
               {DOSE_MEMO_MAX - values.doseMemo.length}자 남음
             </span>
           </div>
         </div>
 
-        <div className="flex flex-none flex-col gap-2 border-t border-gray-100 px-4 pt-3 pb-8">
+        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-3">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {missing ?? '저장'}
@@ -392,9 +392,9 @@ function StepButton({ icon, label, onClick }: { icon: string; label: string; onC
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex h-12 w-14 flex-none items-center justify-center rounded-input bg-gray-100 text-gray-700 hover:bg-gray-150"
+      className="flex h-12 w-12 flex-none items-center justify-center rounded-input bg-gray-100 text-gray-700 hover:bg-gray-150"
     >
-      <Icon name={icon} />
+      <Icon name={icon} size={20} />
     </button>
   )
 }

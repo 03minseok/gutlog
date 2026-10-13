@@ -2,6 +2,7 @@ import { useId, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { FieldHint } from '../../components/FieldHint'
 import { Icon } from '../../components/Icon'
+import { useRecordFormLinkState } from '../../components/recordForm'
 import type { DayRecordsState } from './useDayRecords'
 
 interface RecordSectionProps<T> {
@@ -93,13 +94,30 @@ export function RecordSection<T>({
 
 /** 빈 상태 안내 + 바로 기록 링크 (섹션마다 같은 모양) */
 export function EmptyWithLink({ message, to, label }: { message: string; to: string; label: string }) {
+  const formLinkState = useRecordFormLinkState()
   return (
     <div className="flex flex-col items-center gap-1">
       <p>{message}</p>
-      <Link to={to} className="inline-flex min-h-11 items-center gap-1 px-2 text-body font-semibold text-sky-700 hover:text-sky-800">
+      <Link to={to} state={formLinkState} className="inline-flex min-h-11 items-center gap-1 px-2 text-body font-semibold text-sky-700 hover:text-sky-800">
         <Icon name="add" size={18} />
         {label}
       </Link>
     </div>
+  )
+}
+
+/** 섹션 헤더 오른쪽 "＋ 추가" 링크. 기록이 이미 있는 날에도 새 기록을 바로 쓸 수 있게 한다. */
+export function AddRecordLink({ to, label }: { to: string; label: string }) {
+  const formLinkState = useRecordFormLinkState()
+  return (
+    <Link
+      to={to}
+      state={formLinkState}
+      aria-label={`${label} 추가`}
+      className="-mr-1 flex h-11 items-center gap-0.5 rounded-input px-2 text-label font-semibold text-sky-700"
+    >
+      <Icon name="add" size={18} />
+      추가
+    </Link>
   )
 }

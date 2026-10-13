@@ -14,7 +14,7 @@ import { RecordPage } from './features/record/RecordPage'
 import { StatsPage } from './features/stats/StatsPage'
 import { LoginPage } from './features/user/LoginPage'
 import { SignupPage } from './features/user/SignupPage'
-import { TabLayout } from './layouts/TabLayout'
+import { FullScreenLayout, RecordFormLayout, TabLayout } from './layouts/TabLayout'
 
 export default function App() {
   return (
@@ -33,20 +33,24 @@ export default function App() {
                 <Route path="/record" element={<RecordPage />} />
                 <Route path="/stats" element={<StatsPage />} />
                 <Route path="/mypage" element={<MyPage />} />
+                <Route path="/record/medication/medicines" element={<MyMedicinesPage />} />
               </Route>
-              {/* 기록 입력 화면에는 하단 탭이 없다. */}
-              <Route path="/record/meal/new" element={<MealFormPage />} />
-              <Route path="/record/meal/:id/edit" element={<MealFormPage />} />
-              <Route path="/record/bowel/new" element={<BowelFormPage />} />
-              <Route path="/record/bowel/:id/edit" element={<BowelFormPage />} />
-              <Route path="/record/medication/medicines" element={<MyMedicinesPage />} />
-              <Route path="/record/medication/medicines/new" element={<UserMedicineFormPage />} />
-              <Route path="/record/medication/medicines/:id/edit" element={<UserMedicineFormPage />} />
+              {/* 기록·약 입력 화면: 전체 화면이지만 하단 탭은 보인다. */}
+              <Route element={<RecordFormLayout />}>
+                <Route path="/record/meal/new" element={<MealFormPage />} />
+                <Route path="/record/meal/:id/edit" element={<MealFormPage />} />
+                <Route path="/record/bowel/new" element={<BowelFormPage />} />
+                <Route path="/record/bowel/:id/edit" element={<BowelFormPage />} />
+                <Route path="/record/medication/medicines/new" element={<UserMedicineFormPage />} />
+                <Route path="/record/medication/medicines/:id/edit" element={<UserMedicineFormPage />} />
+              </Route>
 
               <Route element={<RequireAdmin />}>
-                <Route path="/admin/medicines" element={<AdminMedicinesPage />} />
-                <Route path="/admin/medicines/new" element={<AdminMedicineFormPage />} />
-                <Route path="/admin/medicines/:id/edit" element={<AdminMedicineFormPage />} />
+                <Route element={<FullScreenLayout />}>
+                  <Route path="/admin/medicines" element={<AdminMedicinesPage />} />
+                  <Route path="/admin/medicines/new" element={<AdminMedicineFormPage />} />
+                  <Route path="/admin/medicines/:id/edit" element={<AdminMedicineFormPage />} />
+                </Route>
               </Route>
             </Route>
 

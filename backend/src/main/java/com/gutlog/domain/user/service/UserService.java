@@ -1,3 +1,4 @@
+// [권한] 직접 작성 연습용. '// [권한]' 주석이 Claude가 작성했던 권한 코드이고, 지금 동작하는 코드는 권한 추가 전 상태다.
 package com.gutlog.domain.user.service;
 
 import com.gutlog.domain.user.dto.request.LoginRequest;
@@ -47,7 +48,8 @@ public class UserService {
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
-        String accessToken = jwtProvider.createToken(user.getId(), user.getAuthority());
+        // [권한] String accessToken = jwtProvider.createToken(user.getId(), user.getAuthority());   // 토큰에 권한도 담는다
+        String accessToken = jwtProvider.createToken(user.getId());
         return LoginResponse.of(accessToken, UserResponse.fromEntity(user));
     }
 

@@ -1,9 +1,10 @@
 import { useEffect, useId, useState, type FormEvent } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { bowelApi, type BristolType } from '../../api/bowel'
 import { isNotFound, messageOf } from '../../api/types'
 import { Button } from '../../components/Button'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
+import { useCloseRecordForm } from '../../components/recordForm'
 import { FieldHint } from '../../components/FieldHint'
 import { NotFoundView } from '../../components/NotFoundView'
 import { DateTimeFields, DeleteAction, FormLoadStatus, RecordFormScreen } from '../../components/RecordFormScreen'
@@ -11,13 +12,13 @@ import { useToast } from '../../components/toast/ToastContext'
 import { isFutureDate, isValidDateParam, splitDateTime, toDateTimeParam, toTimeValue, todayParam } from '../../lib/date'
 import { BleedingChoice } from './BleedingChoice'
 import { BristolSelect } from './BristolSelect'
-import { MEMO_MAX_LENGTH } from './constants'
+import { MEMO_MAX_LENGTH, PAIN_DEFAULT } from './constants'
 import { PainScale } from './PainScale'
 
 interface FormValues {
   date: string
   time: string
-  /** 혈변·형태·통증은 사용자가 고르기 전까지 null. 손대지 않은 기본값이 저장되면 안 된다. */
+  /** 혈변·형태는 사용자가 고르기 전까지 null (기본값 없음). 통증은 새 기록이면 0에서 시작한다. */
   bowelCondition: BristolType | null
   bleeding: boolean | null
   painLevel: number | null
@@ -46,7 +47,6 @@ export function BowelFormPage() {
   // /record/bowel/abc/edit 같은 주소는 요청 없이 바로 "찾을 수 없음"
   const invalidId = bowelId !== null && (!Number.isInteger(bowelId) || bowelId <= 0)
   const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
   const { showToast } = useToast()
   const [today] = useState(todayParam)
   const memoId = useId()
@@ -55,7 +55,7 @@ export function BowelFormPage() {
   const [values, setValues] = useState<FormValues>(() => {
     const requested = searchParams.get('date')
     const date = isValidDateParam(requested) && requested <= today ? requested : today
-    return { date, time: toTimeValue(new Date()), bowelCondition: null, bleeding: null, painLevel: null, memo: '' }
+    return { date, time: toTimeValue(new Date()), bowelCondition: null, bleeding: null, painLevel: PAIN_DEFAULT, memo: '' }
   })
   // 닫기·삭제 후 돌아갈 목록 날짜 (수정이면 원래 기록의 날짜)
   const [listDate, setListDate] = useState(values.date)
@@ -95,7 +95,8 @@ export function BowelFormPage() {
     }
   }, [bowelId, invalidId])
 
-  const goToList = (date: string) => navigate(`/record?date=${date}`, { replace: true })
+  // 닫기: 보던 화면으로 돌아간다. 주소로 바로 들어왔으면 기록 탭(목록 날짜)으로. (components/recordForm.ts)
+  const closeForm = useCloseRecordForm(listDate)
   const update = (patch: Partial<FormValues>) => setValues((v) => ({ ...v, ...patch }))
 
   const missing = missingLabel(values)
@@ -115,7 +116,7 @@ export function BowelFormPage() {
       if (bowelId !== null) await bowelApi.update(bowelId, body)
       else await bowelApi.create(body)
       showToast('배변 기록을 저장했어요')
-      goToList(values.date)
+      closeForm(values.date)
     } catch (err) {
       if (isNotFound(err)) {
         setLoad({ status: 'notFound' })
@@ -132,7 +133,7 @@ export function BowelFormPage() {
     try {
       await bowelApi.remove(bowelId)
       showToast('배변 기록을 삭제했어요')
-      goToList(listDate)
+      closeForm(listDate)
     } catch (err) {
       setConfirmOpen(false)
       setDeleting(false)
@@ -142,7 +143,7 @@ export function BowelFormPage() {
   }
 
   const title = isEdit ? '배변 수정' : '배변 기록'
-  const close = () => goToList(listDate)
+  const close = () => closeForm()
 
   if (load.status === 'notFound') {
     return (
@@ -203,7 +204,7 @@ export function BowelFormPage() {
           </div>
         </div>
 
-        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-[max(16px,env(safe-area-inset-bottom))]">
+        <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-3">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {missing ?? '저장'}

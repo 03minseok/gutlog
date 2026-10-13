@@ -1,174 +1,177 @@
-# Handoff: 것로그(gutlog) — UC·크론병 증상 기록 앱
+# 것로그(gutlog) 디자인 기준 — 모노 + 하늘 (v2)
 
-## Overview
-궤양성대장염(UC)·크론병 환자를 위한 모바일 증상 기록·분석 앱. 식사·복약·배변을 최소 단계로 기록하고, 기간별 요약과 "음식 → 다음날 혈변" 경향을 보여준다.
-대상 화면: 로그인, 회원가입, 홈, 배변 기록 입력, 통계(기록 충분 / 기록 부족).
+궤양성대장염·크론병 환자가 하루 여러 번 식사·배변·복약을 기록하는 모바일 웹앱이다.
+사용자는 몸이 안 좋은 상태에서, 화장실이나 식탁에서 한 손으로 빠르게 입력하는 경우가 많다.
+목표는 "병원 차트"가 아닌 **매일 편하게 쓰는 생활 앱**이다. 차분하고 가볍게, 기록 화면은 빠르고 실수 없이.
 
-## About the Design Files
-`designs/` 폴더의 파일은 **HTML로 만든 디자인 레퍼런스**다. 모양과 동작을 보여주는 프로토타입이며 그대로 배포할 코드가 아니다.
-작업 목표: 이 디자인을 **React + Tailwind CSS**로 재구현한다. (권장: Vite + React + TypeScript + Tailwind v3/v4, 라우팅은 react-router.)
-`.dc.html` 파일은 같은 폴더의 `support.js`와 함께 브라우저에서 바로 열린다. 스타일은 모두 인라인이므로 각 요소의 정확한 값은 소스에서 확인할 수 있다.
+- 이 문서가 화면 디자인의 기준이다. 새 화면도 아래 토큰과 컴포넌트 규칙으로 만든다.
+- 토큰의 실제 값은 `frontend/src/index.css`의 `@theme`에 있다. 이 문서와 코드가 다르면 코드를 맞추고 이 문서도 고친다.
+- v1 시안(`archive/*.dc.html`, `archive/README-v1.md`)은 참고용으로만 보관한다. **색·크기·radius 값은 따르지 않는다.**
 
-## Fidelity
-**High-fidelity.** 색상·타이포·간격·radius·상호작용이 최종값이다. 픽셀 단위로 재현할 것.
+## 디자인 원칙
+1. **먹색으로 절제하고, 하늘색은 강조에만.** 주 버튼·본문은 먹색(ink), 선택·강조·링크는 하늘색(sky). 파스텔은 면(배경)에만 쓰고 글자에는 쓰지 않는다.
+2. **빨강은 혈변 전용.** 입력 오류·삭제·통증 정도에는 빨강을 쓰지 않는다.
+3. **색만으로 의미를 전달하지 않는다.** 상태마다 아이콘 또는 문구를 함께 바꾼다. (혈변 = 빨강 + 채운 물방울 + "혈변 있음")
+4. **불안을 키우지 않는다.** 응급 기호(✱ emergency), 진한 빨강 면, 경고 말투를 쓰지 않는다. 사실만 차분하게 알린다. ("혈변 1회 기록됨 · 마지막 13:15")
+5. **엄지 자리에 기록 버튼.** 목록 화면(기록 탭)의 추가 버튼은 화면 아래에 고정한다.
+7. **기록을 마치면 보던 곳으로.** 기록 입력 화면을 닫으면 보던 화면으로 돌아간다. 입력 화면에서도 하단 탭은 보인다.
+6. **중요한 답은 대신 고르지 않는다.** 혈변·배변 형태는 사용자가 직접 고르기 전까지 비어 있고, 저장 버튼이 무엇이 빠졌는지 알려준다. (통증은 0에서 시작)
 
-## Platform & Global Rules
-- 모바일 세로, 375–430px 기준 (디자인 캔버스 390×844). 데스크톱에서는 `max-w-[430px] mx-auto`로 가운데 정렬.
-- 화면 좌우 여백 20px (로그인/회원가입은 24px).
-- 최소 터치 영역 48px, 주요 버튼 56px.
-- 본문 대비 4.5:1 이상. 색만으로 의미를 전달하지 않고 아이콘·라벨을 함께 쓴다.
-- 숫자는 `font-variant-numeric: tabular-nums` (`tabular-nums` 클래스).
-- 하단 탭 네비게이션: 홈 / 기록 / 통계 / 마이페이지 (로그인·회원가입·기록 입력 화면에는 없음).
+## 플랫폼 · 공통 규칙
+- 모바일 세로 375–430px 기준. 데스크톱에서는 `max-w-[430px] mx-auto`로 가운데 정렬하고, 바깥 배경은 gray-200으로 앱 영역과 구분한다. `html`에 `scrollbar-gutter: stable`을 둬서 긴 화면에서만 스크롤바가 생겨 앱이 옆으로 밀리지 않게 한다.
+- 화면 좌우 여백 **16px** (`px-4`). 로그인만 20px.
+- **터치 영역 최소 44px** (`h-11`). 주요 버튼·입력칸 48px (`h-12`).
+- 본문 대비 4.5:1 이상, 입력칸 테두리·비선택 아이콘 등 UI 경계는 3:1 이상. (아래 표의 대비 값은 계산한 값)
+- 숫자는 `tabular-nums`. 시간은 24시간 `HH:mm`, 날짜는 `10월 13일 (화)` / `10월 13일 화요일` 형식으로 화면 전체가 같게 쓴다. (`lib/date.ts`)
+- 하단 탭: 홈 / 기록 / 통계 / 마이페이지. 로그인·회원가입 화면에는 없다. 기록 입력 화면에는 보인다.
+- 고정 하단 영역(버튼·탭)은 `env(safe-area-inset-bottom)`을 반영한다.
 
-## Design Tokens
+## 디자인 토큰
 
-### Tailwind config (theme.extend)
-```js
-colors: {
-  ink: '#16202E',
-  gray: { 700: '#3F4A5A', 500: '#6B7686', 400: '#8A94A3', 300: '#C9D0DA', 200: '#E3E7ED', 150: '#E9EDF2', 100: '#F1F3F6', 50: '#F7F9FB' },
-  blue: { 800: '#16408C', 700: '#1E4FA8', 600: '#2B63CC', 300: '#8FB0EC', 100: '#E6EEFB', 50: '#F3F7FD' },
-  bowel: { DEFAULT: '#0B6E8C', mid: '#5BB5D0', soft: '#9ED3E3', bg: '#E3F3F8' },
-  meal:  { DEFAULT: '#1F7A4D', mid: '#6DBF93', bg: '#E5F4EC' },
-  med:   { DEFAULT: '#5B3FB8', mid: '#A392E4', bg: '#EEEAFB' },
-  danger: { DEFAULT: '#B42D32', bg: '#FCEAEA', border: '#F2C4C6' },   // 혈변
-  warn:   { DEFAULT: '#A34B0B', bar: '#D9772B', bg: '#FDF0E4' },       // 주의
-  ok:     { DEFAULT: '#136B61', bg: '#E3F3F1' },                       // 양호
-  kakao: '#FEE500', kakaoInk: '#191600', naver: '#03C75A',
-},
-borderRadius: { input: '12px', btn: '14px', tile: '16px', card: '20px', sheet: '24px' },
-fontFamily: { sans: ['"Pretendard Variable"', 'Pretendard', 'system-ui', 'sans-serif'] },
-boxShadow: {
-  seg: '0 1px 3px rgba(22,32,46,0.12)',
-  toast: '0 8px 20px rgba(22,32,46,0.2)',
-  fab: '0 6px 16px rgba(43,99,204,0.28)',
-},
-```
-- Primary = `blue-600 #2B63CC`, hover `blue-700`, pressed `blue-800`.
-- 화면 배경: 탭이 있는 화면 `gray-50 #F7F9FB`, 폼 화면 `#FFFFFF`.
-- 카테고리 색은 항상 (텍스트/아이콘 = DEFAULT, 배경 = bg) 쌍으로 사용.
+### 색 (`--color-*`)
+Tailwind 기본 팔레트는 지웠다(`--color-*: initial`). 아래 이름만 쓴다.
 
-### Typography (Pretendard 단일 서체)
-CDN: `https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css`
-| 역할 | size / weight | 기타 |
+| 토큰 | 값 | 쓰임 | 대비 |
+|---|---|---|---|
+| `ink` | #1B2430 | 본문 글자, **주 버튼 면**, 선택된 숫자 버튼 | 흰색 위 15.7:1 |
+| `ink-hover` / `ink-pressed` | #2A3442 / #0F151D | 주 버튼 hover / 누름 | |
+| `gray-700` | #3E4753 | 입력 라벨, 보조 본문 | gray-100 위 8.4:1 |
+| `gray-500` | #5B6470 | 보조 글자·캡션, 비활성 탭 | gray-50 위 5.5:1 |
+| `gray-450` | #6B737E | placeholder | 흰색 위 4.8:1 |
+| `gray-400` | #8B939E | **입력칸 테두리**, 비선택 라디오·체크 아이콘, chevron | 흰색 위 3.1:1 |
+| `gray-300` | #C8CDD4 | 선택 타일 테두리, 점선 빈 상태 | |
+| `gray-200` | #E4E7EB | 카드 테두리, 구분선, 데스크톱 바깥 배경 | |
+| `gray-150` | #E7E9EC | 비활성 버튼 면 | gray-500 글자 4.9:1 |
+| `gray-100` | #F0F2F5 | 보조 면(세그먼트 트랙, 통증 버튼, 칩) | |
+| `gray-50` | #F4F5F7 | 탭 화면 바탕 | |
+| `sky-800` | #175A8F | 링크 hover, 날짜 칩 글자 | |
+| `sky-700` | #1F6FAE | **강조 글자·링크·활성 탭·선택 아이콘·focus 테두리** | 흰색 위 5.3:1 |
+| `sky-300` | #8CC6EF | 토스트 아이콘 | ink 위 9.5:1 |
+| `sky-100` | #D3ECFB | **선택된 면**, 바로 기록 버튼 면, focus 링 | ink 글자 12.8:1 |
+| `sky-50` | #EAF5FD | hover 면 | |
+| `blood` / `blood-bg` / `blood-border` | #C0343D / #FDECEE / #F2C3C7 | **혈변 전용** | blood-bg 위 4.8:1 |
+| `error` / `error-bg` / `error-border` | #8A5300 / #FDF1DA / #E2BF7F | 입력·요청 오류 (황토색) | 흰색 위 6.3:1 |
+| `ok` / `ok-bg` | #136B61 / #E3F3F1 | 조건 충족 (예: 비밀번호 규칙) | |
+| `meal` / `meal-bg` | #2C7A4B / #E2F3E8 | 식사 아이콘 | 4.6:1 |
+| `bowel` / `bowel-bg` | #0E6E86 / #DDF2F6 | 배변 아이콘 | 5.0:1 |
+| `med` / `med-bg` | #6550C0 / #EEEAFB | 복약 아이콘 | 5.1:1 |
+
+- 카테고리 색(meal·bowel·med)은 **아이콘, 아이콘 박스, 홈 요약 칸 배경(`*-bg`)에만** 쓴다. 링크·버튼 색으로 쓰지 않는다. (링크는 sky-700)
+- 바탕: 탭 화면 `gray-50`, 폼·입력 화면 `white`.
+
+### 글자 (`--text-*`) — 8단계
+글꼴: **Pretendard** 하나 (`index.html`에서 CDN 로드). 이 8단계 밖의 크기(`text-[15px]` 같은 임의값)는 쓰지 않는다.
+
+| 토큰 | 크기 / 줄높이 | 쓰임 |
 |---|---|---|
-| Display | 40 / 700 | tracking -0.02em |
-| 화면 제목 (통계) | 24 / 700 | -0.015em |
-| 인사말 (홈) | 26 / 700, lh 1.35 | -0.015em |
-| 큰 수치 | 32 / 700 (보조 28, 22) | -0.02em, 단위는 15–16 / 500 gray-500 |
-| 섹션 제목 | 17 / 700 | |
-| 폼 섹션 라벨 | 15 / 700 | 입력 라벨은 14 / 600 gray-700 |
-| 버튼 | 17 / 600 | |
-| 본문 | 16 / 400–500, lh 1.5–1.6 | |
-| 캡션 | 13 / 500 gray-500 | 최소 12 (탭 라벨, 배지) |
+| `text-num` | 26 / 1 | 큰 수치 (지금은 쓰는 곳 없음 — 통계 화면용으로 남겨 둠) |
+| `text-title` | 22 / 1.36 | 화면 제목, 인사말, 앱 이름 — 700, tracking -0.015em |
+| `text-heading` | 18 / 1.4 | 확인창 제목, 빈 화면·404 제목, 홈 요약 수치 — 700 |
+| `text-section` | 16 / 1.45 | 섹션 제목, 헤더 제목, 주요 버튼 글자 — 600~700 |
+| `text-body` | 15 / 1.5 | 본문, 입력값, 목록 내용, 폼 질문(700) |
+| `text-label` | 13 / 1.45 | 입력 라벨(600 gray-700), 안내 문구, 배지 |
+| `text-caption` | 12 / 1.4 | 보조 설명, 척도 양 끝 문구 |
+| `text-tab` | 11 / 1.2 | 하단 탭 라벨에만 |
 
-### Spacing
-4px 단위: 4 · 6 · 8 · 10 · 12 · 14 · 16 · 20 · 24 · 28 · 32. 카드 패딩 18–20, 섹션 간 간격 28 (홈·기록), 12 (통계 카드).
+### 모서리 (`--radius-*`)
+`input` 10 · `btn` 12 · `tile` 12 · `card` 16 · `sheet` 20. 칩·배지는 `rounded-full`.
 
-## Shared Components
-- **StatusBar (목업용)**: 48px. 실제 앱에서는 safe-area로 대체.
-- **BottomTabBar**: 흰 배경, `border-t gray-200`, 4열 grid, padding `6px 4px 26px`, 각 항목 min-h 56, 아이콘 24 + 라벨 12. 활성 = blue-600 + FILL 아이콘 + 700, 비활성 = gray-500 + 500.
-  아이콘: home / edit_note / bar_chart / person.
-- **Button**
-  - Primary: h-14 rounded-btn bg-blue-600 text-white 17/600, hover blue-700.
-  - Disabled: bg-gray-200 text-gray-500, `disabled` 속성. 라벨을 "무엇이 필요한지"로 바꿀 수 있음 (예: "배변 양상을 선택하세요").
-  - Outline: h-12(또는 14) border-[1.5px] gray-300 bg-white, hover border-blue-600.
-- **TextInput**: h-14, border-[1.5px] gray-200, rounded-input, px-4, 17px. focus: border-blue-600 + `ring-[3px] ring-blue-100`. placeholder gray-400.
-  비밀번호: 오른쪽 48×48 아이콘 버튼 (visibility / visibility_off), input 오른쪽 padding 56.
-- **SegmentedControl**: 트랙 bg `gray-100`(통계는 `gray-150`), p-1, rounded-btn, gap-1. 항목 h-11~12, rounded-[10px]. 선택 = bg-white text-blue-700 700 shadow-seg, 비선택 = transparent text-gray-700 500.
-- **SelectTile**: min-h 56 (큰 것 88), rounded-btn/tile. 비선택 `border-[1.5px] gray-200 bg-white`, 선택 `border-2 blue-600 bg-blue-50 text-blue-700` + check 아이콘.
-- **Toggle (switch)**: 60×34, p-[3px], thumb 28 흰색 + shadow. off = gray-300, on = 문맥색 (혈변은 danger). `role="switch" aria-checked`.
-- **Card**: bg-white border gray-200 rounded-card p-5. 그림자는 사용하지 않음 (토스트·FAB만).
-- **Toast**: 하단 탭 위(bottom 108px), 좌우 20, min-h 52, rounded-btn, bg ink, 흰 글씨 15/500, check_circle 아이콘 `#7FD6C9`. 1.8초 후 사라짐.
-- **Badge/Pill**: px-2.5 py-1 rounded-full 13/600, 상태색 bg/텍스트 쌍.
+### 간격
+4px 단위. 화면 여백 16, 섹션 사이 20~24 (`gap-5`/`gap-6`), 카드 안 16 (`p-4`), 같은 묶음 안 8 (`gap-2`).
 
-## Screens
+### 그림자 · 면
+- 카드는 **흰 면 + 1px `gray-200` 테두리**. 그림자를 쓰지 않는다.
+- 그림자는 세그먼트 선택 항목(`shadow-seg`)과 토스트(`shadow-toast`)에만.
+- 빈 상태는 점선 테두리(`border-dashed gray-300`), 배경 없음.
 
-### 1. 로그인 (`Gutlog Login.dc.html` #1a)
-- 흰 배경, 콘텐츠 padding `56px 24px 32px`, 세로 flex, 그룹 간 gap 40.
-- 로고: 72×72 rounded-[22px] bg-blue-600, 흰 "g" 38/700. 아래 "것로그" 28/700, "매일의 장 건강을 기록해요" 15 gray-500.
-- 아이디 / 비밀번호 TextInput (라벨 포함, gap 12). 비밀번호 보기 토글.
-- 로그인 버튼(mt-2): 아이디·비밀번호 모두 입력 시에만 활성.
-- "아이디 찾기 | 비밀번호 찾기" 15 gray-500, 구분선 1×12 gray-300.
-- 하단(mt-auto): "간편 로그인" 구분선 → 카카오 버튼(bg #FEE500, text #191600, 말풍선 로고) → 네이버 버튼(bg #03C75A, 흰 N 로고) — 둘 다 h-14 rounded-btn 17/600. 카카오/네이버 공식 브랜드 가이드 로고로 교체 권장.
-- "아직 회원이 아니신가요? **회원가입**"(blue-600 700) → 회원가입 화면.
+## 아이콘
+Google **Material Symbols Rounded** (weight 500). 기본 20~22px, 활성·선택 상태는 `FILL 1`. 장식 아이콘은 `aria-hidden` (`components/Icon.tsx`).
 
-### 2. 회원가입 (`Gutlog Login.dc.html` #1b)
-- 헤더 56px: 뒤로(arrow_back_ios_new 48×48) + "회원가입" 17/600.
-- 스크롤 영역 padding `12px 24px 24px`, gap 22. 하단 고정 버튼 영역 `12px 24px 32px`, border-t gray-100.
-- 필드 순서:
-  1. **아이디** + "중복 확인" outline 버튼(h-14). 확인 성공 시 ok색 "사용할 수 있는 아이디예요". 아이디를 다시 수정하면 확인 상태 초기화. (프로토타입은 4자 이상이면 성공 처리 → 실제 API 연결)
-  2. **비밀번호**: placeholder "8자 이상, 영문·숫자 포함". 아래 힌트 13px — 조건 미충족 gray-500 + info, 충족 ok색 + check_circle. 규칙: 길이 ≥ 8 && /[a-zA-Z]/ && /\d/.
-  3. **닉네임**: placeholder "앱에서 불릴 이름".
-  4. **회원 유형**: SegmentedControl 환자 / 보호자 / 기타 (초기 미선택).
-  5. **질환 종류**: 회원 유형이 **환자일 때만** 표시. 2열 SelectTile(min-h 88): "UC / 궤양성대장염", "크론병 / Crohn's disease", 우상단 radio_button_unchecked ↔ check_circle. 안내 13px "선택한 질환에 맞춰 기록 항목이 구성돼요. 나중에 바꿀 수 있어요."
-  6. **약관 동의**: border-[1.5px] gray-200 rounded-tile 박스.
-     - 상단 "전체 동의"(min-h 60, 17/700, check_circle FILL 26px; 전체 선택 시 blue-600 + 행 bg-blue-50). 누르면 전부 토글.
-     - 항목(min-h 48): check 아이콘 22(선택 blue-600 / 미선택 gray-300) + "[필수]"(blue-600 600) 또는 "[선택]"(gray-500) + 라벨 15. 약관 문서가 있는 항목은 오른쪽 chevron_right 44×44 링크.
-     - 항목: [필수] 만 14세 이상입니다(문서 없음) · [필수] 서비스 이용약관 · [필수] 개인정보 수집·이용 동의 · [필수] 민감정보(건강정보) 처리 동의 · [선택] 알림·혜택 정보 수신.
-- **가입하기 활성 조건**: 아이디 중복확인 완료 && 비밀번호 규칙 충족 && 닉네임 입력 && 회원 유형 선택 && (환자면 질환 선택) && 필수 약관 모두 동의.
+| 의미 | 아이콘 |
+|---|---|
+| 식사 / 복약 | `restaurant` / `medication` |
+| **배변** | `waves` — 직접적인 표현(똥 이모지 등)은 쓰지 않는다. 혈변 물방울과 헷갈리지 않도록 물방울도 쓰지 않는다. |
+| **혈변** | `water_drop` (FILL) + blood 색 + "혈변" 문구. `emergency`(✱)는 쓰지 않는다. |
+| 혈변 없음 | `do_not_disturb_on` (선택 시 `check_circle`) |
+| 오류 / 안내 / 충족 | `error` / `info` / `check_circle` |
+| 삭제 | `delete` |
+| 탭 | `home` · `edit_note` · `bar_chart` · `person` |
+| 기타 | `close`, `arrow_back_ios_new`, `chevron_left/right`, `calendar_today`, `schedule`, `add`, `refresh`, `history`, `search`, `visibility(_off)`, `radio_button_unchecked`, `check` |
 
-### 3. 홈 (`Gutlog Home.dc.html`)
-- 배경 gray-50, 스크롤 영역 padding `20px 20px 24px`, gap 28. 하단 탭(홈 활성).
-- 날짜: "9월 24일 목요일" 15/600 blue-600 (오늘 날짜 자동).
-- 인사말 26/700: 시간대별 — 11시 전 "좋은 아침이에요", 17시 전 "오늘 하루 어떠세요", 이후 "오늘도 수고하셨어요" + 줄바꿈 + "{닉네임}님".
-- **오늘의 기록 카드**: 제목 17/700. 3열 grid(열 사이 border-l gray-100): 식사 N회 / 복약 N/총 / 배변 N회. 각 열: 카테고리색 아이콘 18 + 라벨 14/600, 수치 32/700 + 단위.
-- **빠른 기록**: 제목 17/700. 3열 grid gap 10, 각 타일 h-[76px] rounded-tile, 카테고리 bg + 카테고리 텍스트색, 흰 34×34 rounded-[10px] 아이콘 박스(아이콘 22) + 라벨 15/700, gap 4. 순서: 식사 · 복약 · 배변.
-  - 동작: 각 기록 입력 화면으로 이동. (프로토타입은 즉시 +1 하고 토스트 표시 — 복약이 총량에 도달하면 "오늘 복약을 모두 마쳤어요")
-- **준비 중 카드**: 2열 grid gap 10. "정보 제공 / 질환·식단·생활 정보"(menu_book), "커뮤니티 / 환우·보호자 이야기"(forum). 흰 카드 rounded-[18px] p-4, 회색 아이콘 박스 40×40 bg gray-100, 우상단 "준비 중" 배지(gray-100/gray-500 12/600). 비활성(aria-disabled), 탭 동작 없음.
+## 공통 컴포넌트 (`frontend/src/components/`)
 
-### 4. 배변 기록 입력 (`Gutlog Bowel Record.dc.html`)
-- 흰 배경, 하단 탭 없음. 헤더 56px(border-b gray-100): 닫기(close) + 28×28 bowel 아이콘 박스 + "배변 기록" 17/700.
-- 스크롤 영역 padding `20px 20px 24px`, gap 28.
-  1. **언제였나요?** — 2열(1.2fr / 1fr): 날짜(calendar_today + `input type=date`), 시간(schedule + `input type=time`). h-14 border gray-200 rounded-input, 값 16/600. 기본값 = 현재 시각. (모바일에서는 네이티브 피커 사용 권장)
-  2. **배변 양상** — 2열 SelectTile(min-h 56), 라벨 16 + 설명 12 gray-500, 선택 시 check:
-     딱딱함(덩어리·힘줘야 나옴) · 보통(부드럽고 형태 있음) · 무름(형태가 약간 풀림) · 진흙 같음(형태 거의 없음) · 물설사(액체 상태) · 점액만(변 없이 점액).
-  3. **혈변** — 행 전체 카드(min-h 64, rounded-tile, border-[1.5px]): emergency 아이콘 + "혈변" 16/700 + 보조문구 13. 오른쪽 Toggle.
-     off: 흰 배경/gray-200 테두리/아이콘 gray-300, "피가 보이지 않았어요". on: bg danger-bg, border danger-border, 아이콘·제목·토글 danger, "피가 섞여 있었어요".
-  4. **통증 정도** — 제목 옆 오른쪽에 "{n}(24/700) / 10 · {라벨}". 라벨/색: 0 없음, 1–3 약함 (blue-700), 4–6 중간 (warn), 7–10 심함 (danger).
-     숫자 버튼 11개를 6열 grid 두 줄(0–5, 6–10), h-12 rounded-input. 비선택 bg gray-100 text gray-700, 선택 bg blue-600 흰색 700. 아래 13px "0 통증 없음" ↔ "10 참을 수 없음". 기본값 0.
-  5. **메모 (선택)** — textarea 3줄, placeholder "급박감, 잔변감, 점액 등 특이사항".
-- 하단 고정 저장 버튼(`12px 20px 32px`, border-t): 배변 양상 미선택 시 비활성 + 라벨 "배변 양상을 선택하세요", 선택 시 "저장". 저장 → 토스트 "배변 기록을 저장했어요" → 이전 화면.
+| 컴포넌트 | 규칙 |
+|---|---|
+| **Button** | `primary`: h-12, rounded-btn, ink 면 + 흰 글자 16/600. `outline`: h-12, 1.5px gray-400 테두리, 흰 면, 15/600, hover 테두리 ink. `secondary`: gray-100 면 + gray-700. `destructive`(삭제): primary와 같은 ink 면에 `delete` 아이콘 — 빨강을 쓰지 않고 아이콘·문구·확인창으로 구분. 비활성: gray-150 면 + gray-500 글자, `disabled` 속성. focus: 2px sky-700 링 + offset 2. |
+| **비활성 버튼 문구** | 저장·가입 버튼이 비활성일 때 라벨을 "무엇이 필요한지"로 바꾼다. 화면 순서대로 첫 번째 빠진 항목. (예: "배변 형태를 선택하세요", "아이디 중복 확인을 해 주세요") |
+| **TextInput** | 라벨 13/600 gray-700 → 입력칸 h-12, 1.5px gray-400, rounded-input, 흰 면, 15px, px-3.5. focus: sky-700 테두리 + 3px sky-100 링. 오류: error 테두리 + error-bg 링. 비밀번호는 오른쪽 44×44 보기 토글. placeholder는 라벨을 반복하지 않는다. |
+| **날짜·시간 입력** (`DateTimeFields`) | 2열(1.25fr/1fr), h-12. 화면에는 "10월 13일 (화)", "13:18"을 보여주고, 투명한 네이티브 선택기가 칸 전체를 덮어 입력을 받는다. 미래 날짜면 오류 문구. |
+| **FieldHint** | 13/500 + 16px 아이콘. neutral = gray-500 + `info`, ok = ok + `check_circle`, error = error(황토) + `error`. error는 `role="alert"`. 눈에 띄어야 하는 요청 오류(로그인 실패 등)는 error-bg 상자 안에 넣는다. |
+| **SelectTile** (선택 타일) | min-h 64, rounded-tile, 1.5px. 비선택: gray-300 테두리 + 흰 면 + `radio_button_unchecked` gray-400. 선택: sky-700 테두리 + sky-100 면 + `check_circle`(FILL, sky-700) + 글자 700. **모든 단일 선택(질환, 배변 형태, 혈변 없음)이 이 규칙을 따른다.** |
+| **세로 선택 목록** (배변 형태) | 한 카드(1px gray-300, rounded-card) 안에 줄(min-h 44)을 쌓고 줄 사이 gray-200 구분선. 선택 줄은 sky-100 면 + check_circle. 설명이 늘 보이게 한다. |
+| **SegmentedControl** | 트랙 gray-100, p-1, rounded-btn. 항목 h-11, rounded-input, 15px. 선택 = 흰 면 + ink 700 + shadow-seg, 비선택 = gray-500 500. |
+| **숫자 척도** (통증) | 0~5 버튼 6개 한 줄, h-11, rounded-input. 비선택 gray-100 면 + gray-700, 선택 ink 면 + 흰 글자 700. 새 기록은 0이 선택된 상태로 시작. 값 옆에 "3 / 5 · 보통" 문구(0 없음, 1 경미, 2 약함, 3 보통, 4 심함, 5 매우 심함). 양 끝 caption "0 없음" · "5 매우 심함". 양 끝 의미를 caption으로. 색으로 심한 정도를 나타내지 않는다. |
+| **Card** | 흰 면, 1px gray-200, rounded-card, p-4. 목록 카드는 min-h 56, 오른쪽 `chevron_right` 20 gray-400, 카드 전체가 링크. |
+| **BottomTabBar** | 흰 면, border-t gray-200, 4열, 항목 min-h 48, 아이콘 22 + 라벨 11. 활성 sky-700 + FILL + 700, 비활성 gray-500. 아래 padding max(20px, safe-area). |
+| **QuickRecordBar** (바로 기록) | 하단 탭 바로 위에 sticky로 붙는 막대. 흰 면 + border-t gray-200, px-4 py-2, 버튼 h-12 rounded-btn sky-100 면 + ink 글자 15/600 + 카테고리색 아이콘 20. 기록 탭(식사 기록·배변 기록, 보던 날짜로)에서 쓴다. |
+| **ConfirmDialog** (확인창) | **화면 가운데** 창, 최대 너비 340, 좌우 여백 24, rounded-sheet, 흰 면, px-5 pt-6 pb-5, shadow-toast, 뒤 배경 ink/40. 제목 18/700, 설명 15 gray-700. 버튼 2열: 취소(secondary, **기본 포커스**) / 확인(destructive + 아이콘). Esc로 닫힘. |
+| **Toast** | **화면 위쪽**(safe-area + 12px), 좌우 16, min-h 48, rounded-btn, ink 면, 흰 글자 15/500, `check_circle` FILL sky-300. 1.8초 후 사라짐. 위쪽에 띄워 방금 저장한 목록이나 하단 버튼을 가리지 않는다. |
+| **MonthCalendar** (한 달 달력) | 흰 카드(1px gray-200, rounded-card). 위: ‹ "2026년 10월" 15/700 › (다음 달은 오늘이 있는 달까지). 요일 줄 12 gray-500, 일요일 시작 7열. 날짜 칸 h-11, 숫자 36px 원: 선택 = ink 면 + 흰 글자 700, 오늘 = sky-700 700 + 아래 점, 미래 = gray-300 비활성. 누르면 그 날짜로 이동. 바깥에서 날짜가 다른 달로 바뀌면 달력도 그 달로 따라간다. |
+| **BleedingBadge** (혈변 배지) | rounded-full px-2 py-0.5, 13/600 blood 글자 + `water_drop` FILL 14. 기본 blood-bg 면, 이미 blood-bg인 카드 안에서는 흰 면 + blood-border 테두리(`onTint`). |
+| **기록 입력 화면** (`RecordFormScreen` + `RecordFormLayout`) | 식사·배변 입력/수정은 **일반 전체 화면**(전환 효과 없음)이고, **아래에 하단 탭이 함께 보인다**. 흰 면, 화면 높이에 맞춰 본문만 안에서 스크롤. 헤더 52px(border-b gray-200): 닫기 44×44 + 카테고리 아이콘 20 + 제목 16/700, 수정이면 오른쪽 `delete` + "삭제"(gray-700, 확인창으로). 본문 px-4 pt-4, 질문 사이 gap-6. 저장 버튼 영역(하단 탭 바로 위): border-t gray-200, px-4 pt-2.5 pb-3. **닫기(X)는 보던 화면으로 돌아간다**(앱 안에서 열었으면 뒤로 가기, 주소로 바로 들어왔으면 기록 탭). 저장·삭제 뒤에도 보던 화면으로 돌아가되, 기록 탭에서 열었으면 저장한 날짜의 기록 탭을 보여준다. 입력 화면으로 가는 링크는 `useRecordFormLinkState()`를 state로 넘긴다. (`components/recordForm.ts`) |
+| **목록 섹션 상태** (`RecordSection`) | 헤더: 28px 카테고리 아이콘 박스 + 제목 16/700 + "N회" 13 gray-500 + 배지, 오른쪽 끝에 동작 링크(식사·배변 "＋ 추가", 복약 "내 약 관리" — 13/600 sky-700, 44px 높이, hover 배경 없음). 로딩: 카드 모양 회색 막대(animate-pulse). 오류: error-bg 상자 한 줄 + 오른쪽 "다시 시도"(`refresh`). 빈 상태: 점선 상자 + 안내 + "＋ ○○ 기록하기" 링크(sky-700) — 모든 섹션이 같은 모양. |
 
-### 5. 통계 (`Gutlog Stats.dc.html` #4a — 기록 충분)
-- 배경 gray-50, 하단 탭(통계 활성).
-- 고정 헤더(padding `12px 20px`): "통계" 24/700 + 기간 SegmentedControl 1주일 / 1개월 / 3개월 (기본 1개월).
-- 스크롤 영역(padding `4px 20px 24px`, gap 12):
-  - 기간 설명 13 gray-500: "8월 26일 – 9월 24일 · 26일 기록".
-  - **배변 카드**: 헤더 bowel 아이콘 박스 30×30 + "배변" 15/700, 우측 danger 배지 "혈변 N일". 좌측 "하루 평균" + 32/700 수치, 우측 미니 막대그래프(높이 최대 44px, radius 5, 과거 bowel-soft, 마지막 막대 bowel). 1주일=요일별 7개(14px 폭), 1개월=주별 4개(22px), 3개월=월별 3개(26px). 라벨 11px.
-  - **식사 / 복약 카드** 2열: 식사 "하루 평균" 28/700. 복약 "복용률 · 54/60" + 28/700 % + 6px 진행 바(med-bg 트랙, med 채움).
-  - **음식과 다음날 혈변 카드** (mt-2): 제목 17/700, 설명 13 "먹은 다음날과 먹지 않은 다음날의 혈변 비율을 비교했어요".
-    - 항목(border-t gray-100, py-4): "{음식} · N일 섭취" + 관련도 배지. 3열 grid(72px / 1fr / 40px): "먹은 다음날" 막대(관련도색) + %, "안 먹은 날" 막대(gray-300) + %. 막대 h 10 rounded-full, 트랙 gray-100.
-    - 관련도: ratio = 먹은 날% / 안 먹은 날%. ≥2 "관련 높음"(danger / 막대 #B42D32), ≥1.4 "관련 있음"(warn / 막대 #D9772B), 그 외 "뚜렷한 관련 없음"(gray / 막대 #8A94A3). ratio 내림차순 정렬.
-    - 하단 안내 박스(bg gray-50 rounded-input p-3, info 아이콘): "기록에서 찾은 경향이며 원인을 뜻하지 않아요. 식단이나 치료를 바꾸기 전에 주치의와 상의하세요."
-- 예시 데이터는 `Gutlog Stats.dc.html`의 logic class `D` 객체 참고 (API 응답 형태 설계에 활용).
+## 화면
 
-### 6. 통계 — 기록 부족 (#4b)
-- 조건: 선택 기간 내 기록일 < 7일.
-- 헤더·기간 선택은 동일.
-- 안내 카드(흰, p `28px 24px`, 가운데 정렬, gap 16): insights 아이콘 64×64 bg blue-50 → "분석하려면 기록이 더 필요해요" 20/700 → "7일 이상 기록하면 식사·복약·배변 요약과 음식별 혈변 경향을 보여드려요." 15 gray-700 → 진행 박스(bg gray-50 rounded-btn p-4): "기록한 날 **3일** / 7일" + 7칸 세그먼트 바(h 8, 채움 blue-600 / 빈칸 gray-200) → Primary "오늘 기록하기" (→ 기록 화면).
-- "지금까지의 기록" 13/600 gray-500 + 3열 소형 카드(식사 8회 / 복약 5/6 / 배변 10회), 수치 22/700.
+### 로그인
+- 흰 면, `px-5 pt-16`, 왼쪽 정렬. 로고 자리: 48×48 rounded-[14px] sky-100 면에 "것"(18/700 ink) — 앱 이름이 바뀌면 함께 바꾼다. 아래 "것로그" 22/700 + "매일의 장 건강을 가볍게 기록해요" 15 gray-500.
+- 아이디·비밀번호 TextInput(placeholder 없음) → 실패 시 error-bg 상자 안 FieldHint → 로그인 버튼(둘 다 입력해야 활성).
+- 하단(mt-auto): "아직 회원이 아니신가요? **회원가입**"(sky-700, 44px 높이).
+- 카카오·네이버 로그인, 아이디·비밀번호 찾기는 API가 없어 표시하지 않는다. (CLAUDE.md)
 
-## State Management (제안)
-- `auth`: user { id, nickname, role: 'patient'|'guardian'|'other', disease?: 'uc'|'cd' }.
-- `records`: { meals[], meds[], bowels[] } — bowel = { datetime, shape, blood: boolean, pain: 0–10, memo }.
-- `medSchedule`: 하루 총 복약 횟수 (홈의 N/총).
-- 통계는 기간(`'1w'|'1m'|'3m'`)별 서버 집계 또는 클라이언트 계산. 상관관계는 최소 기록일 조건 충족 시에만 노출.
-- 폼 상태는 각 화면 로컬(useState / react-hook-form + zod 권장).
+### 회원가입
+- 헤더 52px(border-b): 뒤로 + "회원가입" 16/700. 스크롤 영역 px-4 pt-4 gap-5. 하단 고정 버튼.
+- 아이디(+ "중복 확인" outline) → 비밀번호(규칙 힌트: 미충족 neutral / 충족 ok) → 닉네임 → 회원 유형 SegmentedControl → (환자만) 질환 종류 2열 SelectTile(한글 이름만) + 안내 caption → 약관 동의.
+- 약관 상자: 1px gray-300, rounded-tile. "전체 동의" 행 min-h 52, 전부 체크되면 sky-100 면. 항목 행 min-h 44, `check` 아이콘(체크 sky-700 / 미체크 gray-400) + "[필수]"(gray-700 600) 또는 "[선택]"(gray-500) + 라벨 15.
+- 가입 버튼은 비활성일 때 빠진 항목을 문구로 알려준다.
 
-## Assets
-- 아이콘: Google **Material Symbols Rounded** (weight 500, opsz 24). 활성 탭은 `FILL 1`. React에서는 웹폰트 또는 `@material-symbols/svg-500` 패키지 사용.
-  사용 아이콘: home, edit_note, bar_chart, person, restaurant, medication, water_drop(배변), emergency, check, check_circle, radio_button_unchecked, info, insights, calendar_today, schedule, close, arrow_back_ios_new, chevron_right, visibility, visibility_off, menu_book, forum.
-- 카카오/네이버 로고는 임시 SVG — 각 사 공식 리소스로 교체.
-- 이미지 에셋 없음.
+### 홈
+- gray-50 바탕. 날짜 13/600 sky-700 → 인사말 22/700 (시간대별 3가지 + 줄바꿈 + "{닉네임}님").
+- **오늘의 기록 카드**: 제목 16/700 + 오른쪽 위 "바로가기 ›"(sky-700 13/600, 44px 높이, hover 배경 없음, 기록 탭 오늘로 이동).
+  - 3칸 타일(gap 8): 식사 N회 / 복약 n / m / 배변 N회. 각 칸은 rounded-tile, p-3, **카테고리 배경색(meal-bg · med-bg · bowel-bg)**으로 구분하고 높이는 내용만큼. 칸 안: 카테고리 아이콘 16 + 라벨 13/600 + 오른쪽 `chevron_right` 16(카테고리색), 아래 수치.
+  - 수치는 숫자와 단위를 **같은 크기 18/700**으로 쓴다. ("2회", "1 / 2")
+  - **칸 전체가 링크**: 식사 → 식사 입력, 배변 → 배변 입력, 복약 → 기록 탭(복약은 섹션에서 체크). hover 배경 변화 없음, 키보드 focus는 2px sky-700 링.
+  - 불러오는 중: 회색 막대. 실패: "불러오지 못함". 매일 먹는 약이 없으면 복약 "약 없음". 모두 숫자 자리에 한 줄 13/600 gray-500으로 써서 세 칸 높이를 맞춘다.
+  - 오늘 혈변이 있으면 카드 아래 줄: blood-bg rounded-tile, `water_drop` + "**혈변 N회** 기록됨" + 오른쪽 "마지막 HH:mm".
+- 홈에는 바로 기록 막대와 빈 상태 안내 문구를 두지 않는다. 기록은 요약 카드의 각 칸을 눌러 바로 시작한다.
 
-## Files
-`designs/` — 브라우저에서 바로 열 수 있음 (support.js 동봉):
-- `Gutlog Design System.dc.html` — 컬러·타이포·버튼·카드·입력·탭바 규격
-- `Gutlog Login.dc.html` — 로그인(#1a), 회원가입(#1b)
-- `Gutlog Home.dc.html` — 홈
-- `Gutlog Bowel Record.dc.html` — 배변 기록 입력
-- `Gutlog Stats.dc.html` — 통계 (#4a 충분, #4b 부족)
+### 기록 탭 (식사·복약·배변 목록)
+- 제목 "기록" 22/700 → DateNavigator(흰 카드, 이전/다음 44×44, 가운데 "10월 13일 화요일" 16/700 + "오늘/어제" 칩 sky-100/sky-800 12) → 바로 아래 MonthCalendar(gap 8, 날짜를 누르면 그날 기록으로 이동) → 식사 · 복약 · 배변 섹션(gap-6) → 하단 고정 바로 기록 막대(식사 기록 · 배변 기록, 보던 날짜로).
+- 식사 카드: 시간 15/600 + 음식 이름을 " · "로 이어 쓴 글자(칩으로 그리지 않는다 — 각각 누를 수 있어 보이므로).
+- 배변 카드: 시간 + "4형 · 매끈한 소시지 모양" 15 + 통증 칩(gray-100, "통증 1 · 약함") + 메모 13 gray-700 한 줄.
+  혈변 기록은 카드 면 blood-bg + 테두리 blood-border + "혈변 있음" 배지(onTint). 섹션 헤더에 "혈변 N회" 배지.
 
-## 아직 디자인되지 않은 화면
-식사 기록, 복약 기록, 기록 탭(목록/캘린더), 마이페이지, 약관 상세, 아이디·비밀번호 찾기. 위 토큰과 컴포넌트 규칙을 그대로 따라 구현.
+### 식사 기록 입력
+- 언제였나요?(DateTimeFields) → 무엇을 먹었나요?(음식 칩 입력).
+- 칩: h-9 meal-bg 면 + meal 글자 15/600, 삭제 버튼 44×44(칩보다 크게, `close` 16).
+- 입력칸 아래 안내 → **자주 먹은 음식**: 입력칸이 비어 있고 자동완성 목록이 닫혀 있으면 caption 제목 + 버튼(min-h 44, rounded-full, 1px gray-300, `add` + 이름)으로 보여준다. 누르면 칩으로 추가. 입력칸을 누르면 같은 후보가 자동완성 목록으로 바뀐다.
+- 자동완성 항목 min-h 44, 활성 항목 sky-100 면.
+
+### 배변 기록 입력
+- 언제였나요? → **배변 형태**(세로 선택 목록, "1형 · 딱딱한 덩어리" … "7형 · 물 같은 변") → **혈변이 있었나요?**(2열 선택: 없음 / 있음) → **통증 정도**(숫자 척도 0–5, 한 줄) → 메모(선택, textarea 3줄, 남은 글자 수 caption).
+- 혈변 선택: min-h 56, 아이콘 22 + "없음/있음" 15/700 + 설명 12.
+  없음 선택 = SelectTile 선택 규칙(sky). 있음 선택 = blood 테두리 + blood-bg 면 + `water_drop` FILL + blood 글자.
+- 혈변·형태는 **기본값 없음**, 통증은 **기본값 0**. 저장 버튼 문구: "배변 형태를 선택하세요" → "혈변 여부를 선택하세요" → "저장".
+
+### 통계 (아직 구현 전 — 구현할 때 이 규칙을 따른다)
+- 화면 구성·데이터 규칙(기간 1주일/1개월/3개월, 기록일 7일 미만이면 "기록 부족" 안내, 음식과 다음날 혈변 비교, 하단 주의 문구)은 `archive/README-v1.md` 5·6절을 따른다.
+- 단, 색·크기·radius는 이 문서의 토큰으로 바꾼다.
+  - 막대그래프: 지난 막대 gray-300, 마지막(현재) 막대 ink. 복약 진행 바: 트랙 gray-100, 채움 sky-700.
+  - "혈변 N일" 배지는 BleedingBadge.
+  - **음식–혈변 관련도는 빨강을 쓰지 않는다**(빨강은 혈변 기록 자체에만). 관련 높음 = ink 막대 + "관련 높음" 배지(ink 글자, gray-100 면, 700), 관련 있음 = gray-500 막대 + 배지, 뚜렷한 관련 없음 = gray-300 막대. 막대 위 % 숫자와 배지 문구로 구분한다.
+  - 기록 부족 진행 바: 채움 sky-700, 빈칸 gray-200. 버튼은 primary.
+
+## 파일
+- `frontend/src/index.css` — 토큰(`@theme`)
+- `frontend/src/components/` — 공통 컴포넌트
+- `archive/` — v1 시안과 v1 README (보관용, 값은 따르지 않음)

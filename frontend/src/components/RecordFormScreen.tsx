@@ -22,11 +22,15 @@ interface RecordFormScreenProps {
   children: ReactNode
 }
 
-/** 기록 입력 화면 틀: 헤더 52px(닫기 + 카테고리 아이콘 + 제목), 흰 배경, border-b gray-200. 하단 탭 없음. */
+/**
+ * 기록 입력 화면 틀 (전체 화면). 아래에 하단 탭이 함께 보인다. (layouts/TabLayout.tsx RecordFormLayout)
+ * 헤더 52px(border-b gray-200): 닫기 + 카테고리 아이콘 + 제목, 수정 화면이면 오른쪽에 삭제.
+ * 닫기는 보던 화면으로 돌아간다. (components/recordForm.ts)
+ */
 export function RecordFormScreen({ category, title, onClose, action, children }: RecordFormScreenProps) {
   const { icon, color } = CATEGORY[category]
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-[430px] flex-col bg-white">
+    <div className="flex min-h-0 flex-1 flex-col bg-white">
       <header className="flex h-13 flex-none items-center gap-1 border-b border-gray-200 px-1.5">
         <button
           type="button"

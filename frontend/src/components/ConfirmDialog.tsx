@@ -17,7 +17,7 @@ interface ConfirmDialogProps {
 }
 
 /**
- * 되돌릴 수 없는 동작 전에 띄우는 하단 시트 확인창 (rounded-sheet).
+ * 되돌릴 수 없는 동작 전에 띄우는 확인창. 화면 가운데에 뜬다. (흰 면, rounded-sheet, 좌우 여백 24)
  * 빨강은 혈변 전용이라, 위험한 동작은 아이콘 + 문구 + 확인 단계로 구분한다.
  */
 export function ConfirmDialog({
@@ -49,14 +49,14 @@ export function ConfirmDialog({
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-ink/40" onClick={() => !pending && onCancel()}>
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/40 px-6" onClick={() => !pending && onCancel()}>
       <div
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descId : undefined}
         onClick={(e) => e.stopPropagation()}
-        className="flex w-full max-w-[430px] flex-col gap-5 rounded-t-sheet bg-white px-4 pt-5 pb-[max(24px,env(safe-area-inset-bottom))]"
+        className="flex w-full max-w-[340px] flex-col gap-5 rounded-sheet bg-white px-5 pt-6 pb-5 shadow-toast"
       >
         <div className="flex flex-col gap-1.5">
           <h2 id={titleId} className="text-heading font-bold">

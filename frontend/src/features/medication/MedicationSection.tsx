@@ -29,7 +29,7 @@ export function MedicationSection({ date }: { date: string }) {
       onRetry={refresh}
       countLabel={countLabel}
       action={
-        <Link to={MY_MEDICINES_PATH} className="flex h-11 items-center rounded-input px-2 text-label font-semibold text-sky-700 hover:bg-sky-50">
+        <Link to={MY_MEDICINES_PATH} className="-mr-1 flex h-11 items-center rounded-input px-2 text-label font-semibold text-sky-700">
           내 약 관리
         </Link>
       }

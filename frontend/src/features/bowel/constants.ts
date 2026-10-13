@@ -17,20 +17,23 @@ export function bristolLabel(value: BristolType): string {
   return option ? `${option.type} · ${option.description}` : value
 }
 
+/** 통증은 0~5로 기록한다. (백엔드 검증은 0~10이라 그 안의 값만 보낸다) */
 export const PAIN_MIN = 0
-export const PAIN_MAX = 10
+export const PAIN_MAX = 5
+/** 새 기록의 통증 기본값 */
+export const PAIN_DEFAULT = 0
 
 /** 백엔드 검증 @Size(max = 500)과 같다. */
 export const MEMO_MAX_LENGTH = 500
 
+/** 통증 0~5 문구 */
+const PAIN_LABELS = ['없음', '경미', '약함', '보통', '심함', '매우 심함'] as const
+
 /**
  * 통증 정도 문구. 빨강은 혈변 전용이라 통증은 색으로 구분하지 않고 문구로만 전달한다.
- * 0 없음, 1–3 약함, 4–6 중간, 7–10 심함
+ * 0 없음, 1 경미, 2 약함, 3 보통, 4 심함, 5 매우 심함. (0~5 척도 이전에 6 이상으로 저장된 기록은 매우 심함)
  */
 export function painLevelInfo(level: number): { label: string; color: string } {
   const color = 'text-gray-700'
-  if (level === 0) return { label: '없음', color }
-  if (level <= 3) return { label: '약함', color }
-  if (level <= 6) return { label: '중간', color }
-  return { label: '심함', color }
+  return { label: PAIN_LABELS[Math.min(Math.max(level, 0), PAIN_LABELS.length - 1)], color }
 }
