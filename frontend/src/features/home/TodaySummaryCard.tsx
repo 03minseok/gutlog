@@ -24,8 +24,9 @@ interface BowelSummary {
  * 오늘의 기록 카드. 요약 API가 아직 없어서
  * 식사·배변은 오늘 하루 기간 조회 결과의 개수, 복약은 날짜별 조회의 n / m(DAILY 약의 회차만)으로 채운다.
  * - 불러오는 중: 회색 막대, 실패: "불러오지 못함", 매일 먹는 약 없음(m = 0): "약 없음" — 숫자와 같은 높이 한 줄로 써서 칸 높이를 맞춘다.
- * - 식사·복약·배변은 각자 카테고리 배경색 칸으로 나눠 구분하고, 칸을 누르면 바로 기록하러 간다.
- *   식사·배변 → 입력 화면, 복약 → 기록 탭(복약은 따로 입력 화면 없이 섹션에서 체크한다).
+ * - 식사·복약·배변은 각자 카테고리 배경색 칸으로 나눠 구분한다.
+ *   칸 윗줄("식사 ›")을 누르면 그 기록의 상세 화면, 숫자 옆 ＋를 누르면 바로 기록한다.
+ *   ＋: 식사·배변 → 입력 화면, 복약 → 기록 탭(복약은 따로 입력 화면 없이 섹션에서 체크한다).
  * - 오른쪽 위 "바로가기"는 기록 탭(오늘)으로 이동한다.
  * - 오늘 혈변 기록이 있으면 카드 아래에 혈변 줄(물방울 아이콘 + 횟수 + 마지막 시각)을 보여준다.
  */
@@ -67,24 +68,24 @@ export function TodaySummaryCard({ today }: { today: string }) {
   }, [today])
 
   return (
-    <section className="flex flex-col gap-3.5 rounded-card border border-gray-200 bg-white p-4" aria-labelledby="today-summary">
+    <section className="flex flex-col gap-3.5 rounded-card border border-gray-200 bg-white px-4 pt-3 pb-4" aria-labelledby="today-summary">
       <div className="flex items-center justify-between">
         <h2 id="today-summary" className="text-section font-bold">
           오늘의 기록
         </h2>
         <Link
           to="/record"
-          className="-mr-2 flex h-11 items-center gap-0.5 rounded-input pr-1 pl-2.5 text-label font-semibold text-sky-700"
+          className="-my-2.5 -mr-2 flex h-11 items-center gap-0.5 rounded-input pr-1 pl-2.5 text-label font-semibold text-sky-700"
         >
           바로가기
           <Icon name="chevron_right" size={18} />
         </Link>
       </div>
-      <div className="-mt-1 grid grid-cols-3 gap-2">
-        <Column to="/record/meal/new" icon="restaurant" label="식사" action="기록하기" color="text-meal" className="bg-meal-bg">
+      <div className="grid grid-cols-3 gap-2">
+        <Column detailTo="/record/meal" addTo="/record/meal/new" icon="restaurant" label="식사" addLabel="식사 기록하기" color="text-meal" className="bg-meal-bg">
           <Value load={meal} render={(count) => <Count value={count} unit="회" />} />
         </Column>
-        <Column to="/record" icon="medication" label="복약" action="체크하기" color="text-med" className="bg-med-bg">
+        <Column detailTo="/record/medication" addTo="/record" icon="medication" label="복약" addLabel="오늘 복약 체크하기" color="text-med" className="bg-med-bg">
           <Value
             load={medication}
             render={({ taken, total }) =>
@@ -92,7 +93,7 @@ export function TodaySummaryCard({ today }: { today: string }) {
             }
           />
         </Column>
-        <Column to="/record/bowel/new" icon="waves" label="배변" action="기록하기" color="text-bowel" className="bg-bowel-bg">
+        <Column detailTo="/record/bowel" addTo="/record/bowel/new" icon="waves" label="배변" addLabel="배변 기록하기" color="text-bowel" className="bg-bowel-bg">
           <Value load={bowel} render={({ count }) => <Count value={count} unit="회" />} />
         </Column>
       </div>
@@ -121,33 +122,51 @@ function Value<T>({ load, render }: { load: Load<T>; render: (value: T) => React
 }
 
 interface ColumnProps {
-  to: string
+  /** 칸 윗줄을 누르면 갈 상세 화면 */
+  detailTo: string
+  /** ＋를 누르면 갈 곳 (입력 화면 또는 기록 탭) */
+  addTo: string
   icon: string
   label: string
-  /** 화면 낭독기용 동작 이름 (예: "기록하기") */
-  action: string
+  /** ＋ 버튼의 화면 낭독기용 이름 (예: "식사 기록하기") */
+  addLabel: string
   color: string
   className: string
   children: ReactNode
 }
 
-/** 카테고리 칸. 칸 전체가 링크다. 내용 높이만큼만 차지한다. */
-function Column({ to, icon, label, action, color, className, children }: ColumnProps) {
+/**
+ * 카테고리 칸 (rounded-tile, p-3, 높이는 내용만큼).
+ * - 윗줄: 아이콘 + 이름 + › — 칸 위쪽 44px 전체가 상세 화면 링크.
+ * - 아랫줄: 수치 + 오른쪽 ＋(흰 원 28px, 누르는 영역 44px) — 바로 기록.
+ */
+function Column({ detailTo, addTo, icon, label, addLabel, color, className, children }: ColumnProps) {
   const formLinkState = useRecordFormLinkState()
   return (
-    <Link
-      to={to}
-      state={to.startsWith('/record/') ? formLinkState : undefined}
-      className={`flex flex-col gap-1.5 rounded-tile p-3 focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:outline-none ${className}`}
-    >
-      <span className={`flex items-center gap-1 text-label font-semibold ${color}`}>
+    <div className={`flex flex-col rounded-tile px-3 pt-3 pb-3.5 ${className}`}>
+      <Link
+        to={detailTo}
+        aria-label={`${label} 자세히 보기`}
+        className={`-mx-3 -mt-3 -mb-1.5 flex min-h-11 items-center gap-1 rounded-t-tile px-3 text-label font-semibold focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:outline-none ${color}`}
+      >
         <Icon name={icon} size={16} />
         {label}
-        <span className="sr-only">{action}</span>
         <Icon name="chevron_right" size={16} className="ml-auto" />
-      </span>
-      {children}
-    </Link>
+      </Link>
+      <div className="flex h-7 items-center justify-between gap-1">
+        {children}
+        <Link
+          to={addTo}
+          state={addTo.startsWith('/record/') ? formLinkState : undefined}
+          aria-label={addLabel}
+          className="-my-2 -mr-2 flex h-11 w-11 flex-none items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:outline-none"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-ink ring-1 ring-black/5">
+            <Icon name="add" size={18} />
+          </span>
+        </Link>
+      </div>
+    </div>
   )
 }
 

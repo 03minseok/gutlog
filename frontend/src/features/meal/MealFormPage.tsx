@@ -14,6 +14,14 @@ import { FoodChipInput } from './FoodChipInput'
 import { addFoods, filterFoodSuggestions } from './foods'
 import { useMyFoods } from './useMyFoods'
 
+/** 식사 시간대 바로 설정 */
+const MEAL_TIME_PRESETS = [
+  { label: '아침', time: '07:00' },
+  { label: '점심', time: '12:00' },
+  { label: '저녁', time: '18:00' },
+  { label: '야식', time: '22:00' },
+] as const
+
 interface FormValues {
   date: string
   time: string
@@ -177,6 +185,7 @@ export function MealFormPage() {
             maxDate={today}
             onDateChange={(date) => setValues((v) => ({ ...v, date }))}
             onTimeChange={(time) => setValues((v) => ({ ...v, time }))}
+            timePresets={MEAL_TIME_PRESETS}
           />
 
           <FoodChipInput

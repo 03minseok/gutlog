@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Button } from './Button'
 import { FieldHint } from './FieldHint'
 import { Icon } from './Icon'
-import { formatDateWithDay, isFutureDate } from '../lib/date'
+import { formatDateWithDay, isFutureDate, shiftTime } from '../lib/date'
 
 /** 기록 종류별 헤더 아이콘 */
 export type RecordCategory = 'meal' | 'bowel' | 'medication'
@@ -91,6 +91,11 @@ interface DateTimeFieldsProps {
   maxDate: string
   onDateChange: (date: string) => void
   onTimeChange: (time: string) => void
+  /**
+   * 시간 바로 설정 (예: 식사의 아침·점심·저녁·야식). 주면 시간 칸 양옆에 ± 1시간 버튼이 붙고,
+   * 아래에 이 버튼들이 한 줄로 놓인다. 지금 시간과 같은 버튼은 선택 상태로 보인다.
+   */
+  timePresets?: readonly { label: string; time: string }[]
 }
 
 /**
@@ -98,8 +103,21 @@ interface DateTimeFieldsProps {
  * 화면에는 "10월 13일 (화)", "13:18"처럼 앱의 다른 화면과 같은 형식으로 보여주고,
  * 실제 입력은 투명하게 겹친 네이티브 선택기가 받는다.
  */
-export function DateTimeFields({ date, time, maxDate, onDateChange, onTimeChange }: DateTimeFieldsProps) {
+export function DateTimeFields({ date, time, maxDate, onDateChange, onTimeChange, timePresets }: DateTimeFieldsProps) {
   const dateError = isFutureDate(date, maxDate) ? FUTURE_DATE_MESSAGE : null
+  if (timePresets) {
+    return (
+      <TimeToolsFields
+        date={date}
+        time={time}
+        maxDate={maxDate}
+        dateError={dateError}
+        onDateChange={onDateChange}
+        onTimeChange={onTimeChange}
+        presets={timePresets}
+      />
+    )
+  }
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="mb-2 text-body font-bold">언제였나요?</legend>
@@ -132,6 +150,100 @@ export function DateTimeFields({ date, time, maxDate, onDateChange, onTimeChange
 }
 
 const FUTURE_DATE_MESSAGE = '미래 날짜는 기록할 수 없어요'
+
+interface TimeToolsFieldsProps {
+  date: string
+  time: string
+  maxDate: string
+  dateError: string | null
+  onDateChange: (date: string) => void
+  onTimeChange: (time: string) => void
+  presets: readonly { label: string; time: string }[]
+}
+
+/**
+ * 시간을 빠르게 고르는 "언제였나요?" (식사)
+ * - 한 줄 2열: 날짜 칸 | 시간 칸. 시간 칸 안 양쪽에 − / + (1시간씩, 00시·23시에서 멈춤, 누르는 영역 44px).
+ *   가운데 시간 글자를 누르면 네이티브 시간 선택기가 열린다.
+ * - 아래 시간대 버튼 한 줄 (4열, h-11): 누르면 그 시각으로. 지금 시간과 같으면 선택 상태(sky-100 면 + sky-700 테두리 + 700).
+ */
+function TimeToolsFields({ date, time, maxDate, dateError, onDateChange, onTimeChange, presets }: TimeToolsFieldsProps) {
+  const earlier = shiftTime(time, -1)
+  const later = shiftTime(time, 1)
+  return (
+    <fieldset className="flex flex-col gap-2">
+      <legend className="mb-2 text-body font-bold">언제였나요?</legend>
+      <div className="grid grid-cols-2 gap-2">
+        <PickerField icon="calendar_today" display={date ? formatDateWithDay(date) : '날짜 선택'} invalid={dateError !== null}>
+          <input
+            type="date"
+            aria-label="날짜"
+            value={date}
+            max={maxDate}
+            required
+            onChange={(e) => onDateChange(e.target.value)}
+            className="picker-input absolute inset-0 h-full w-full opacity-0"
+          />
+        </PickerField>
+
+        <div className="flex h-12 items-center rounded-input border-[1.5px] border-gray-400 bg-white focus-within:border-sky-700 focus-within:ring-[3px] focus-within:ring-sky-100">
+          <StepButton icon="remove" label="1시간 전으로" disabled={!earlier || earlier === time} onClick={() => earlier && onTimeChange(earlier)} />
+          <label className="relative flex h-full min-w-0 flex-1 cursor-pointer items-center justify-center">
+            <span aria-hidden="true" className="text-body font-semibold text-ink tabular-nums">
+              {time || '시간'}
+            </span>
+            <input
+              type="time"
+              aria-label="시간"
+              value={time}
+              required
+              onChange={(e) => onTimeChange(e.target.value)}
+              className="picker-input absolute inset-0 h-full w-full opacity-0"
+            />
+          </label>
+          <StepButton icon="add" label="1시간 뒤로" disabled={!later || later === time} onClick={() => later && onTimeChange(later)} />
+        </div>
+      </div>
+      {dateError && <FieldHint tone="error">{dateError}</FieldHint>}
+
+      <div role="group" aria-label="시간대로 바로 설정" className="grid grid-cols-4 gap-2">
+        {presets.map((preset) => {
+          const selected = preset.time === time
+          return (
+            <button
+              key={preset.label}
+              type="button"
+              aria-pressed={selected}
+              aria-label={`${preset.label} ${preset.time}`}
+              onClick={() => onTimeChange(preset.time)}
+              className={
+                'h-11 rounded-btn border-[1.5px] text-body transition-colors ' +
+                (selected ? 'border-sky-700 bg-sky-100 font-bold text-ink' : 'border-gray-300 bg-white font-medium text-gray-700')
+              }
+            >
+              {preset.label}
+            </button>
+          )
+        })}
+      </div>
+    </fieldset>
+  )
+}
+
+/** 시간 칸 안의 − / + 버튼: 44×44, 아이콘만(gray-700, 비활성 gray-400). */
+function StepButton({ icon, label, disabled, onClick }: { icon: string; label: string; disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className="flex h-11 w-11 flex-none items-center justify-center rounded-input text-gray-700 disabled:text-gray-400"
+    >
+      <Icon name={icon} size={20} />
+    </button>
+  )
+}
 
 /** 날짜·시간 입력 칸: h-12, 1.5px gray-400, rounded-input, 왼쪽 아이콘 18 gray-500 + 표시 글자 15/600 */
 function PickerField({ icon, display, invalid = false, children }: { icon: string; display: string; invalid?: boolean; children: ReactNode }) {

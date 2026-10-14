@@ -4,9 +4,12 @@ import { GuestOnly, RequireAdmin, RequireAuth } from './auth/RequireAuth'
 import { ToastProvider } from './components/toast/ToastProvider'
 import { AdminMedicineFormPage } from './features/admin/AdminMedicineFormPage'
 import { AdminMedicinesPage } from './features/admin/AdminMedicinesPage'
+import { BowelDetailPage } from './features/bowel/BowelDetailPage'
 import { BowelFormPage } from './features/bowel/BowelFormPage'
 import { HomePage } from './features/home/HomePage'
+import { MealDetailPage } from './features/meal/MealDetailPage'
 import { MealFormPage } from './features/meal/MealFormPage'
+import { MedicationDetailPage } from './features/medication/MedicationDetailPage'
 import { MyMedicinesPage } from './features/medication/MyMedicinesPage'
 import { UserMedicineFormPage } from './features/medication/UserMedicineFormPage'
 import { MyPage } from './features/mypage/MyPage'
@@ -33,6 +36,10 @@ export default function App() {
                 <Route path="/record" element={<RecordPage />} />
                 <Route path="/stats" element={<StatsPage />} />
                 <Route path="/mypage" element={<MyPage />} />
+                {/* 기록 종류별 상세 */}
+                <Route path="/record/meal" element={<MealDetailPage />} />
+                <Route path="/record/bowel" element={<BowelDetailPage />} />
+                <Route path="/record/medication" element={<MedicationDetailPage />} />
                 <Route path="/record/medication/medicines" element={<MyMedicinesPage />} />
               </Route>
               {/* 기록·약 입력 화면: 전체 화면이지만 하단 탭은 보인다. */}

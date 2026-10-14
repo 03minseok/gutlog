@@ -90,3 +90,11 @@ export function formatDateWithDay(dateParam: string): string {
   const date = parseDateParam(dateParam)
   return date ? `${date.getMonth() + 1}월 ${date.getDate()}일 (${WEEKDAYS[date.getDay()]})` : dateParam
 }
+
+/** 'HH:mm'에 시간 더하기. 하루를 넘기지 않게 00:mm ~ 23:mm 안에서 멈춘다. 형식이 틀리면 null */
+export function shiftTime(time: string, hours: number): string | null {
+  const match = /^(\d{2}):(\d{2})$/.exec(time)
+  if (!match) return null
+  const hour = Math.min(23, Math.max(0, Number(match[1]) + hours))
+  return `${pad(hour)}:${match[2]}`
+}

@@ -9,7 +9,7 @@ export function BleedingBadge({ label, onTint = false }: { label: string; onTint
   return (
     <span
       className={
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-label font-semibold text-blood ' +
+        'inline-flex items-center gap-1 rounded-full px-2 pt-[3px] pb-px text-label font-semibold text-blood ' +
         (onTint ? 'border border-blood-border bg-white' : 'bg-blood-bg')
       }
     >

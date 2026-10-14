@@ -32,7 +32,8 @@ export function MedicationDayCard({ item, date, onChanged }: MedicationDayCardPr
 
   const { medicine } = item
   const dose = formatDose(item.doseAmount, medicine.doseUnit)
-  const subtitle = [medicine.genericName, scheduleSummary(item.scheduleType, item.dailyDoseCount, item.intervalDays), dose, item.doseMemo]
+  // 성분명은 약 이름 옆에 작게, 두 번째 줄에는 복용 방식 · 1회 복용량 · 메모만
+  const subtitle = [scheduleSummary(item.scheduleType, item.dailyDoseCount, item.intervalDays), dose, item.doseMemo]
     .filter(Boolean)
     .join(' · ')
   const maxDose = item.scheduleType === 'DAILY' ? (item.dailyDoseCount ?? 1) : 1
@@ -60,14 +61,12 @@ export function MedicationDayCard({ item, date, onChanged }: MedicationDayCardPr
   return (
     <article className={`flex flex-col gap-3 rounded-card border bg-white p-4 ${item.stopped ? 'border-gray-200 opacity-80' : 'border-gray-200'}`}>
       <div className="flex items-start gap-3">
-        <span className="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-med-bg text-med">
-          <Icon name="medication" size={20} />
-        </span>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="flex items-center gap-1.5">
-            <h3 className="truncate text-body font-bold">{medicineTitle(medicine)}</h3>
+          <span className="flex min-w-0 items-baseline gap-1.5">
+            <h3 className="min-w-0 truncate text-body font-bold">{medicineTitle(medicine)}</h3>
+            <span className="min-w-0 truncate text-caption text-gray-500">{medicine.genericName}</span>
             {item.stopped && (
-              <span className="flex-none rounded-full bg-gray-100 px-2 py-0.5 text-caption font-semibold text-gray-500">복용 중단</span>
+              <span className="flex-none self-center rounded-full bg-gray-100 px-2 py-0.5 text-caption font-semibold text-gray-500">복용 중단</span>
             )}
           </span>
           <p className="truncate text-label text-gray-500">{subtitle}</p>

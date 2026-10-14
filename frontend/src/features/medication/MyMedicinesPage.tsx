@@ -120,7 +120,7 @@ export function MyMedicinesPage() {
   )
 }
 
-/** 약 카드: 약 이름(제품명 + 제형) 15/600, 아래 줄에 성분명 · 복용 방식 · 1회 복용량 · 메모 13 gray-500. */
+/** 약 카드: 약 이름(제품명 + 제형) 15/600 + 옆에 성분명 12 gray-500, 아래 줄에 복용 방식 · 1회 복용량 · 메모 13 gray-500. */
 function MyMedicineCard({ item }: { item: UserMedicine }) {
   const details = [
     scheduleSummary(item.scheduleType, item.dailyDoseCount, item.intervalDays),
@@ -132,17 +132,15 @@ function MyMedicineCard({ item }: { item: UserMedicine }) {
   return (
     <Link
       to={`${MY_MEDICINES_PATH}/${item.id}/edit`}
-      aria-label={`${medicineTitle(item.medicine)}, ${details}. 수정하기`}
-      className="flex min-h-16 items-center gap-3 rounded-card border border-gray-200 bg-white py-3 pr-2 pl-3 hover:border-gray-300"
+      aria-label={`${medicineTitle(item.medicine)} (${item.medicine.genericName}), ${details}. 수정하기`}
+      className="flex items-center gap-3 rounded-card border border-gray-200 bg-white py-3 pr-2 pl-4 hover:border-gray-300"
     >
-      <span className="flex h-9 w-9 flex-none items-center justify-center rounded-input bg-med-bg text-med">
-        <Icon name="medication" size={20} />
-      </span>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="truncate text-body font-semibold">{medicineTitle(item.medicine)}</span>
-        <span className="truncate text-label text-gray-500">
-          {item.medicine.genericName} · {details}
+        <span className="flex min-w-0 items-baseline gap-1.5">
+          <span className="min-w-0 truncate text-body font-semibold">{medicineTitle(item.medicine)}</span>
+          <span className="min-w-0 truncate text-caption text-gray-500">{item.medicine.genericName}</span>
         </span>
+        <span className="truncate text-label text-gray-500">{details}</span>
       </span>
       <Icon name="chevron_right" size={20} className="flex-none text-gray-400" />
     </Link>

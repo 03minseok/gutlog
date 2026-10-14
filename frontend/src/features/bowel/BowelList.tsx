@@ -17,19 +17,21 @@ export function BowelList({ date }: { date: string }) {
     <RecordSection
       title="배변"
       icon="waves"
-      iconBox="bg-bowel-bg text-bowel"
+      panel="bg-bowel-bg"
+      iconColor="text-bowel"
       emptyMessage={<EmptyWithLink message="이 날의 배변 기록이 없어요" to={`/record/bowel/new?date=${date}`} label="배변 기록하기" />}
       state={state}
       onRetry={reload}
       badge={bleedingCount > 0 && <BleedingBadge label={`혈변 ${bleedingCount}회`} />}
       action={<AddRecordLink to={`/record/bowel/new?date=${date}`} label="배변" />}
+      detailTo="/record/bowel"
       getKey={(bowel) => bowel.id}
       renderItem={(bowel) => <BowelCard bowel={bowel} />}
     />
   )
 }
 
-function BowelCard({ bowel }: { bowel: Bowel }) {
+export function BowelCard({ bowel }: { bowel: Bowel }) {
   const formLinkState = useRecordFormLinkState()
   const { time } = splitDateTime(bowel.bowelAt)
   const condition = bristolLabel(bowel.bowelCondition)
@@ -42,7 +44,8 @@ function BowelCard({ bowel }: { bowel: Bowel }) {
       to={`/record/bowel/${bowel.id}/edit`}
       aria-label={`${summary}. 수정하기`}
       className={
-        'flex min-h-14 items-center gap-3 rounded-card border py-3 pr-2 pl-4 ' +
+        'flex items-center gap-3 rounded-card border pt-2.5 pr-2 pl-4 ' +
+        (bowel.memo ? 'pb-2.5 ' : 'pb-3.5 ') +
         (bowel.bleeding ? 'border-blood-border bg-blood-bg' : 'border-gray-200 bg-white hover:border-gray-300')
       }
     >

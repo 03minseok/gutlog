@@ -21,7 +21,8 @@ interface FoodChipInputProps {
  * - 콤마나 엔터로 입력한 글자 그대로 칩을 만든다.
  * - 후보를 누르거나 ↑↓로 고르고 엔터를 치면 그 후보를 칩으로 만든다.
  * - 한글 조합 중에는 엔터·방향키를 무시한다. (조합 중 엔터를 처리하면 글자가 반만 들어가거나 두 번 추가된다)
- * - 입력칸이 비어 있고 목록이 닫혀 있으면 "자주 먹은 음식"을 버튼으로 보여준다. (누르면 바로 칩으로 추가)
+ * - 입력칸 바로 아래 "자주 먹은 음식" 칸을 처음부터 보여준다. (입력칸이 비어 있을 때, 누르면 바로 칩으로 추가)
+ * - 글자를 입력하면 그 칸 대신 검색 결과 목록이 펼쳐진다.
  */
 export function FoodChipInput({
   label,
@@ -43,9 +44,10 @@ export function FoodChipInput({
   const [dismissed, setDismissed] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
 
-  const open = focused && !dismissed && suggestions.length > 0
-  const active = open && activeIndex < suggestions.length ? activeIndex : -1
   const query = draft.trim()
+  // 검색 결과 목록은 글자를 입력했을 때만 펼친다. 비어 있을 때는 아래 '자주 먹은 음식' 칸이 늘 보인다.
+  const open = focused && !dismissed && query !== '' && suggestions.length > 0
+  const active = open && activeIndex < suggestions.length ? activeIndex : -1
   const optionId = (index: number) => `${listId}-option-${index}`
 
   function handleChange(value: string) {
@@ -129,7 +131,7 @@ export function FoodChipInput({
                 }}
                 aria-label={`${food} 삭제`}
                 // 칩(36px)보다 크게 44×44 누르는 영역을 둔다.
-                className="-my-1 flex h-11 w-11 flex-none items-center justify-center rounded-full hover:bg-white/60"
+                className="-my-1 flex h-11 w-11 flex-none items-center justify-center rounded-full"
               >
                 <Icon name="close" size={16} />
               </button>
@@ -164,9 +166,34 @@ export function FoodChipInput({
         />
       </div>
 
+      {/* 자주 먹은 음식 칸: 입력칸 바로 아래에 처음부터 보인다. 누르면 바로 칩으로 추가(입력칸 포커스는 유지). */}
+      {query === '' && suggestions.length > 0 && (
+        <div className="flex flex-col gap-2 rounded-card bg-gray-50 px-3 pt-2.5 pb-3">
+          <p className="flex items-center gap-1 text-caption font-semibold text-gray-500">
+            <Icon name="history" size={14} />
+            자주 먹은 음식
+          </p>
+          <ul className="flex flex-wrap gap-2" aria-label="자주 먹은 음식">
+            {suggestions.map((name) => (
+              <li key={name} className="max-w-full">
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => select(name)}
+                  aria-label={`${name} 추가`}
+                  className="flex min-h-11 max-w-full items-center gap-1 rounded-full border border-gray-300 bg-white pr-3.5 pl-2.5 text-body text-ink hover:border-gray-400"
+                >
+                  <Icon name="add" size={16} className="flex-none text-gray-500" />
+                  <span className="truncate">{name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* 후보 목록: 아래 내용을 밀어내며 펼친다. (스크롤 영역에 잘리거나 키보드에 가리지 않게) */}
       <div hidden={!open} className="overflow-hidden rounded-input border border-gray-200 bg-white py-1">
-        {query === '' && <p className="px-3.5 pt-2 pb-1 text-caption font-semibold text-gray-500">자주 먹은 음식</p>}
         <ul id={listId} role="listbox" aria-label="음식 추천">
           {open &&
             suggestions.map((name, index) => (
@@ -184,7 +211,7 @@ export function FoodChipInput({
                   (index === active ? 'bg-sky-100 text-ink' : 'text-ink')
                 }
               >
-                <Icon name={query === '' ? 'history' : 'search'} size={18} className="flex-none text-gray-500" />
+                <Icon name="search" size={18} className="flex-none text-gray-500" />
                 <span className="min-w-0 truncate">
                   <Highlight text={name} query={query} />
                 </span>
@@ -201,27 +228,6 @@ export function FoodChipInput({
         )}
       </div>
 
-      {/* 자주 먹은 음식: 입력칸을 누르기 전에도 보여서 한 번에 추가할 수 있다. 입력칸이 열려 있으면 위 목록이 대신한다. */}
-      {!open && query === '' && suggestions.length > 0 && (
-        <div className="mt-2 flex flex-col gap-2">
-          <p className="text-caption font-semibold text-gray-500">자주 먹은 음식</p>
-          <ul className="flex flex-wrap gap-2" aria-label="자주 먹은 음식">
-            {suggestions.map((name) => (
-              <li key={name} className="max-w-full">
-                <button
-                  type="button"
-                  onClick={() => select(name)}
-                  aria-label={`${name} 추가`}
-                  className="flex min-h-11 max-w-full items-center gap-1 rounded-full border border-gray-300 bg-white pr-3.5 pl-2.5 text-body text-ink hover:border-gray-400"
-                >
-                  <Icon name="add" size={16} className="flex-none text-gray-500" />
-                  <span className="truncate">{name}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   )
 }

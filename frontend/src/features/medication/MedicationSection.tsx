@@ -1,7 +1,6 @@
 import { Link } from 'react-router'
 import type { DailyMedicationItem } from '../../api/medication'
-import { Icon } from '../../components/Icon'
-import { RecordSection } from '../record/RecordSection'
+import { EmptyWithLink, RecordSection } from '../record/RecordSection'
 import type { DayRecordsState } from '../record/useDayRecords'
 import { MY_MEDICINES_PATH } from './constants'
 import { MedicationDayCard } from './MedicationDayCard'
@@ -24,7 +23,9 @@ export function MedicationSection({ date }: { date: string }) {
     <RecordSection
       title="복약"
       icon="medication"
-      iconBox="bg-med-bg text-med"
+      panel="bg-med-bg"
+      iconColor="text-med"
+      collapseAfter={2}
       state={sectionState}
       onRetry={refresh}
       countLabel={countLabel}
@@ -33,18 +34,8 @@ export function MedicationSection({ date }: { date: string }) {
           내 약 관리
         </Link>
       }
-      emptyMessage={
-        <div className="flex flex-col items-center gap-1">
-          <p>이 날 복용 중이던 약이 없어요</p>
-          <Link
-            to={`${MY_MEDICINES_PATH}/new`}
-            className="inline-flex min-h-11 items-center gap-1 px-2 text-body font-semibold text-sky-700 hover:text-sky-800"
-          >
-            <Icon name="add" size={18} />
-            먹는 약 등록하기
-          </Link>
-        </div>
-      }
+      emptyMessage={<EmptyWithLink message="이 날 복용 중이던 약이 없어요" to={`${MY_MEDICINES_PATH}/new`} label="먹는 약 등록하기" />}
+      detailTo="/record/medication"
       getKey={(item) => item.userMedicineId}
       renderItem={(item) => <MedicationDayCard item={item} date={date} onChanged={refresh} />}
     />

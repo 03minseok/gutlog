@@ -14,11 +14,13 @@ export function MealList({ date }: { date: string }) {
     <RecordSection
       title="식사"
       icon="restaurant"
-      iconBox="bg-meal-bg text-meal"
+      panel="bg-meal-bg"
+      iconColor="text-meal"
       emptyMessage={<EmptyWithLink message="이 날의 식사 기록이 없어요" to={`/record/meal/new?date=${date}`} label="식사 기록하기" />}
       state={state}
       onRetry={reload}
       action={<AddRecordLink to={`/record/meal/new?date=${date}`} label="식사" />}
+      detailTo="/record/meal"
       getKey={(meal) => meal.id}
       renderItem={(meal) => <MealCard meal={meal} />}
     />
@@ -26,7 +28,7 @@ export function MealList({ date }: { date: string }) {
 }
 
 /** 식사 카드: 시간 + 음식 이름(가운뎃점으로 이어 씀). 음식을 칩으로 그리면 각각 누를 수 있어 보여서 글자로 쓴다. */
-function MealCard({ meal }: { meal: Meal }) {
+export function MealCard({ meal }: { meal: Meal }) {
   const formLinkState = useRecordFormLinkState()
   const { time } = splitDateTime(meal.eatenAt)
   return (
@@ -34,7 +36,7 @@ function MealCard({ meal }: { meal: Meal }) {
       state={formLinkState}
       to={`/record/meal/${meal.id}/edit`}
       aria-label={`${time} 식사: ${meal.foods.join(', ')}. 수정하기`}
-      className="flex min-h-14 items-center gap-3 rounded-card border border-gray-200 bg-white py-3 pr-2 pl-4 hover:border-gray-300"
+      className="flex items-center gap-3 rounded-card border border-gray-200 bg-white py-3.5 pr-2 pl-4 hover:border-gray-300"
     >
       <span className="w-12 flex-none self-start text-body font-semibold tabular-nums">{time}</span>
       <p className="min-w-0 flex-1 self-start text-body break-keep text-ink">{meal.foods.join(' · ')}</p>
