@@ -23,6 +23,9 @@ public enum ErrorCode {
     MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MD001", "약을 찾을 수 없습니다."),
     DUPLICATE_MEDICINE(HttpStatus.CONFLICT, "MD002", "이미 등록된 약입니다."),
 
+    SCHEDULE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "S001", "복용 일정을 찾을 수 없습니다."),
+    NOT_IN_USE_ON_DATE(HttpStatus.BAD_REQUEST,"S002", "그 날짜에는 복용 중인 약이 아닙니다."),
+
     USER_MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "UM001", "복용 약을 찾을 수 없습니다."),
     DUPLICATE_USER_MEDICINE(HttpStatus.CONFLICT, "UM002", "이미 복용 중인 약입니다."),
     INVALID_DOSE_AMOUNT(HttpStatus.BAD_REQUEST, "UM003", "복용량이 올바르지 않습니다."),
