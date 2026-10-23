@@ -1,5 +1,6 @@
 package com.gutlog.domain.record.medication.dto.response;
 
+import com.gutlog.domain.record.medication.entity.MedicationSchedule;
 import com.gutlog.domain.record.medication.entity.ScheduleType;
 import com.gutlog.domain.record.medication.entity.UserMedicine;
 
@@ -36,16 +37,17 @@ public record DailyMedicationResponse(
 			LocalDate lastTakenDate,
 			LocalDate nextDueDate
 	) {
-		public static Item of(UserMedicine userMedicine, List<Integer> takenDoses, LocalDate lastTakenDate) {
-			LocalDate nextDueDate = lastTakenDate == null ? null : lastTakenDate.plusDays(userMedicine.getIntervalDays());
+		public static Item of(MedicationSchedule schedule, List<Integer> takenDoses, LocalDate lastTakenDate) {
+			UserMedicine userMedicine = schedule.getUserMedicine();
+			LocalDate nextDueDate = lastTakenDate == null ? null : lastTakenDate.plusDays(schedule.getIntervalDays());
 			return new Item(
 					userMedicine.getId(),
 					MedicineResponse.fromEntity(userMedicine.getMedicine()),
-					userMedicine.getScheduleType(),
-					userMedicine.getDailyDoseCount(),
-					userMedicine.getIntervalDays(),
-					userMedicine.getDoseAmount(),
-					userMedicine.getDoseMemo(),
+					schedule.getScheduleType(),
+					schedule.getDailyDoseCount(),
+					schedule.getIntervalDays(),
+					schedule.getDoseAmount(),
+					schedule.getDoseMemo(),
 					userMedicine.isDeleted(),
 					takenDoses,
 					lastTakenDate,

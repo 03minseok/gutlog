@@ -42,16 +42,14 @@ public class MedicationLog extends BaseTimeEntity {
 	@Column(nullable = false, length = 10)
 	private String doseUnit; // mg, 정, 포
 
-	private MedicationLog(UserMedicine userMedicine, LocalDate takenDate, int doseNumber, Integer doseAmount, String doseUnit) {
+	private MedicationLog(UserMedicine userMedicine, LocalDate takenDate, int doseNumber) {
 		this.userMedicine = userMedicine;
 		this.takenDate = takenDate;
 		this.doseNumber = doseNumber;
-		this.doseAmount = doseAmount;
-		this.doseUnit = doseUnit;
 	}
 
-	public static MedicationLog create(UserMedicine userMedicine, LocalDate takenDate, int doseNumber, Integer doseAmount, String doseUnit) {
-		return new MedicationLog(userMedicine, takenDate, doseNumber, doseAmount, doseUnit);
+	public static MedicationLog create(UserMedicine userMedicine, LocalDate takenDate, int doseNumber) {
+		return new MedicationLog(userMedicine, takenDate, doseNumber);
 	}
 
 	public void delete() {
