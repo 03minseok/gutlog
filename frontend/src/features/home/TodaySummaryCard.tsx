@@ -24,7 +24,7 @@ interface BowelSummary {
  * 오늘의 기록 카드. 요약 API가 아직 없어서
  * 식사·배변은 오늘 하루 기간 조회 결과의 개수, 복약은 날짜별 조회의 n / m(DAILY 약의 회차만)으로 채운다.
  * - 불러오는 중: 회색 막대, 실패: "불러오지 못함", 매일 먹는 약 없음(m = 0): "약 없음" — 숫자와 같은 높이 한 줄로 써서 칸 높이를 맞춘다.
- * - 식사·복약·배변은 각자 카테고리 배경색 칸으로 나눠 구분한다.
+ * - 식사·배변·복약은 각자 카테고리 배경색 칸으로 나눠 구분한다. (순서는 식사 · 배변 · 복약)
  *   칸 윗줄("식사 ›")을 누르면 그 기록의 상세 화면, 숫자 옆 ＋를 누르면 바로 기록한다.
  *   ＋: 식사·배변 → 입력 화면, 복약 → 기록 탭(복약은 따로 입력 화면 없이 섹션에서 체크한다).
  * - 오른쪽 위 "바로가기"는 기록 탭(오늘)으로 이동한다.
@@ -85,6 +85,9 @@ export function TodaySummaryCard({ today }: { today: string }) {
         <Column detailTo="/record/meal" addTo="/record/meal/new" icon="restaurant" label="식사" addLabel="식사 기록하기" color="text-meal" className="bg-meal-bg">
           <Value load={meal} render={(count) => <Count value={count} unit="회" />} />
         </Column>
+        <Column detailTo="/record/bowel" addTo="/record/bowel/new" icon="waves" label="배변" addLabel="배변 기록하기" color="text-bowel" className="bg-bowel-bg">
+          <Value load={bowel} render={({ count }) => <Count value={count} unit="회" />} />
+        </Column>
         <Column detailTo="/record/medication" addTo="/record" icon="medication" label="복약" addLabel="오늘 복약 체크하기" color="text-med" className="bg-med-bg">
           <Value
             load={medication}
@@ -92,9 +95,6 @@ export function TodaySummaryCard({ today }: { today: string }) {
               total === 0 ? <Empty note="약 없음" /> : <Count value={taken} unit={`/ ${total}`} />
             }
           />
-        </Column>
-        <Column detailTo="/record/bowel" addTo="/record/bowel/new" icon="waves" label="배변" addLabel="배변 기록하기" color="text-bowel" className="bg-bowel-bg">
-          <Value load={bowel} render={({ count }) => <Count value={count} unit="회" />} />
         </Column>
       </div>
 

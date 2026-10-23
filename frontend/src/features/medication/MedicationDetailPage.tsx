@@ -1,29 +1,25 @@
-import { Link } from 'react-router'
+import { useState } from 'react'
+import { useSearchParams } from 'react-router'
 import { medicationApi, type DailyMedication, type DailyMedicationItem } from '../../api/medication'
 import { Icon } from '../../components/Icon'
-import { addDays, formatDateWithDay } from '../../lib/date'
-import { DetailHeader, DetailHeaderLink, NoMatch, RangeStatus, SearchBox, StatTiles } from '../record/CategoryDetail'
-import { dateSearchTexts, matchesQuery, useDetailParams, useRangeRecords } from '../record/detail'
-import { medicineTitle, MY_MEDICINES_PATH } from './constants'
-
-const DAYS = 7
+import { addDays, formatDateWithDay, isValidDateParam, relativeDayLabel, todayParam } from '../../lib/date'
+import { DetailTop, PeriodCalendar, ToolBarButton } from '../record/CategoryDetail'
+import { useRangeRecords, weekStartOf } from '../record/detail'
+import { EmptyWithLink, RecordSection } from '../record/RecordSection'
+import type { DayRecordsState } from '../record/useDayRecords'
+import { MY_MEDICINES_PATH } from './constants'
+import { MedicationDayCard } from './MedicationDayCard'
+import { useMyMedicinesSheet } from './useMyMedicinesSheet'
 
 /**
- * 복약은 기간 조회 API가 없어 날짜별 조회를 하루씩 불러온다. (최근 7일 = 요청 7번)
- * 모듈 수준 함수라 렌더마다 새로 만들어지지 않는다. 결과는 최근 날짜가 먼저.
+ * 복약은 기간 조회 API가 없어 날짜별 조회를 하루씩 불러온다. (한 주 = 요청 최대 7번)
+ * TODO: 날짜별 조회와 같은 모양의 기간 조회 API가 생기면 이 함수만 바꿔 요청 1번으로 줄인다.
+ * 모듈 수준 함수라 렌더마다 새로 만들어지지 않는다.
  */
 function fetchDays(from: string, to: string): Promise<DailyMedication[]> {
   const dates: string[] = []
-  for (let date = to; date >= from; date = addDays(date, -1)) dates.push(date)
+  for (let date = from; date <= to; date = addDays(date, 1)) dates.push(date)
   return Promise.all(dates.map((date) => medicationApi.daily(date)))
-}
-
-/** 약 하나의 그날 체크 상태: 매일 "1 / 2회", 간격 투여 "투여함", 필요할 때 "n회" (체크 없으면 null) */
-function doseStatus(item: DailyMedicationItem): string | null {
-  const taken = item.takenDoses.length
-  if (item.scheduleType === 'DAILY') return `${taken} / ${item.dailyDoseCount ?? 1}회`
-  if (taken === 0) return null
-  return item.scheduleType === 'INTERVAL' ? '투여함' : `${taken}회`
 }
 
 /** 매일 먹는 약(DAILY)의 체크 회차 수 / 전체 회차 수. 줄인 횟수를 넘는 옛 체크는 세지 않는다. */
@@ -39,111 +35,147 @@ function dailyCounts(medicines: DailyMedicationItem[]): { taken: number; total: 
   return { taken, total }
 }
 
+type Mark = 'full' | 'half' | 'none' | 'blank'
+
+/** 날짜 칸 아래 표시: 다 먹음 ● / 일부 ◐ / 안 먹음 ○. 매일 먹는 약이 없는 날·미래·불러오는 중은 비움. */
+function markOf(day: DailyMedication | undefined): Mark {
+  if (!day) return 'blank'
+  const { taken, total } = dailyCounts(day.medicines)
+  if (total === 0) return 'blank'
+  if (taken >= total) return 'full'
+  return taken > 0 ? 'half' : 'none'
+}
+
+const MARK_LABEL: Record<Mark, string> = { full: '다 먹음', half: '일부 먹음', none: '안 먹음', blank: '' }
+
 /**
- * 복약 상세 — 최근 7일 복약 기록. (기간 조회 API가 없어 7일 고정)
- * 헤더(내 약 관리) → 검색창(약 이름·성분명·날짜) → 체크 수 → 날짜별 카드(그날 약마다 체크 상태).
- * 카드를 누르면 그날 기록 탭으로 가서 체크를 바꿀 수 있다.
- * 기록 자체에 대한 정보만 둔다. 복용률 같은 해석한 값은 분석 탭에서 보여준다.
+ * 복약 상세 — 날짜를 고르고, 그날 복용 중인 약을 바로 체크한다. 모아 보는 건 통계 탭이 맡는다.
+ * 헤더 + 전환 버튼 → 달력(주, 날마다 체크 표시) → "내 약 관리" 칸(식사 검색창과 같은 크기) → 고른 날 요약(날짜 · 2 / 3 · n회 남음) → 복용 중인 약 + 체크 카드.
+ * 복약은 날짜별 조회를 하루씩 불러와야 해서 달력을 월·년으로 넓히지 않는다.
+ * 고른 날은 주소(?date=)에 둔다: 홈에서는 오늘, 기록 탭에서는 보던 날짜로 들어온다. 미래는 고를 수 없다.
+ * 체크하면 그날만 다시 불러와 주간 표시와 요약을 바로 바꾼다.
+ * "내 약 관리"는 새 화면이 아니라 아래에서 올라오는 시트로 연다. (useMyMedicinesSheet)
  */
 export function MedicationDetailPage() {
-  const { today, query, setQuery } = useDetailParams()
-  const from = addDays(today, -(DAYS - 1))
-  const { state, reload } = useRangeRecords(fetchDays, from, today, '복약 기록을 불러오지 못했어요')
-  const all = state.status === 'ready' ? state.items : []
-  const searching = query.trim() !== ''
+  const [today] = useState(todayParam)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const param = searchParams.get('date')
+  const selected = isValidDateParam(param) && param <= today ? param : today
 
-  // 날짜가 맞으면 그날 약 전부, 아니면 이름이 맞는 약만 남긴다. 검색 중에는 남은 약이 없는 날을 뺀다.
-  const days = all
-    .map((day) => {
-      if (matchesQuery(dateSearchTexts(day.date, today), query)) return day
-      const medicines = day.medicines.filter((item) =>
-        matchesQuery([medicineTitle(item.medicine), item.medicine.brandName, item.medicine.genericName, ...dateSearchTexts(day.date, today)], query),
-      )
-      return { ...day, medicines }
-    })
-    .filter((day) => !searching || day.medicines.length > 0)
+  function select(date: string) {
+    const next = date > today ? today : date
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev)
+        if (next === today) params.delete('date')
+        else params.set('date', next)
+        return params
+      },
+      { replace: true },
+    )
+  }
 
-  const { taken, total } = dailyCounts(days.flatMap((day) => day.medicines))
-  const checkedDays = days.filter((day) => day.medicines.some((item) => item.takenDoses.length > 0)).length
+  const { openSheet, sheet } = useMyMedicinesSheet()
+
+  const weekStart = weekStartOf(selected)
+  const weekEnd = addDays(weekStart, 6)
+  const fetchTo = weekEnd < today ? weekEnd : today
+  const { state, reload } = useRangeRecords(fetchDays, weekStart, fetchTo, '복약 기록을 불러오지 못했어요')
+
+  // 체크를 바꾼 날만 다시 불러와 덮어쓴다. (한 주를 다시 부르지 않게)
+  const [overrides, setOverrides] = useState<Record<string, DailyMedication>>({})
+  function refreshDay(date: string) {
+    medicationApi
+      .daily(date)
+      .then((day) => setOverrides((prev) => ({ ...prev, [date]: day })))
+      .catch(() => reload())
+  }
+
+  // 주를 넘기는 동안은 이전 주 목록이 남아 있으므로, 이번 주 날짜만 찾는다.
+  const byDate = new Map((state.status === 'ready' ? state.items : []).map((day) => [day.date, overrides[day.date] ?? day]))
+  const day = byDate.get(selected)
+  const sectionState: DayRecordsState<DailyMedicationItem> =
+    state.status === 'error' ? state : day ? { status: 'ready', items: day.medicines } : { status: 'loading' }
+  const { taken, total } = dailyCounts(day?.medicines ?? [])
+  const relative = relativeDayLabel(selected, today)
 
   return (
     <div className="flex flex-col">
-      <DetailHeader category="medication" action={<DetailHeaderLink to={MY_MEDICINES_PATH} label="내 약 관리" />} />
-      <div className="flex flex-col gap-4 px-4 pt-1 pb-6">
-        <SearchBox value={query} onChange={setQuery} placeholder="약 이름이나 날짜 (예: 펜타사, 어제)" />
-        <p className="-mt-1 px-1 text-label text-gray-500">최근 7일 기록</p>
+      <DetailTop category="medication" />
+      <div className="flex flex-col gap-4 px-4 pt-3 pb-6">
+        <PeriodCalendar
+          mode="week"
+          start={weekStart}
+          selected={selected}
+          today={today}
+          onSelect={select}
+          onMove={(weeks) => select(addDays(selected, weeks * 7))}
+          mark={(date) => <MarkDot mark={markOf(byDate.get(date))} />}
+          markLabel={(date) => MARK_LABEL[markOf(byDate.get(date))]}
+          legend={
+            <>
+              <span className="flex items-center gap-1">
+                <MarkDot mark="full" />다 먹음
+              </span>
+              <span className="flex items-center gap-1">
+                <MarkDot mark="half" />일부
+              </span>
+              <span className="flex items-center gap-1">
+                <MarkDot mark="none" />안 먹음
+              </span>
+            </>
+          }
+        />
+        <ToolBarButton icon="medication" label="내 약 관리" onClick={openSheet} haspopup="dialog" />
 
-        {state.status === 'ready' && (
-          <StatTiles
-            stats={[
-              { label: '체크(매일 먹는 약)', value: total > 0 ? `${taken} / ${total}` : '없음' },
-              { label: '체크한 날', value: `${checkedDays}일` },
-            ]}
-          />
-        )}
-
-        <RangeStatus state={state} onRetry={reload} emptyMessage={null} />
-        {state.status === 'ready' && searching && days.length === 0 && <NoMatch query={query.trim()} />}
-
-        <ul className="flex flex-col gap-2">
-          {days.map((day) => (
-            <li key={day.date}>
-              <DayCard day={day} />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-/**
- * 하루 카드: 날짜 15/600 + (매일 먹는 약) "2 / 3" + 칩(다 먹음 / n회 남음) + ›,
- * 아래에 약마다 "펜타사 정제 … 1 / 2회". 누르면 그날 기록 탭.
- */
-function DayCard({ day }: { day: DailyMedication }) {
-  const { taken, total } = dailyCounts(day.medicines)
-  const remaining = total - taken
-  return (
-    <Link
-      to={`/record?date=${day.date}`}
-      className="flex items-center gap-2 rounded-card border border-gray-200 bg-white py-3 pr-2 pl-4 hover:border-gray-300"
-    >
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <span className="flex-1 text-body font-semibold tabular-nums">{formatDateWithDay(day.date)}</span>
-          {total > 0 && (
+        <div className="-mb-1 flex min-h-7 items-center gap-2 px-1">
+          <h2 className="flex-1 text-body font-bold tabular-nums">
+            {formatDateWithDay(selected)}
+            {relative && <span className="ml-1.5 text-label font-medium text-gray-500">{relative}</span>}
+          </h2>
+          {day && total > 0 && (
             <>
               <span className="text-body font-semibold tabular-nums">
                 {taken} / {total}
               </span>
-              {remaining <= 0 ? (
+              {taken >= total ? (
                 <span className="flex items-center gap-0.5 rounded-full bg-ok-bg px-2 pt-[3px] pb-px text-label font-semibold text-ok">
                   <Icon name="check" size={14} />다 먹음
                 </span>
               ) : (
-                <span className="rounded-full bg-gray-100 px-2 pt-[3px] pb-px text-label font-medium text-gray-700 tabular-nums">{remaining}회 남음</span>
+                <span className="rounded-full bg-gray-100 px-2 pt-[3px] pb-px text-label font-medium text-gray-700 tabular-nums">
+                  {total - taken}회 남음
+                </span>
               )}
             </>
           )}
         </div>
-        {day.medicines.length === 0 ? (
-          <p className="text-label text-gray-500">복용 중인 약이 없어요</p>
-        ) : (
-          <ul className="flex flex-col gap-1">
-            {day.medicines.map((item) => {
-              const status = doseStatus(item)
-              return (
-                <li key={item.userMedicineId} className="flex items-center gap-2 text-label">
-                  <span className="min-w-0 flex-1 truncate text-gray-700">{medicineTitle(item.medicine)}</span>
-                  <span className={`flex-none tabular-nums ${status ? 'font-semibold text-ink' : 'text-gray-500'}`}>{status ?? '안 먹음'}</span>
-                </li>
-              )
-            })}
-          </ul>
-        )}
+
+        <RecordSection
+          title="복용 중인 약"
+          icon="medication"
+          panel="bg-med-bg"
+          iconColor="text-med"
+          state={sectionState}
+          onRetry={reload}
+          countLabel={day ? `${day.medicines.length}개` : ''}
+          emptyMessage={<EmptyWithLink message="이 날 복용 중이던 약이 없어요" to={`${MY_MEDICINES_PATH}/new`} label="먹는 약 등록하기" />}
+          getKey={(item) => item.userMedicineId}
+          renderItem={(item) => <MedicationDayCard item={item} date={selected} onChanged={() => refreshDay(selected)} />}
+        />
       </div>
-      <Icon name="chevron_right" size={20} className="flex-none text-gray-400" />
-    </Link>
+      {sheet}
+    </div>
   )
+}
+
+/** 체크 표시 9px: 꽉 찬 원 / 반 찬 원 / 빈 원 (복약색, 빈 원은 gray-500) */
+function MarkDot({ mark }: { mark: Mark }) {
+  const style = {
+    full: 'bg-med',
+    half: 'border-[1.5px] border-med bg-[linear-gradient(90deg,var(--color-med)_50%,transparent_50%)]',
+    none: 'border-[1.5px] border-gray-500',
+    blank: 'invisible',
+  }[mark]
+  return <span aria-hidden="true" className={`block h-[9px] w-[9px] flex-none rounded-full ${style}`} />
 }

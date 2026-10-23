@@ -13,6 +13,8 @@ interface MedicationDayCardProps {
   date: string
   /** 체크·취소가 끝나면 날짜별 현황을 다시 받는다. (n/m 갱신) */
   onChanged: () => void
+  /** true면 카드 테두리·면·여백 없이 내용만 (다른 카드 안에 넣을 때) */
+  plain?: boolean
 }
 
 /**
@@ -20,7 +22,7 @@ interface MedicationDayCardProps {
  * DAILY: 회차 버튼 (순서대로 체크, 역순으로 취소) / INTERVAL: 투여 체크 + 마지막·다음 예정일 / AS_NEEDED: 먹었어요 체크
  * 끊은 약은 기록만 보여주고 바꿀 수 없다.
  */
-export function MedicationDayCard({ item, date, onChanged }: MedicationDayCardProps) {
+export function MedicationDayCard({ item, date, onChanged, plain = false }: MedicationDayCardProps) {
   // 서버 응답으로 바로 반영하고, onChanged로 받은 새 현황이 오면 그 값을 따른다.
   const [taken, setTaken] = useState<{ source: number[]; doses: Set<number> }>(() => ({
     source: item.takenDoses,
@@ -59,7 +61,7 @@ export function MedicationDayCard({ item, date, onChanged }: MedicationDayCardPr
   }
 
   return (
-    <article className={`flex flex-col gap-3 rounded-card border bg-white p-4 ${item.stopped ? 'border-gray-200 opacity-80' : 'border-gray-200'}`}>
+    <article className={`flex flex-col gap-3 ${plain ? '' : 'rounded-card border border-gray-200 bg-white p-4'} ${item.stopped ? 'opacity-80' : ''}`}>
       <div className="flex items-start gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="flex min-w-0 items-baseline gap-1.5">

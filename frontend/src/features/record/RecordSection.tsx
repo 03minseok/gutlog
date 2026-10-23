@@ -8,7 +8,7 @@ import type { DayRecordsState } from './useDayRecords'
 interface RecordSectionProps<T> {
   title: string
   icon: string
-  /** 섹션 배경색 (예: 'bg-meal-bg'). 식사·복약·배변을 서로 다른 면으로 묶어 구분한다. */
+  /** 섹션 배경색 (예: 'bg-meal-bg'). 식사·배변·복약을 서로 다른 면으로 묶어 구분한다. */
   panel: string
   /** 아이콘 색 (예: 'text-meal'). 아이콘 박스는 배경 위에서 보이도록 흰 면이다. */
   iconColor: string

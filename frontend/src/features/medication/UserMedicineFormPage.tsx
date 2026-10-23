@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type FormEvent } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { medicationApi, type Medicine, type ScheduleType, type UserMedicine } from '../../api/medication'
 import { isNotFound, messageOf } from '../../api/types'
 import { Button } from '../../components/Button'
@@ -8,6 +8,7 @@ import { FieldHint } from '../../components/FieldHint'
 import { Icon } from '../../components/Icon'
 import { NotFoundView } from '../../components/NotFoundView'
 import { DeleteAction, FormLoadStatus, RecordFormScreen } from '../../components/RecordFormScreen'
+import type { RecordFormLinkState } from '../../components/recordForm'
 import { SegmentedControl } from '../../components/SegmentedControl'
 import { useToast } from '../../components/toast/ToastContext'
 import {
@@ -125,7 +126,10 @@ export function UserMedicineFormPage() {
   }, [isEdit, userMedicineId, invalidId])
 
   const update = (patch: Partial<FormValues>) => setValues((v) => ({ ...v, ...patch }))
-  const goToList = () => navigate(MY_MEDICINES_PATH, { replace: true })
+  const location = useLocation()
+  // 앱 안의 링크로 열었으면(state.from) 보던 화면(약 관리 시트·약 관리 화면·기록 탭)으로 돌아간다. 주소로 바로 들어왔으면 약 관리 화면으로.
+  const openedFrom = (location.state as Partial<RecordFormLinkState> | null)?.from
+  const goToList = () => (openedFrom ? navigate(-1) : navigate(MY_MEDICINES_PATH, { replace: true }))
 
   const missing = missingLabel(values)
   const intervalDays = parseIntervalDays(values.intervalDays)
