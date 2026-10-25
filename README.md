@@ -88,7 +88,12 @@
 ---
 
 ## 관련 글
-프로젝트를 만들며 정리한 글. (velog)
+프로젝트를 만들며 정리한 글. (velog, 네이버 블로그)
+
+**프로젝트 기반·User 도메인**
+- [스프링 부트 프로젝트 시작 전 기본 구조 잡기](https://blog.naver.com/iris15977/224422580172) (패키지 구조, 공통 응답·예외 처리, SecurityConfig)
+- [도메인 개발 시 생각해야 할 점 (User 도메인 기준)](https://blog.naver.com/iris15977/224426262422) (엔티티 생성 규칙, DTO 검증, 예외 처리)
+- [User 인증 구현 정리 — 회원가입부터 JWT까지](https://blog.naver.com/iris15977/224428106029)
 
 **인증·인가 — Spring Security 파헤치기**
 - [1부 — 인증, 인가, 그리고 JWT](https://velog.io/@03minseok/Spring-Security-파헤치기-1부-인증-인가-그리고-JWT)
@@ -98,14 +103,12 @@
 
 **API·구조 설계**
 - [프로젝트 시작 전 스켈레톤 코드: 전역 예외 처리](https://velog.io/@03minseok/프로젝트-시작-전-스켈레톤-코드-전역-예외-처리)
-- [DTO와 엔티티 사이: toEntity와 from](https://velog.io/@03minseok/DTO와-엔티티-사이-toEntity와-from)
-- [Spring JPA 엔티티를 직접 반환하면 안 되는 이유 — 순환 참조 트러블슈팅](https://velog.io/@03minseok/Spring-JPA-엔티티를-직접-반환하면-안되는-이유-순환-참조-트러블슈팅)
 
 **JPA·데이터 설계**
-- [LAZY는 N+1의 해결책이 아니다](https://velog.io/@03minseok/LAZY는N1의해결책이아니다)
-- [왜 JPA는 N+1 문제를 그냥 두었을까에 대한 고찰과 안전한 기본값](https://velog.io/@03minseok/왜-JPA는-N1-문제를-그냥-두었을까에-대한-고찰과-안전한-기본값)
-- [JPA 연관관계 매핑 — @ManyToMany와 중간 엔티티](https://velog.io/@03minseok/JPA-연관관계-매핑-ManyToMany와-중간-엔티티) (식사-음식 연결)
-- [외래키 트러블 슈팅과 소프트 딜리트 트러블 슈팅](https://velog.io/@03minseok/외래키-트러블-슈팅과-소프트-딜리트-트러블-슈팅)
+- [[실전! 스프링 부트와 JPA 활용] JPA 엔티티 설계시 주의사항](https://blog.naver.com/iris15977/224323429686)
+- [[실전! 스프링 부트와 JPA 활용] 변경 감지와 병합(Merge)](https://blog.naver.com/iris15977/224324991351) (더티 체킹)
+- [[스프링 DB 1편] 트랜잭션 이해 — 개념](https://blog.naver.com/iris15977/224315712931)
+- [[스프링 DB 1편] 트랜잭션 이해 — 적용](https://blog.naver.com/iris15977/224316068011) (`@Transactional(readOnly = true)`)
 - [update() 이후 과거 데이터 보존 — 스냅샷과 이력 테이블](https://velog.io/@03minseok/update이후-과거-데이터-보존-스냅샷과-이력-테이블) (복용 일정 이력)
 - [개발자가 알아야 할 데이터베이스 (1부) — 개념편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스1부-개념편)
 - [개발자가 알아야 할 데이터베이스 (2부) — 스프링 부트 편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스2부-스프링-부트-편)
