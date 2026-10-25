@@ -95,20 +95,17 @@
 - [도메인 개발 시 생각해야 할 점 (User 도메인 기준)](https://blog.naver.com/iris15977/224426262422) (엔티티 생성 규칙, DTO 검증, 예외 처리)
 - [User 인증 구현 정리 — 회원가입부터 JWT까지](https://blog.naver.com/iris15977/224428106029)
 
-**인증·인가 — Spring Security 파헤치기**
-- [1부 — 인증, 인가, 그리고 JWT](https://velog.io/@03minseok/Spring-Security-파헤치기-1부-인증-인가-그리고-JWT)
-- [2부 — ?userId=1을 JWT로 바꾸기](https://velog.io/@03minseok/Spring-Security-파헤치기-2부-userId1을-JWT로-바꾸기)
-- [2.5부 — JWT 토큰 만료 리팩터링](https://velog.io/@03minseok/JWT-토큰-만료-리팩터링-...-Spring-Security-2.5부)
-- [4부 — 권한(인가) 붙이기](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)
+**인증·인가**
+- [Spring Security 파헤치기 1부 — 인증, 인가, 그리고 JWT](https://velog.io/@03minseok/Spring-Security-파헤치기-1부-인증-인가-그리고-JWT)
+- [Spring Security 파헤치기 2부 — ?userId=1을 JWT로 바꾸기](https://velog.io/@03minseok/Spring-Security-파헤치기-2부-userId1을-JWT로-바꾸기)
+- [Spring Security 파헤치기 2.5부 — JWT 토큰 만료 리팩터링](https://velog.io/@03minseok/JWT-토큰-만료-리팩터링-...-Spring-Security-2.5부)
+- [Spring Security 파헤치기 4부 — 권한(인가) 붙이기](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)
+- [[Spring Boot] 소셜 로그인과 일반 로그인 흐름 비교](https://blog.naver.com/iris15977/224376840232)
 
 **API·구조 설계**
 - [프로젝트 시작 전 스켈레톤 코드: 전역 예외 처리](https://velog.io/@03minseok/프로젝트-시작-전-스켈레톤-코드-전역-예외-처리)
 
 **JPA·데이터 설계**
-- [[실전! 스프링 부트와 JPA 활용] JPA 엔티티 설계시 주의사항](https://blog.naver.com/iris15977/224323429686)
-- [[실전! 스프링 부트와 JPA 활용] 변경 감지와 병합(Merge)](https://blog.naver.com/iris15977/224324991351) (더티 체킹)
-- [[스프링 DB 1편] 트랜잭션 이해 — 개념](https://blog.naver.com/iris15977/224315712931)
-- [[스프링 DB 1편] 트랜잭션 이해 — 적용](https://blog.naver.com/iris15977/224316068011) (`@Transactional(readOnly = true)`)
 - [update() 이후 과거 데이터 보존 — 스냅샷과 이력 테이블](https://velog.io/@03minseok/update이후-과거-데이터-보존-스냅샷과-이력-테이블) (복용 일정 이력)
 - [개발자가 알아야 할 데이터베이스 (1부) — 개념편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스1부-개념편)
 - [개발자가 알아야 할 데이터베이스 (2부) — 스프링 부트 편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스2부-스프링-부트-편)
