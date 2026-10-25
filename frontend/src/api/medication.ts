@@ -36,7 +36,10 @@ export interface Medicine {
   active: boolean
 }
 
-/** 내 복용 약 */
+/**
+ * 내 복용 약. 복용 방식·횟수·간격·복용량·메모는 지금 적용 중인 일정 값이다.
+ * (백엔드는 일정을 기간별로 따로 저장한다. 수정하면 오늘부터 새 일정, 지난 날짜는 그때 일정 그대로)
+ */
 export interface UserMedicine {
   id: number
   medicine: Medicine
@@ -62,6 +65,7 @@ export interface UserMedicineRequest {
   doseMemo: string | null
 }
 
+/** 날짜별 복용 현황의 약 하나. 복용 방식·횟수·간격·복용량·메모는 "그 날짜에 적용된 일정" 값이다. */
 export interface DailyMedicationItem {
   userMedicineId: number
   medicine: Medicine
@@ -72,7 +76,7 @@ export interface DailyMedicationItem {
   doseMemo: string | null
   /** 지금 끊은 상태. 체크·취소할 수 없다. */
   stopped: boolean
-  /** 그날 체크한 회차. 하루 복용 횟수를 줄였다면 범위 밖 회차도 들어 있다. */
+  /** 그날 체크한 회차. 같은 날 하루 복용 횟수를 줄였다면 범위 밖 회차도 들어 있다. (다른 날은 그날 일정 기준이라 범위 안) */
   takenDoses: number[]
   /** INTERVAL만: 조회 날짜까지의 마지막 투여일 / 다음 예정일 ('yyyy-MM-dd') */
   lastTakenDate: string | null
@@ -125,6 +129,7 @@ export const medicationApi = {
   /**
    * 체크 토글. 서버가 지금 상태를 보고 체크·취소를 정한다.
    * n회차 체크는 n-1회차가 체크돼 있어야 하고, 취소는 n+1회차가 체크돼 있지 않아야 한다.
+   * 회차 상한은 그 날짜에 적용된 일정이 정한다. 그날 일정이 없으면(등록 전 날짜) 400 "그 날짜에는 복용 중인 약이 아닙니다.".
    */
   toggle: (userMedicineId: number, date: string, doseNumber: number) =>
     unwrap(api.post<ApiResponse<MedicationToggleResult>>(`/record/medication/${userMedicineId}/${date}/${doseNumber}/toggle`)),

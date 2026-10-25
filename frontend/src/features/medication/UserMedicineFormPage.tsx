@@ -371,6 +371,8 @@ export function UserMedicineFormPage() {
 
         <div className="flex flex-none flex-col gap-2 border-t border-gray-200 bg-white px-4 pt-2.5 pb-3">
           {submitError && <FieldHint tone="error">{submitError}</FieldHint>}
+          {/* 백엔드는 수정할 때 지금 일정을 오늘 날짜로 닫고 새 일정을 만든다. (오늘 시작한 일정이면 그대로 고친다) */}
+          {isEdit && !submitError && <FieldHint>바꾼 내용은 오늘부터 적용돼요. 지난 날짜는 그때 일정대로 남아요.</FieldHint>}
           <Button type="submit" disabled={!canSubmit}>
             {missing ?? '저장'}
           </Button>
@@ -380,7 +382,7 @@ export function UserMedicineFormPage() {
       <ConfirmDialog
         open={confirmOpen}
         title="이 약 복용을 중단할까요?"
-        description="내 약 목록에서 빠지지만, 지금까지의 복용 기록은 남아요. 다시 먹게 되면 새로 등록하면 돼요."
+        description="오늘부터 내 약 목록과 기록 탭에서 빠져요. 오늘까지의 복용 기록은 그대로 남아요. 다시 먹게 되면 새로 등록하면 돼요."
         confirmLabel="복용 중단"
         pending={deleting}
         onConfirm={handleDelete}

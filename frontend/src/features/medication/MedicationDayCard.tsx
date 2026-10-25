@@ -129,7 +129,7 @@ interface DoseButtonProps {
   checked: boolean
   disabled: boolean
   pending: boolean
-  /** 하루 복용 횟수를 줄여서 범위 밖에 남은 회차 */
+  /** 같은 날 하루 복용 횟수를 줄여서 범위 밖에 남은 회차 */
   outOfRange?: boolean
   onClick: () => void
 }
