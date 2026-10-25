@@ -92,6 +92,7 @@
 
 **프로젝트 기반·User 도메인**
 - [스프링 부트 프로젝트 시작 전 기본 구조 잡기](https://blog.naver.com/iris15977/224422580172) (패키지 구조, 공통 응답·예외 처리, SecurityConfig)
+- [프로젝트 시작 전 스켈레톤 코드: 전역 예외 처리](https://velog.io/@03minseok/프로젝트-시작-전-스켈레톤-코드-전역-예외-처리)
 - [도메인 개발 시 생각해야 할 점 (User 도메인 기준)](https://blog.naver.com/iris15977/224426262422) (엔티티 생성 규칙, DTO 검증, 예외 처리)
 - [User 인증 구현 정리 — 회원가입부터 JWT까지](https://blog.naver.com/iris15977/224428106029)
 
@@ -101,9 +102,6 @@
 - [Spring Security 파헤치기 2.5부 — JWT 토큰 만료 리팩터링](https://velog.io/@03minseok/JWT-토큰-만료-리팩터링-...-Spring-Security-2.5부)
 - [Spring Security 파헤치기 4부 — 권한(인가) 붙이기](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)
 - [[Spring Boot] 소셜 로그인과 일반 로그인 흐름 비교](https://blog.naver.com/iris15977/224376840232)
-
-**API·구조 설계**
-- [프로젝트 시작 전 스켈레톤 코드: 전역 예외 처리](https://velog.io/@03minseok/프로젝트-시작-전-스켈레톤-코드-전역-예외-처리)
 
 **JPA·데이터 설계**
 - [update() 이후 과거 데이터 보존 — 스냅샷과 이력 테이블](https://velog.io/@03minseok/update이후-과거-데이터-보존-스냅샷과-이력-테이블) (복용 일정 이력)
