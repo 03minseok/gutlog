@@ -36,16 +36,11 @@ public class MedicationLog extends BaseTimeEntity {
 	@Column(nullable = false)
 	private boolean deleted;
 
-	@Column(nullable = false)
-	private Integer doseAmount; // 복용 당시 용량을 복사
-
-	@Column(nullable = false, length = 10)
-	private String doseUnit; // mg, 정, 포
-
 	private MedicationLog(UserMedicine userMedicine, LocalDate takenDate, int doseNumber) {
 		this.userMedicine = userMedicine;
 		this.takenDate = takenDate;
 		this.doseNumber = doseNumber;
+		this.deleted = false;
 	}
 
 	public static MedicationLog create(UserMedicine userMedicine, LocalDate takenDate, int doseNumber) {
