@@ -1,6 +1,7 @@
 package com.gutlog.domain.record.medication.controller;
 
 import com.gutlog.domain.record.medication.repository.MedicationLogRepository;
+import com.gutlog.domain.record.medication.repository.MedicationScheduleRepository;
 import com.gutlog.domain.record.medication.repository.UserMedicineRepository;
 import com.gutlog.domain.user.repository.UserRepository;
 import com.jayway.jsonpath.JsonPath;
@@ -44,6 +45,7 @@ class AdminMedicineControllerTest {
     @Autowired UserRepository userRepository;
     @Autowired UserMedicineRepository userMedicineRepository;
     @Autowired MedicationLogRepository medicationLogRepository;
+    @Autowired MedicationScheduleRepository medicationScheduleRepository;
     @Autowired Clock clock;
 
     private String userToken;
@@ -61,6 +63,7 @@ class AdminMedicineControllerTest {
     @AfterEach
     void cleanUp() {
         medicationLogRepository.deleteAllInBatch();
+        medicationScheduleRepository.deleteAllInBatch();   // 일정이 복용 약을 가리키므로 먼저 지운다
         userMedicineRepository.deleteAllInBatch();
         jdbcTemplate.update("delete from medicine where generic_name like '테스트%'");
         userRepository.deleteAllInBatch();

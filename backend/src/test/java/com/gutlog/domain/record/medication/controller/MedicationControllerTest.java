@@ -1,6 +1,7 @@
 package com.gutlog.domain.record.medication.controller;
 
 import com.gutlog.domain.record.medication.repository.MedicationLogRepository;
+import com.gutlog.domain.record.medication.repository.MedicationScheduleRepository;
 import com.gutlog.domain.record.medication.repository.UserMedicineRepository;
 import com.gutlog.domain.record.medication.entity.DosageForm;
 import com.gutlog.domain.record.medication.repository.MedicineRepository;
@@ -45,6 +46,7 @@ class MedicationControllerTest {
     @Autowired MedicineRepository medicineRepository;
     @Autowired UserMedicineRepository userMedicineRepository;
     @Autowired MedicationLogRepository medicationLogRepository;
+    @Autowired MedicationScheduleRepository medicationScheduleRepository;
     @Autowired Clock clock;
 
     private String myToken;
@@ -67,6 +69,7 @@ class MedicationControllerTest {
     @AfterEach
     void cleanUp() {
         medicationLogRepository.deleteAllInBatch();
+        medicationScheduleRepository.deleteAllInBatch();   // 일정이 복용 약을 가리키므로 먼저 지운다
         userMedicineRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
