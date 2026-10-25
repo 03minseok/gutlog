@@ -67,7 +67,7 @@
 ---
 
 ## 다룬 기술·개념
-자세한 내용과 이유는 [블로그 글](#관련-글-spring-security-파헤치기)에 정리했다.
+자세한 내용과 이유는 [블로그 글](#관련-글)에 정리했다.
 
 - **인증·인가:** JWT, Spring Security 필터 체인, 회원 유형(Role)과 권한(Authority) 분리
 - **API 설계:** 공통 응답·에러 코드, 요청 DTO 검증, 소유권 검사 404
@@ -79,20 +79,36 @@
 
 | 주제 | 내용 |
 |---|---|
-| 403이 실제 서버에서만 401로 바뀜 | `sendError(403)` 뒤 `/error`로 재디스패치될 때 인증 정보가 없어서 생긴 문제. 에러 디스패치를 인가 검사에서 제외하고, 실제 포트로 띄우는 테스트로 고정 |
-| ADMIN인데 403 | 필터에서 인증 정보를 등록한 뒤, 남아 있던 예전 코드가 빈 권한으로 덮어씀. "허용되는 경우" 테스트가 있어서 잡음 |
+| 403이 실제 서버에서만 401로 바뀜 | `sendError(403)` 뒤 `/error`로 재디스패치될 때 인증 정보가 없어서 생긴 문제. 에러 디스패치를 인가 검사에서 제외하고, 실제 포트로 띄우는 테스트로 고정 ([4부](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)) |
+| ADMIN인데 403 | 필터에서 인증 정보를 등록한 뒤, 남아 있던 예전 코드가 빈 권한으로 덮어씀. "허용되는 경우" 테스트가 있어서 잡음 ([4부](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)) |
 | 기존 DB에 NOT NULL 컬럼 추가 실패 | `ddl-auto: update`는 기존 행이 있으면 NOT NULL 컬럼 추가에 실패하고 조용히 넘어감. `@ColumnDefault`로 DB 기본값을 두거나 데이터 이전이 필요 |
-| 복용 횟수를 바꾸면 과거 기록이 이상해짐 | 일정을 `UserMedicine`에 두면 수정이 과거까지 덮어씀 → 기간별 이력 테이블로 분리 |
+| 복용 횟수를 바꾸면 과거 기록이 이상해짐 | 일정을 `UserMedicine`에 두면 수정이 과거까지 덮어씀 → 기간별 이력 테이블로 분리 ([글](https://velog.io/@03minseok/update이후-과거-데이터-보존-스냅샷과-이력-테이블)) |
 | 혈변 여부가 빠지면 `false`로 저장됨 | 기본형 `boolean`은 값이 없어도 `false`가 됨 → `Boolean` + `@NotNull`로 "입력 안 함"과 "없음"을 구분 |
 
 ---
 
-## 관련 글 (Spring Security 파헤치기)
-- [1부 — 인증, 인가, 그리고 JWT](https://velog.io/@03minseok/Spring-Security-%ED%8C%8C%ED%97%A4%EC%B9%98%EA%B8%B0-1%EB%B6%80-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80-%EA%B7%B8%EB%A6%AC%EA%B3%A0-JWT)
-- [2부 — ?userId=1을 JWT로 바꾸기](https://velog.io/@03minseok/Spring-Security-%ED%8C%8C%ED%97%A4%EC%B9%98%EA%B8%B0-2%EB%B6%80-userId1%EC%9D%84-JWT%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B8%B0)
-- [2.5부 — JWT 토큰 만료 리팩터링](https://velog.io/@03minseok/JWT-%ED%86%A0%ED%81%B0-%EB%A7%8C%EB%A3%8C-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81-...-Spring-Security-2.5%EB%B6%80)
-- 3.1부 — 소셜 로그인 도입 리팩터링 (링크 추가 예정)
-- 4부 — 권한(인가) 붙이기 (작성 중)
+## 관련 글
+프로젝트를 만들며 정리한 글. (velog)
+
+**인증·인가 — Spring Security 파헤치기**
+- [1부 — 인증, 인가, 그리고 JWT](https://velog.io/@03minseok/Spring-Security-파헤치기-1부-인증-인가-그리고-JWT)
+- [2부 — ?userId=1을 JWT로 바꾸기](https://velog.io/@03minseok/Spring-Security-파헤치기-2부-userId1을-JWT로-바꾸기)
+- [2.5부 — JWT 토큰 만료 리팩터링](https://velog.io/@03minseok/JWT-토큰-만료-리팩터링-...-Spring-Security-2.5부)
+- [4부 — 권한(인가) 붙이기](https://velog.io/@03minseok/Spring-Security-파헤치기-4부-권한인가-붙이)
+
+**API·구조 설계**
+- [프로젝트 시작 전 스켈레톤 코드: 전역 예외 처리](https://velog.io/@03minseok/프로젝트-시작-전-스켈레톤-코드-전역-예외-처리)
+- [DTO와 엔티티 사이: toEntity와 from](https://velog.io/@03minseok/DTO와-엔티티-사이-toEntity와-from)
+- [Spring JPA 엔티티를 직접 반환하면 안 되는 이유 — 순환 참조 트러블슈팅](https://velog.io/@03minseok/Spring-JPA-엔티티를-직접-반환하면-안되는-이유-순환-참조-트러블슈팅)
+
+**JPA·데이터 설계**
+- [LAZY는 N+1의 해결책이 아니다](https://velog.io/@03minseok/LAZY는N1의해결책이아니다)
+- [왜 JPA는 N+1 문제를 그냥 두었을까에 대한 고찰과 안전한 기본값](https://velog.io/@03minseok/왜-JPA는-N1-문제를-그냥-두었을까에-대한-고찰과-안전한-기본값)
+- [JPA 연관관계 매핑 — @ManyToMany와 중간 엔티티](https://velog.io/@03minseok/JPA-연관관계-매핑-ManyToMany와-중간-엔티티) (식사-음식 연결)
+- [외래키 트러블 슈팅과 소프트 딜리트 트러블 슈팅](https://velog.io/@03minseok/외래키-트러블-슈팅과-소프트-딜리트-트러블-슈팅)
+- [update() 이후 과거 데이터 보존 — 스냅샷과 이력 테이블](https://velog.io/@03minseok/update이후-과거-데이터-보존-스냅샷과-이력-테이블) (복용 일정 이력)
+- [개발자가 알아야 할 데이터베이스 (1부) — 개념편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스1부-개념편)
+- [개발자가 알아야 할 데이터베이스 (2부) — 스프링 부트 편](https://velog.io/@03minseok/개발자가-알아야-할-데이터베이스2부-스프링-부트-편)
 
 ---
 
