@@ -13,6 +13,10 @@ spring:
       ddl-auto: update
     show-sql: true
 
+jwt:
+  secret: gutlog-dev-secret-key-for-local-testing-environment-2026-very-long-key
+  expiration: 3600000 # 1 hour in milliseconds
+
   h2:
     console:
       enabled: true

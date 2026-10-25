@@ -1,0 +1,34 @@
+generic_name,brand_name,dosage_form,category,verified,note
+메살라진,펜타사,TABLET,AMINOSALICYLATE,Y,서방정 - 의약품안전나라 199704519
+메살라진,펜타사,GRANULE,AMINOSALICYLATE,Y,서방과립 - 의약품안전나라 200606206
+메살라진,펜타사,SUPPOSITORY,AMINOSALICYLATE,Y,좌약 - 의약품안전나라 199704520 (국내 관장액 없음)
+메살라진,아사콜,TABLET,AMINOSALICYLATE,Y,디알정 - 의약품안전나라 200400465
+메살라진,아사콜,SUPPOSITORY,AMINOSALICYLATE,Y,좌약 - 의약품안전나라 200307870
+메살라진,아사콜,ENEMA,AMINOSALICYLATE,Y,관장액 - 의약품안전나라 200307868
+메살라진,메자반트,TABLET,AMINOSALICYLATE,Y,엑스엘장용정 - 의약품안전나라 201001891
+프레드니솔론,소론도,TABLET,CORTICOSTEROID,Y,정 - 의약품안전나라 199602982
+아자티오프린,이뮤란,TABLET,IMMUNOMODULATOR,Y,필름코팅정 - 의약품안전나라 199203272
+메토트렉세이트,메토젝트,SC_INJECTION,IMMUNOMODULATOR,Y,프리필드펜 - 의약품안전나라 201306447
+시클로스포린,산디문뉴오랄,CAPSULE,IMMUNOMODULATOR,Y,연질캡슐 - 의약품안전나라 199403112
+시클로스포린,산디문뉴오랄,ORAL_LIQUID,IMMUNOMODULATOR,Y,내복액 - 의약품안전나라 199604696
+타크로리무스,프로그랍,CAPSULE,IMMUNOMODULATOR,Y,캡슐 - 의약품안전나라 200511276
+인플릭시맙,레미케이드,IV_INJECTION,BIOLOGIC,Y,정맥주사(병원 투여) - 의약품안전나라 200511104
+인플릭시맙,램시마,IV_INJECTION,BIOLOGIC,Y,정맥주사(병원 투여) - 의약품안전나라 201206204
+인플릭시맙,램시마SC,SC_INJECTION,BIOLOGIC,Y,펜·프리필드시린지 - 허가명 램시마펜주/램시마프리필드시린지주 - 의약품안전나라 202006923
+인플릭시맙,레마로체,IV_INJECTION,BIOLOGIC,Y,정맥주사(병원 투여) - 의약품안전나라 201508122
+아달리무맙,휴미라,SC_INJECTION,BIOLOGIC,Y,펜·프리필드시린지 - 의약품안전나라 201704556
+아달리무맙,아달로체,SC_INJECTION,BIOLOGIC,Y,펜·프리필드시린지 - 의약품안전나라 202300028
+아달리무맙,유플라이마,SC_INJECTION,BIOLOGIC,Y,펜·프리필드시린지 - 의약품안전나라 202106948
+골리무맙,심퍼니,SC_INJECTION,BIOLOGIC,Y,오토인젝터·프리필드시린지 - 의약품안전나라 201308672
+베돌리주맙,킨텔레스,IV_INJECTION,BIOLOGIC,Y,정맥주사(병원 투여) - 의약품안전나라 201503975
+베돌리주맙,킨텔레스,SC_INJECTION,BIOLOGIC,Y,프리필드시린지·펜 - 의약품안전나라 202200739
+우스테키누맙,스텔라라,IV_INJECTION,BIOLOGIC,Y,정맥주사(유도요법·병원 투여) - 의약품안전나라 201801521
+우스테키누맙,스텔라라,SC_INJECTION,BIOLOGIC,Y,프리필드시린지 - 의약품안전나라 201103892
+토파시티닙,젤잔즈,TABLET,JAK_INHIBITOR,Y,정·XR서방정 - 의약품안전나라 201401569
+우파다시티닙,린버크,TABLET,JAK_INHIBITOR,Y,서방정 - 의약품안전나라 202004222
+이소니아지드,유한짓,TABLET,ANTI_TUBERCULOSIS,Y,정 - 의약품안전나라 196200032
+에탐부톨,마이암부톨,TABLET,ANTI_TUBERCULOSIS,Y,제피정 - 의약품안전나라 196700060
+피라진아미드,유한피라진아미드,TABLET,ANTI_TUBERCULOSIS,Y,정 - 기존 피라마이드는 국내 제품 없음 - 의약품안전나라 성분 검색 결과
+메트로니다졸,후라시닐,TABLET,OTHER,Y,정 - 의약품안전나라 196500004
+시프로플록사신,씨프로바이,TABLET,OTHER,Y,필름코팅정 - 의약품안전나라 201905731
+로페라미드,로프민,CAPSULE,OTHER,Y,경질캡슐 - 성분명 표기 로페라마이드→로페라미드(의약품안전나라 197600412)
