@@ -18,6 +18,8 @@ public enum ErrorCode {
 
     BOWEL_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "B001", "배변 기록을 찾을 수 없습니다."),
 
+    WEIGHT_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "W001", "체중 기록을 찾을 수 없습니다."),
+
     FUTURE_DATE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "D002", "미래 날짜에는 기록할 수 없습니다."),
 
     MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MD001", "약을 찾을 수 없습니다."),

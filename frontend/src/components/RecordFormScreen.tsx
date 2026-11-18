@@ -151,6 +151,28 @@ export function DateTimeFields({ date, time, maxDate, onDateChange, onTimeChange
 
 const FUTURE_DATE_MESSAGE = '미래 날짜는 기록할 수 없어요'
 
+/** 날짜만 고르는 칸 (체중처럼 시각 없이 날짜로 기록할 때). DateTimeFields의 날짜 칸과 같은 모양이다. */
+export function DateField({ label, date, maxDate, onChange }: { label: string; date: string; maxDate: string; onChange: (date: string) => void }) {
+  const dateError = isFutureDate(date, maxDate) ? FUTURE_DATE_MESSAGE : null
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="text-label font-semibold text-gray-700">{label}</span>
+      <PickerField icon="calendar_today" display={date ? formatDateWithDay(date) : '날짜 선택'} invalid={dateError !== null}>
+        <input
+          type="date"
+          aria-label={label}
+          value={date}
+          max={maxDate}
+          required
+          onChange={(e) => onChange(e.target.value)}
+          className="picker-input absolute inset-0 h-full w-full opacity-0"
+        />
+      </PickerField>
+      {dateError && <FieldHint tone="error">{dateError}</FieldHint>}
+    </div>
+  )
+}
+
 interface TimeToolsFieldsProps {
   date: string
   time: string

@@ -6,8 +6,9 @@ import { TabHeader } from '../../layouts/TabLayout'
 import { ADMIN_MEDICINES_PATH } from '../admin/constants'
 import { useMyMedicinesSheet } from '../medication/useMyMedicinesSheet'
 import { IBD_TYPE_OPTIONS, ROLE_OPTIONS } from '../user/constants'
+import { WeightCard } from '../weight/WeightCard'
 
-/** 마이페이지. 내 정보(/me), 내 약 관리(아래에서 올라오는 시트), (관리자만) 약 관리, 로그아웃. */
+/** 마이페이지. 내 정보(/me), 체중(오늘 입력 + 최근 30일 추이), 내 약 관리(아래에서 올라오는 시트), (관리자만) 약 관리, 로그아웃. */
 export function MyPage() {
   const { user, logout } = useAuth()
   const { openSheet, sheet } = useMyMedicinesSheet()
@@ -27,6 +28,7 @@ export function MyPage() {
             </p>
           </section>
         )}
+        <WeightCard />
         <button
           type="button"
           onClick={openSheet}

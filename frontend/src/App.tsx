@@ -17,6 +17,7 @@ import { RecordPage } from './features/record/RecordPage'
 import { StatsPage } from './features/stats/StatsPage'
 import { LoginPage } from './features/user/LoginPage'
 import { SignupPage } from './features/user/SignupPage'
+import { WeightPage } from './features/weight/WeightPage'
 import { FullScreenLayout, RecordFormLayout, TabLayout } from './layouts/TabLayout'
 
 export default function App() {
@@ -36,6 +37,7 @@ export default function App() {
                 <Route path="/record" element={<RecordPage />} />
                 <Route path="/stats" element={<StatsPage />} />
                 <Route path="/mypage" element={<MyPage />} />
+                <Route path="/mypage/weight" element={<WeightPage />} />
                 {/* 기록 종류별 상세 */}
                 <Route path="/record/meal" element={<MealDetailPage />} />
                 <Route path="/record/bowel" element={<BowelDetailPage />} />
