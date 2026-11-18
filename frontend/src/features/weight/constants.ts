@@ -10,3 +10,5 @@ export const WEIGHT_PERIODS = [
 export type WeightPeriod = (typeof WEIGHT_PERIODS)[number]['value']
 
 export const DEFAULT_WEIGHT_PERIOD: WeightPeriod = '30'
+
+export const WEIGHT_EMPTY_TEXT = '이 기간 체중 기록이 없어요'

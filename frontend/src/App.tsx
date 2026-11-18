@@ -14,6 +14,7 @@ import { MyMedicinesPage } from './features/medication/MyMedicinesPage'
 import { UserMedicineFormPage } from './features/medication/UserMedicineFormPage'
 import { MyPage } from './features/mypage/MyPage'
 import { RecordPage } from './features/record/RecordPage'
+import { SleepDetailPage } from './features/sleep/SleepDetailPage'
 import { StatsPage } from './features/stats/StatsPage'
 import { LoginPage } from './features/user/LoginPage'
 import { SignupPage } from './features/user/SignupPage'
@@ -43,6 +44,7 @@ export default function App() {
                 <Route path="/record/bowel" element={<BowelDetailPage />} />
                 <Route path="/record/medication" element={<MedicationDetailPage />} />
                 <Route path="/record/medication/medicines" element={<MyMedicinesPage />} />
+                <Route path="/record/sleep" element={<SleepDetailPage />} />
               </Route>
               {/* 기록·약 입력 화면: 전체 화면이지만 하단 탭은 보인다. */}
               <Route element={<RecordFormLayout />}>

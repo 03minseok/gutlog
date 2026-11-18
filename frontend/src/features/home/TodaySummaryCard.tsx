@@ -3,9 +3,11 @@ import { Link } from 'react-router'
 import { bowelApi } from '../../api/bowel'
 import { mealApi } from '../../api/meal'
 import { medicationApi } from '../../api/medication'
+import { sleepApi } from '../../api/sleep'
 import { Icon } from '../../components/Icon'
 import { useRecordFormLinkState } from '../../components/recordForm'
 import { splitDateTime } from '../../lib/date'
+import { SLEEP_PATH, formatSleep } from '../sleep/sleep'
 
 /** 요청 하나의 상태. 로딩·실패·결과를 화면에서 구분해 보여준다. */
 type Load<T> = { status: 'loading' } | { status: 'error' } | { status: 'ready'; value: T }
@@ -29,11 +31,14 @@ interface BowelSummary {
  *   ＋: 식사·배변 → 입력 화면, 복약 → 기록 탭(복약은 따로 입력 화면 없이 섹션에서 체크한다).
  * - 오른쪽 위 "바로가기"는 기록 탭(오늘)으로 이동한다.
  * - 오늘 혈변 기록이 있으면 카드 아래에 혈변 줄(물방울 아이콘 + 횟수 + 마지막 시각)을 보여준다.
+ * - 맨 아래 수면 한 줄: 오늘 일어나기까지 잔 시간(오늘 날짜 기록). 누르면 수면 상세 화면.
  */
 export function TodaySummaryCard({ today }: { today: string }) {
   const [meal, setMeal] = useState<Load<number>>(LOADING)
   const [medication, setMedication] = useState<Load<{ taken: number; total: number }>>(LOADING)
   const [bowel, setBowel] = useState<Load<BowelSummary>>(LOADING)
+  /** 오늘 수면 시간(분). 기록이 없으면 null */
+  const [sleep, setSleep] = useState<Load<number | null>>(LOADING)
 
   useEffect(() => {
     let cancelled = false
@@ -62,6 +67,10 @@ export function TodaySummaryCard({ today }: { today: string }) {
         })
       })
       .catch(() => !cancelled && setBowel(FAILED))
+    sleepApi
+      .listByPeriod(today, today)
+      .then((records) => !cancelled && setSleep({ status: 'ready', value: records[0]?.sleepMinutes ?? null }))
+      .catch(() => !cancelled && setSleep(FAILED))
     return () => {
       cancelled = true
     }
@@ -109,7 +118,37 @@ export function TodaySummaryCard({ today }: { today: string }) {
           )}
         </p>
       )}
+
+      <SleepRow load={sleep} />
     </section>
+  )
+}
+
+/**
+ * 수면 한 줄 (rounded-tile, gray-100 면, min-h-11). 수면은 카테고리 색이 없어 회색 면으로 둔다.
+ * 아이콘 + "수면" + 오른쪽 값("7시간 30분" / "기록 없음" / "불러오지 못함") + ›. 줄 전체가 수면 상세 화면 링크.
+ */
+function SleepRow({ load }: { load: Load<number | null> }) {
+  const valueText = load.status === 'ready' ? (load.value === null ? '기록 없음' : formatSleep(load.value)) : load.status === 'error' ? '불러오지 못함' : null
+  return (
+    <Link
+      to={SLEEP_PATH}
+      aria-label={`수면 ${valueText ?? '불러오는 중'}, 자세히 보기`}
+      className="flex min-h-11 items-center gap-2 rounded-tile bg-gray-100 pr-2 pl-3 text-body focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:outline-none"
+    >
+      <Icon name="bedtime" size={18} className="flex-none text-gray-700" />
+      <span className="font-semibold text-gray-700">수면</span>
+      <span className="ml-auto flex items-center">
+        {load.status === 'loading' ? (
+          <span className="block h-4 w-16 animate-pulse rounded-input bg-white/70" />
+        ) : load.status === 'ready' && load.value !== null ? (
+          <b className="font-bold text-ink tabular-nums">{valueText}</b>
+        ) : (
+          <span className="text-label font-semibold text-gray-500">{valueText}</span>
+        )}
+      </span>
+      <Icon name="chevron_right" size={18} className="flex-none text-gray-400" />
+    </Link>
   )
 }
 

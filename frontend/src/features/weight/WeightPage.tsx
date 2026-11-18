@@ -5,12 +5,12 @@ import { weightApi, type WeightRecord } from '../../api/weight'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { Icon } from '../../components/Icon'
 import { SegmentedControl } from '../../components/SegmentedControl'
+import { TrendBody } from '../../components/TrendBody'
 import { useToast } from '../../components/toast/ToastContext'
 import { addDays, formatDateWithDay, relativeDayLabel, todayParam } from '../../lib/date'
-import { DEFAULT_WEIGHT_PERIOD, WEIGHT_PERIODS, type WeightPeriod } from './constants'
+import { DEFAULT_WEIGHT_PERIOD, WEIGHT_EMPTY_TEXT, WEIGHT_PERIODS, type WeightPeriod } from './constants'
 import { useWeightRecords } from './useWeightRecords'
 import { formatWeight } from './weight'
-import { TrendBody } from './WeightCard'
 import { WeightChart } from './WeightChart'
 import { WeightEntryForm } from './WeightEntryForm'
 
@@ -101,6 +101,7 @@ export function WeightPage() {
             count={trend.records.length}
             message={trend.message}
             onRetry={trend.reload}
+            emptyText={WEIGHT_EMPTY_TEXT}
           >
             <WeightChart records={trend.records} from={from} to={today} />
             <TrendSummary records={trend.records} />
