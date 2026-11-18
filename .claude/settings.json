@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(**/CLAUDE.md)",
+      "Edit(**/domain/analysis/**)",
+      "Read(**/.env)",
+      "Bash(git push:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node .claude/hooks/check-claude-md.mjs" }
+        ]
+      }
+    ]
+  }
+}
