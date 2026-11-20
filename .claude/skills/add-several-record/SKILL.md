@@ -48,6 +48,7 @@ description: 하루에 여러 번 기록 가능한 기록 기능을 제작할 �
 - `features/home/TodaySummaryCard.tsx` (넣기로 했을 때만): 상태·요청·`Column` 추가, `grid-cols-3` 조정
 - `index.css` `@theme` (새 색을 쓸 때만): `--color-{type}`, `--color-{type}-bg`
 - 마이페이지에 두기로 했으면 위의 기록 탭 항목 대신 `MyPage.tsx`와 `/mypage/{type}` 라우트를 고친다
+- `components/RecordFormScreen.tsx`: `RecordCategory`와 `CATEGORY`에 새 타입 추가 (입력 화면 헤더의 아이콘·색)
 
 ## 5. 문서
 - `docs/design/README.md`: 새 부품·섹션 규칙 행을 추가하고, "기록 탭"·"오늘의 기록"·"기록 종류별 상세" 항목의 타입 목록을 갱신한다
