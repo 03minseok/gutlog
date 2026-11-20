@@ -13,11 +13,12 @@ description: 하루에 한 번만 기록할 수 있는 기록 기능을 제작�
 - 날짜가 무엇을 뜻하는지 (예: 수면은 일어난 날)
 - 홈 "오늘의 기록"에 넣을지. 넣으면 수면처럼 카드 아래 한 줄로 둔다
 - 답을 받으면 backend/CLAUDE.md대로 구현 계획을 보여주고 확인받는다
+- 상세 화면 위 종류 전환 버튼(`SWITCH_ORDER`)에 넣을지
 
 ## 1. 백엔드 (`domain/record/{type}/`)
 순서: ErrorCode → 엔티티 → DTO → 리포지토리 → 서비스 → 컨트롤러
 - 엔티티: `@UniqueConstraint(name = "uk_{type}_record_user_date", columnNames = {"user_id", "record_date"})`
-  - `recordDate`(LocalDate)와 값 한 칸, `create(user, date, value)`, `update{Value}(value)`. userId로 조회하므로 `isOwnedBy`는 없다
+  - userId로 조회하므로 `isOwnedBy`는 없다
 - 요청 DTO에는 값만 넣는다(날짜는 경로로 받는다). 30분 단위처럼 애너테이션으로 안 되는 검증은 `@JsonIgnore @AssertTrue` 메서드로 하되, 값이 없거나 범위 밖이면 true를 돌려 오류 문구가 하나만 나오게 한다. 명세에 보이도록 `@Schema(multipleOf = …)`도 붙인다
 - 응답 DTO는 `{ date, 값 }`이다 (id는 내보내지 않는다)
 - 리포지토리: `findByUserIdAndRecordDate`, `findAllByUserIdAndRecordDateBetweenOrderByRecordDateAsc`
@@ -49,7 +50,7 @@ description: 하루에 한 번만 기록할 수 있는 기록 기능을 제작�
   - `App.tsx`: TabLayout 안 `/record/{type}`
   - `RecordPage.tsx`: 섹션 추가, 주석의 섹션 순서 수정
   - `TodaySummaryCard.tsx` (넣기로 했을 때만): 요청과 `SleepRow` 같은 한 줄
-  - `detail.ts`의 `Category`와 `SWITCH_ORDER`에는 넣지 않는다 (수면도 넣지 않았다). 넣고 싶으면 개발자에게 묻는다
+  - `detail.ts`의 `Category`·`SWITCH_ORDER` (넣기로 했을 때만). 체중·수면 상세는 `CategoryDetail`을 쓰지 않아서, 넣으려면 상세 화면에 전환 버튼을 붙이는 작업이 추가로 필요하다. 이 작업도 계획에 포함해 확인받는다
 - 마이페이지에 둘 때 (체중처럼): `App.tsx` `/mypage/{type}`, `MyPage.tsx`에 카드. 홈과 기록 탭은 손대지 않는다
 
 ## 5. 문서

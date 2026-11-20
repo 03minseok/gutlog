@@ -13,13 +13,12 @@ description: 하루에 여러 번 기록 가능한 기록 기능을 제작할 �
 - 홈 "오늘의 기록"에 넣을지. 지금은 3칸 그리드라 넣으면 디자인을 바꿔야 한다
 - 카테고리 색을 새로 둘지 (없으면 수면처럼 회색 면)
 - 답을 받으면 backend/CLAUDE.md대로 구현 계획을 보여주고 확인받는다
+- 상세 화면 위 종류 전환 버튼(`SWITCH_ORDER`)에 넣을지
 
 ## 1. 백엔드 (`domain/record/{type}/`)
 순서: 엔티티 → 요청 DTO → 응답 DTO → 리포지토리 → 서비스(+ErrorCode) → 컨트롤러
-- 엔티티 `{Type}Record extends BaseTimeEntity`: `user`(LAZY, not null), `{type}At`(LocalDateTime), `@Index(user_id, {type}_at)`, 정적 `create(...)`, 전체 교체용 `update(...)`, `isOwnedBy(userId)`
 - 요청 DTO는 등록·수정 공용 `{Type}CreateRequest` 하나다. 응답 DTO는 `{Type}Response.fromEntity`
 - 리포지토리: `findAllByUserIdAnd{Type}AtGreaterThanEqualAnd{Type}AtLessThanOrderBy{Type}AtAsc`
-- 서비스
 - ErrorCode: `{TYPE}_RECORD_NOT_FOUND` 한 줄. 코드는 기존과 겹치지 않는 접두사 + 001 (B001, M001 등)
 - 컨트롤러 `/api/record/{type}`: POST, GET `/{id}`, GET `?from&to`, PUT `/{id}`, DELETE `/{id}`
 - 식사의 음식처럼 연결된 목록이 있으면 추가로 만든다: 연결 엔티티, 자동완성 API, SQL 개수 테스트(`MealRecordServiceQueryCountTest` 참고)
@@ -45,7 +44,7 @@ description: 하루에 여러 번 기록 가능한 기록 기능을 제작할 �
   - RecordFormLayout 안: `/record/{type}/new`, `/record/{type}/:id/edit`
 - `features/record/RecordPage.tsx`: 섹션을 추가하고, 위쪽 주석의 섹션 순서도 고친다
 - `features/record/detail.ts`: `Category`, `CATEGORY_META`, `DETAIL_PATH`
-- `features/record/CategoryDetail.tsx`: `SWITCH_ORDER`. 전환 버튼이 3열 기준이라 열 수도 확인한다
+- `features/record/CategoryDetail.tsx`: `SWITCH_ORDER` (넣기로 했을 때만). 전환 버튼이 3열 기준이라 열 수도 확인한다
 - `features/home/TodaySummaryCard.tsx` (넣기로 했을 때만): 상태·요청·`Column` 추가, `grid-cols-3` 조정
 - `index.css` `@theme` (새 색을 쓸 때만): `--color-{type}`, `--color-{type}-bg`
 - 마이페이지에 두기로 했으면 위의 기록 탭 항목 대신 `MyPage.tsx`와 `/mypage/{type}` 라우트를 고친다
