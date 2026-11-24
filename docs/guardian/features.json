@@ -34,7 +34,7 @@
       "기존 H2 파일 DB에서 ddl-auto: update로 서버가 정상 기동한다",
       "./gradlew test 통과"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "G03",

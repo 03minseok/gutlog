@@ -65,3 +65,21 @@
 **다음 할 일**
 - 개발자가 design.md 6장의 "보호자 연결" 규칙을 CLAUDE.md에 반영할지 정한다. (429는 반영됨)
 - 다음 세션은 G02(연결·초대 코드·공개 범위·해제 이력의 엔티티와 리포지토리)를 진행한다.
+
+### 2026-11-24 · G02 연결·초대 코드·공개 범위·해제 이력의 엔티티와 리포지토리
+
+**한 일**
+- 시작 전 `./gradlew test --rerun` 통과를 확인했다.
+- `com.gutlog.domain.guardian`에 엔티티 `GuardianLink`, `GuardianLinkHistory`, `GuardianInviteCode`, `GuardianCodeAttempt`와 enum `GuardianAccess`, 리포지토리 4개를 만들었다.
+- 리포지토리 테스트 17개와 코드 만료 판단 단위 테스트 1개를 작성했다. 저장·조회, 공개 범위 기본값 `PRIVATE`, 유니크 4개(연결 `patient_id`, 코드 `patient_id`·`code`, 시도 `guardian_id`), 보호자 1명–환자 2명 연결 허용, 재발급 후 이전 코드 무효, 해제 후 재연결과 이력 유지를 확인했다.
+- `./gradlew test` 통과를 확인했다.
+- 기동 확인: 실행 중이던 개발 서버를 개발자 승인 후 종료하고, `data/gutlog.mv.db`를 백업한 뒤 `./gradlew bootRun`으로 띄웠다. 기존 파일 DB에서 새 테이블 4개, 유니크 4개, 인덱스 3개, FK 7개가 생성되고 `Started GutlogApplication`이 찍혔다. `/v3/api-docs`는 200, 토큰 없는 `/api/record/meal`은 401이었다. 확인 후 띄운 서버는 종료했다.
+
+**결정한 것**
+- 계획 확인(개발자): 패키지 `com.gutlog.domain.guardian`, enum `GuardianAccess`, `guardian_link.guardian_id`·이력의 `patient_id`·`guardian_id` 인덱스, 이력의 `disconnected_by_id` NOT NULL.
+- 실패 횟수 증가·차단·초기화 메서드는 G04에서 규칙과 함께 만든다. 비관적 잠금 쿼리도 G04에서 추가한다.
+- 보호자의 연결 목록은 연결 시각 순, 같으면 id 순이다(`findAllByGuardianIdOrderByConnectedAtAscIdAsc`).
+
+**다음 할 일**
+- 다음 세션은 G03(환자의 초대 코드 발급·재발급)을 진행한다.
+- 개발 서버는 꺼진 상태다. 필요하면 개발자가 다시 띄운다.
