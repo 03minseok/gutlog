@@ -112,3 +112,23 @@
 
 **다음 할 일**
 - 개발자가 위 3개 메서드를 구현하면 리뷰 단계를 진행한다. (테스트 실행 → design.md·CLAUDE.md 기준 리뷰 → 통과하면 G03 `passes: true`, 커밋)
+
+### 2026-11-25 · G03 환자의 초대 코드 발급·재발급 (리뷰)
+
+**한 일**
+- 개발자가 `InviteCodeGenerator.generate()`, `GuardianInviteCodeService.getInviteCode()`·`issueInviteCode()`를 구현했다.
+- 개발자 요청에 따라 서비스 메서드 위에 역할을 한 줄로 적었다. (backend/CLAUDE.md "서비스 로직 위에는 해당 메서드가 어떤 역할을 하는지 간단하게 적는다")
+- 리뷰에서 힌트로 짚은 것과 개발자가 고친 것:
+  - 코드가 없을 때 `orElseThrow`로 404 → `null`을 돌려주도록 (design 3.1)
+  - `LocalDateTime.now()` → `Clock` 기준 (design 4.1)
+  - `fromEntity(null)` NPE → `Optional.map`
+  - 발급한 코드를 저장하지 않음 → 없으면 `create` 후 저장, 있으면 `reissue` (design 2장)
+  - 코드 겹침 확인 누락, 이후 반복 조건이 거꾸로라 무한 루프 → `existsByCode`로 겹칠 때만 다시 만들기 (design 4.1)
+- `./gradlew test --rerun` 통과: 기존 408개, G03 28개 모두 통과했다.
+- 완료 조건(만료 10분, 재발급 시 이전 코드 무효, PATIENT 외 404, Q7, `./gradlew test`)을 모두 확인하고 개발자가 리뷰를 마쳐 G03을 `passes: true`로 바꿨다.
+
+**결정한 것**
+- 남은 다듬을 거리(`orElse` → `orElseGet`, `map` 안의 `reissue`, `expiredAt` 이름)는 개발자 판단으로 그대로 둔다. 동작에는 영향이 없다.
+
+**다음 할 일**
+- 다음 세션은 G04(보호자의 코드 입력으로 연결)를 진행한다. design.md 4.2 순서, 5.1(실패 횟수 롤백), 5.2(보호자 행 비관적 잠금)를 함께 본다.

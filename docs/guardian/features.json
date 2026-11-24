@@ -46,7 +46,7 @@
       "테스트: Q7의 결정대로 동작한다",
       "./gradlew test 통과"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "G04",
