@@ -83,3 +83,32 @@
 **다음 할 일**
 - 다음 세션은 G03(환자의 초대 코드 발급·재발급)을 진행한다.
 - 개발 서버는 꺼진 상태다. 필요하면 개발자가 다시 띄운다.
+
+### 2026-11-24 · G03 환자의 초대 코드 발급·재발급
+
+**한 일**
+- 시작 전 `./gradlew test --rerun` 통과를 확인했다. (408개)
+- 계획을 개발자에게 확인받고 뼈대를 만들었다.
+  - `MyGuardianController`: `GET`·`POST /api/my-guardian/invite-code`
+  - `InviteCodeResponse(code, expiresAt)`
+  - `GuardianInviteCodeService`, `InviteCodeGenerator` (본문은 TODO)
+  - `ErrorCode`: `GUARDIAN_LINK_NOT_FOUND`(404, G001), `GUARDIAN_ALREADY_LINKED`(409, G002)
+- 테스트 28개를 작성했다.
+  - `MyGuardianInviteCodeTest`: 발급 시 만료 10분 뒤, 재발급 시 이전 코드 무효, 만료 후 재발급, 만료 경계(9분 59초 보임·10분 null), GUARDIAN·OTHER 404, 토큰 없음 401, Q7(연결 시 409, 연결 삭제 후 발급), 동시 요청(첫 발급·재발급 각 5회 반복)
+  - `MyGuardianInviteCodeCollisionTest`: 생성기를 가짜로 바꿔 다른 환자 코드·다른 환자의 만료된 코드·자기 이전 코드와 겹치면 다시 만드는지 확인
+  - `InviteCodeGeneratorTest`: 형식(6자리 영문 대문자+숫자)과 매번 같은 값이 아닌지
+- `./gradlew test` 결과: 기존 408개 통과. 새 테스트는 토큰 없음 401 1개만 통과하고 27개는 TODO 때문에 실패한다(예상대로).
+
+**결정한 것**
+- 역할 불일치 404는 `GUARDIAN_LINK_NOT_FOUND`를 쓴다. ErrorCode는 이번에 쓰는 2개만 추가하고 나머지는 해당 항목에서 추가한다.
+- GET `/api/my-guardian/invite-code`도 G03에 포함한다. 유효한 코드가 없으면 `null`이다.
+- 코드 겹침 확인은 다른 환자의 만료된 코드와 자기 이전 코드도 포함한다. 서비스는 `InviteCodeGenerator.generate()`로만 코드를 만든다.
+- 같은 환자의 동시 발급: 진 요청은 409(`DataIntegrityViolationException` 공통 처리)여도 된다. 500은 안 되고 코드는 1개만 남아야 한다. 잠금은 넣지 않는다.
+
+**개발자 구현 대기**
+- `InviteCodeGenerator.generate()` — design.md 4.1
+- `GuardianInviteCodeService.getInviteCode(userId)` — design.md 3.1
+- `GuardianInviteCodeService.issueInviteCode(userId)` — design.md 3.1, 4.1, Q7
+
+**다음 할 일**
+- 개발자가 위 3개 메서드를 구현하면 리뷰 단계를 진행한다. (테스트 실행 → design.md·CLAUDE.md 기준 리뷰 → 통과하면 G03 `passes: true`, 커밋)

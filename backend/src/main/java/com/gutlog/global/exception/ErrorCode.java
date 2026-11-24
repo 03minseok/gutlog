@@ -37,7 +37,10 @@ public enum ErrorCode {
     INVALID_DOSE_NUMBER(HttpStatus.BAD_REQUEST, "ML001", "복용 회차가 올바르지 않습니다."),
     DOSE_ORDER_CHECK(HttpStatus.BAD_REQUEST, "ML002", "이전 회차를 먼저 체크해 주세요."),
     DOSE_ORDER_UNCHECK(HttpStatus.BAD_REQUEST, "ML003", "다음 회차를 먼저 취소해 주세요."),
-    STOPPED_MEDICINE(HttpStatus.BAD_REQUEST, "ML004", "복용을 중단한 약에는 기록할 수 없습니다.");
+    STOPPED_MEDICINE(HttpStatus.BAD_REQUEST, "ML004", "복용을 중단한 약에는 기록할 수 없습니다."),
+
+    GUARDIAN_LINK_NOT_FOUND(HttpStatus.NOT_FOUND, "G001", "연결 정보를 찾을 수 없습니다."),
+    GUARDIAN_ALREADY_LINKED(HttpStatus.CONFLICT, "G002", "연결된 보호자를 해제한 뒤 코드를 발급해 주세요.");
 
     private final HttpStatus status;
     private final String code;
