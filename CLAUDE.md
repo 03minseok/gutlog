@@ -18,6 +18,7 @@ gutlog/
 
 ## ⚠️ 역할 분담 — 반드시 지킬 것
 이 프로젝트는 학습이 목적이며, 역할이 명확히 나뉜다.
+답변은 항상 한국어로 한다.
 
 - 백엔드: 개발자가 설계, Claude가 구현 → `backend/CLAUDE.md`
 - 백엔드 테스트: Claude 작성 → `backend/CLAUDE.md`
