@@ -117,4 +117,16 @@ class GuardianInviteCodeRepositoryTest {
         codeRepository.saveAndFlush(GuardianInviteCode.create(patientA, "AB12CD", EXPIRES.plusDays(1)));
         assertThat(codeRepository.findByPatientId(patientA.getId())).isPresent();
     }
+
+    @Test
+    @DisplayName("잠금 조회 - 트랜잭션 안에서 코드 값으로 잠그고 찾는다 (G04, design.md 4.2의 5단계)")
+    void findByCodeForUpdate() {
+        save(patientA, "AB12CD");
+        em.flush();
+        em.clear();
+
+        assertThat(codeRepository.findByCodeForUpdate("AB12CD")).get()
+                .extracting(c -> c.getPatient().getId()).isEqualTo(patientA.getId());
+        assertThat(codeRepository.findByCodeForUpdate("ZZ99ZZ")).isEmpty();
+    }
 }

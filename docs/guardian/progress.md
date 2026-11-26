@@ -132,3 +132,59 @@
 
 **다음 할 일**
 - 다음 세션은 G04(보호자의 코드 입력으로 연결)를 진행한다. design.md 4.2 순서, 5.1(실패 횟수 롤백), 5.2(보호자 행 비관적 잠금)를 함께 본다.
+
+### 2026-11-25 · G04 보호자의 코드 입력으로 연결
+
+**한 일**
+- 시작 전 `./gradlew test --rerun` 통과를 확인했다. (436개)
+- 계획을 개발자에게 확인받고 뼈대를 만들었다.
+  - `GuardianPatientController`: `POST /api/guardian/patients` (목록 조회·해제는 G05)
+  - `ConnectPatientRequest(code)`: 생성자에서 앞뒤 공백 제거·대문자 변환 후 `@NotBlank`·`@Pattern("^[A-Z0-9]{6}$")` 검사 (C2)
+  - `GuardianPatientResponse(patientId, nickname, connectedAt, access)`, `GuardianAccessResponse(meal, bowel, medication, weight, sleep)`
+  - `ConnectResult`: 트랜잭션 결과(성공 응답 또는 ErrorCode)
+  - `GuardianConnectService`(트랜잭션 없음, 커밋 뒤 예외) / `GuardianConnectProcessor`(`@Transactional`, 결과만 반환) (본문은 TODO)
+  - `GuardianCodeAttempt`: `MAX_FAIL_COUNT = 3`, `BLOCK_MINUTES = 1`, `isBlocked`·`recordFailure`·`reset` (본문은 TODO)
+  - 잠금 조회: `UserRepository.findByIdForUpdate`, `GuardianInviteCodeRepository.findByCodeForUpdate` (`@Lock(PESSIMISTIC_WRITE)` + `@Query`)
+  - `ErrorCode`: `INVITE_CODE_NOT_FOUND`(404, G003), `INVITE_CODE_BLOCKED`(429, G004), `GUARDIAN_PATIENT_LIMIT`(409, G005), `PATIENT_ALREADY_LINKED`(409, G006)
+- 테스트 42개를 작성했다.
+  - `GuardianConnectTest`: 연결 성공(응답·공개 범위 전부 PRIVATE·코드 삭제), 같은 코드 재사용 404, 공백·소문자 정규화, 재발급 전 코드 404, 보호자당 2명, 형식 오류 400(실패 횟수 미포함), 만료 경계(9분 59초 성공·10분 404), PATIENT·OTHER 404, 토큰 없음 401, 환자 이미 연결 409, 3번째 환자 409(코드 미확인·횟수 미포함), 3번째 오답 429, 실패 횟수·차단 시각 DB 유지(5.1), 차단 중 맞는 코드도 429, 차단 경계(59초 429·1분 성공), 차단 후 0부터 다시 셈, 성공 시 초기화, 보호자별 횟수, 동시성(보호자 5명이 같은 코드 → 연결 1개, 한 보호자가 코드 3개 → 연결 2개, 각 3회 반복)
+  - `GuardianCodeAttemptTest`: 초기 상태, 1·2번째 실패, 3번째 실패 시 1분 차단, 차단 경계, 초기화
+  - `UserRepositoryTest`, `GuardianInviteCodeRepositoryTest`: 잠금 조회 메서드 각 1개
+- `./gradlew test --rerun` 결과: 기존 436개 통과. 새 테스트는 형식 오류 400, 토큰 없음 401, 잠금 조회 리포지토리 테스트 11개만 통과하고 31개는 TODO 때문에 실패한다(예상대로).
+
+**결정한 것**
+- 5.1 처리 구조는 두 클래스로 나눈다. `GuardianConnectProcessor`(트랜잭션 안, 결과만 반환)와 `GuardianConnectService`(트랜잭션 밖, 커밋 뒤 예외).
+- `GuardianCodeAttempt`의 실패 기록·차단 판단·초기화 메서드는 개발자가 직접 구현한다.
+- 4.2의 6단계(환자가 이미 연결됨) 409는 실패 횟수에 넣지 않는다. 유효한 코드를 넣었기 때문이다.
+- 역할 불일치 404는 G03과 같이 `GUARDIAN_LINK_NOT_FOUND`를 쓴다.
+- 형식 오류 문구: 빈 값 "초대 코드를 입력해주세요.", 형식 "초대 코드는 영문 대문자와 숫자 6자리입니다."
+- 개발자 요청에 따라 `process()`의 리뷰 지적 3개(4단계 ErrorCode `GUARDIAN_PATIENT_LIMIT`, 6단계 ErrorCode `PATIENT_ALREADY_LINKED`, 3번째 오답 429)는 Claude가 고치고 단계별 한 줄 주석을 달았다.
+
+**개발자 구현 대기**
+- `GuardianCodeAttempt.isBlocked(now)` — design.md 1장 C1, 4.2의 3단계
+- `GuardianCodeAttempt.recordFailure(now)` — design.md 1장 C1, 4.2의 5단계
+- `GuardianCodeAttempt.reset()` — design.md 1장 C1, 4.2의 7단계
+- `GuardianConnectProcessor.process(guardianId, code)` — design.md 4.2, 5.1, 5.2, C1, Q6, Q8
+- `GuardianConnectService.connect(userId, code)` — design.md 3.2, 5.1
+
+**다음 할 일**
+- 개발자가 위 5개 메서드를 구현하면 리뷰 단계를 진행한다. (테스트 실행 → design.md·CLAUDE.md 기준 리뷰 → 통과하면 G04 `passes: true`, 커밋)
+
+### 2026-11-26 · G04 보호자의 코드 입력으로 연결 (리뷰)
+
+**한 일**
+- 개발자가 `GuardianCodeAttempt.isBlocked()`·`recordFailure()`·`reset()`, `GuardianConnectProcessor.process()`, `GuardianConnectService.connect()`를 구현했다.
+- 리뷰에서 짚은 것과 고친 것:
+  - `isBlocked`: `blockedUntil`이 null일 때 NPE, 횟수(`failCount > 3`)로 차단을 판단함 → 시각만으로 판단 (C1)
+  - "1분이 지나면 0부터"가 없음 → `isBlocked` 안에서 초기화했다가 1·2번째 실패도 지워지는 문제 → `recordFailure`에서 차단이 끝난 뒤에만 초기화. `isAfter`로 정확히 1분째가 빠지는 경계 → `isEqual || isAfter` (C1)
+  - `process`: 만료 `filter` 조건이 거꾸로, `findByCode` → `findByCodeForUpdate` (4.2의 5단계, 5.2), 새 시도 행 미저장, 차단 확인이 코드 조회 뒤에 있음 → 4.2 순서대로, 4단계(개수)·6단계(환자 이미 연결)·코드 삭제·`return` 누락
+  - 개발자 요청으로 Claude가 고친 것: 4단계 ErrorCode `GUARDIAN_PATIENT_LIMIT`, 6단계 ErrorCode `PATIENT_ALREADY_LINKED`, 3번째 오답 429, `process()` 단계별 한 줄 주석
+- `./gradlew test --rerun` 통과: 478개 (기존 436개, G04 42개) 모두 통과했다.
+- 완료 조건(유효 코드 연결·재사용 불가, 만료·역할 404, 환자당 1명·보호자당 2명, 동시성 2종, 3번 실패 429·1분 뒤 재입력, `./gradlew test`)을 모두 확인하고 개발자가 리뷰를 마쳐 G04를 `passes: true`로 바꿨다.
+
+**결정한 것**
+- 처음 조회·역할·개수(4단계)·환자 연결(6단계) 실패는 지킬 변경이 없어 트랜잭션 안에서 예외를 던져도 된다. 실패 횟수를 바꾸는 5단계만 `ConnectResult`로 돌려준다. (5.1)
+- 남은 다듬을 거리(`MAX_GUARDIAN_COUNT` 이름·`static`, `findAll().size()` → `countByGuardianId`, `orElse` → `orElseGet`)는 그대로 둔다. 동작에는 영향이 없다.
+
+**다음 할 일**
+- 다음 세션은 G05(연결 조회와 해제, 해제 이력 저장)를 진행한다.

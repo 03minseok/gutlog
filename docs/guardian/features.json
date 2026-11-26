@@ -59,7 +59,7 @@
       "테스트: 코드를 3번 틀리면 429로 1분 막히고, 1분 뒤 다시 입력할 수 있다",
       "./gradlew test 통과"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "G05",

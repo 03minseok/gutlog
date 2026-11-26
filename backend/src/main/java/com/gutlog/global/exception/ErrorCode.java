@@ -40,7 +40,11 @@ public enum ErrorCode {
     STOPPED_MEDICINE(HttpStatus.BAD_REQUEST, "ML004", "복용을 중단한 약에는 기록할 수 없습니다."),
 
     GUARDIAN_LINK_NOT_FOUND(HttpStatus.NOT_FOUND, "G001", "연결 정보를 찾을 수 없습니다."),
-    GUARDIAN_ALREADY_LINKED(HttpStatus.CONFLICT, "G002", "연결된 보호자를 해제한 뒤 코드를 발급해 주세요.");
+    GUARDIAN_ALREADY_LINKED(HttpStatus.CONFLICT, "G002", "연결된 보호자를 해제한 뒤 코드를 발급해 주세요."),
+    INVITE_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "G003", "초대 코드가 올바르지 않거나 만료되었습니다."),
+    INVITE_CODE_BLOCKED(HttpStatus.TOO_MANY_REQUESTS, "G004", "1분 뒤 다시 시도해 주세요."),
+    GUARDIAN_PATIENT_LIMIT(HttpStatus.CONFLICT, "G005", "환자는 2명까지 연결할 수 있습니다."),
+    PATIENT_ALREADY_LINKED(HttpStatus.CONFLICT, "G006", "이미 보호자가 연결된 환자입니다.");
 
     private final HttpStatus status;
     private final String code;

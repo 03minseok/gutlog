@@ -73,4 +73,16 @@ class UserRepositoryTest {
         assertThatThrownBy(() -> userRepository.saveAndFlush(newUser("user2", "장건강")))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
+
+    @Test
+    @DisplayName("findByIdForUpdate - 트랜잭션 안에서 잠그고 id로 조회한다 (G04, design.md 5.2)")
+    void findByIdForUpdate() {
+        User saved = userRepository.saveAndFlush(newUser("gutlog", "장건강"));
+
+        assertThat(userRepository.findByIdForUpdate(saved.getId()))
+                .get()
+                .extracting(User::getUsername)
+                .isEqualTo("gutlog");
+        assertThat(userRepository.findByIdForUpdate(saved.getId() + 999)).isEmpty();
+    }
 }
