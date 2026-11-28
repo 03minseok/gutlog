@@ -70,7 +70,7 @@
       "테스트: 해제 후 이력이 남고 다시 연결할 수 있다",
       "./gradlew test 통과"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "G06",

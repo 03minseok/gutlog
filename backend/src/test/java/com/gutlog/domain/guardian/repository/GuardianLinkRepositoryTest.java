@@ -136,4 +136,19 @@ class GuardianLinkRepositoryTest {
         assertThat(found.getId()).isEqualTo(again.getId());
         assertThat(found.getMealAccess()).isEqualTo(GuardianAccess.PRIVATE);
     }
+
+    @Test
+    @DisplayName("잠금 조회 - 환자 id로 현재 연결을 찾고, 연결이 없으면 비어 있다")
+    void findByPatientIdForUpdate() {
+        GuardianLink saved = link(patientA, guardian, NOW);
+        em.flush();
+        em.clear();
+
+        assertThat(linkRepository.findByPatientIdForUpdate(patientA.getId())).get()
+                .satisfies(l -> {
+                    assertThat(l.getId()).isEqualTo(saved.getId());
+                    assertThat(l.getGuardian().getId()).isEqualTo(guardian.getId());
+                });
+        assertThat(linkRepository.findByPatientIdForUpdate(patientB.getId())).isEmpty();
+    }
 }

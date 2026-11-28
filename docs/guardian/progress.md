@@ -188,3 +188,54 @@
 
 **다음 할 일**
 - 다음 세션은 G05(연결 조회와 해제, 해제 이력 저장)를 진행한다.
+
+### 2026-11-28 · G05 연결 조회와 해제, 해제 이력 저장
+
+**한 일**
+- 시작 전 `./gradlew test --rerun` 통과를 확인했다. (478개)
+- 계획을 개발자에게 확인받고 뼈대를 만들었다.
+  - `MyGuardianController`: `GET`·`DELETE /api/my-guardian`
+  - `GuardianPatientController`: `GET /api/guardian/patients`, `DELETE /api/guardian/patients/{patientId}`
+  - `MyGuardianResponse(guardianNickname, connectedAt, access)` (보호자 쪽 목록은 기존 `GuardianPatientResponse`)
+  - `GuardianLinkService` (메서드 4개, 본문은 TODO)
+  - 잠금 조회: `GuardianLinkRepository.findByPatientIdForUpdate` (`@Lock(PESSIMISTIC_WRITE)` + `@Query`)
+  - 새 ErrorCode는 없다. 역할 불일치·연결 없음은 `GUARDIAN_LINK_NOT_FOUND`(404)다.
+- 테스트 35개를 작성했다.
+  - `GuardianLinkTest`: 조회(환자 null·보호자 정보, 보호자 빈 배열·연결 순서, 남의 연결 안 보임), 역할 404(GET·DELETE 양쪽, 연결된 환자가 보호자 쪽 해제를 불러도 404), 토큰 없음 401, 환자 해제(data null, 연결 삭제, 이력의 연결·해제 시각·해제한 사람, 양쪽에서 사라짐, 다른 환자 유지, 연결 없음 404, 두 번째 404), 보호자 해제(같은 확인, 제3자·미연결·없는 id·환자 아닌 id 404), 재연결(해제 뒤 코드 발급 가능 Q7, 같은·다른 보호자와 재연결, 이력 2줄, 2명 제한 풀림), 동시 해제(환자+보호자 5회, 환자 2번+보호자 2번 3회 → 200 1개·나머지 404·이력 1줄)
+  - `GuardianLinkRepositoryTest`: 잠금 조회 1개
+- `./gradlew test --rerun` 결과: 513개 중 480개 통과. 기존 478개와 잠금 조회 리포지토리 테스트, 토큰 없음 401이 통과하고, 33개는 TODO 때문에 500이 나서 실패한다(예상대로).
+
+**결정한 것**
+- 동시 해제(개발자): 연결 행을 `PESSIMISTIC_WRITE`로 잠근다. 늦은 요청은 기다렸다가 연결이 없어 404다. 잠그지 않으면 늦은 쪽 DELETE가 0줄이 되어 Hibernate 충돌 예외로 500이 난다.
+- 서비스는 `GuardianLinkService` 하나로 둔다(개발자). 메서드 역할 주석은 개발자가 단다.
+- 해제 응답 `data`는 `null`이다. 해제 시각은 `Clock` 기준이다.
+
+**개발자 구현 대기**
+- `GuardianLinkService.getMyGuardian(userId)` — design.md 3.1, C5
+- `GuardianLinkService.disconnectMyGuardian(userId)` — design.md 2장(guardian_link_history), 3.1, Q2, Q3
+- `GuardianLinkService.getPatients(userId)` — design.md 3.2, Q15
+- `GuardianLinkService.disconnectPatient(userId, patientId)` — design.md 2장(guardian_link_history), 3.2, Q2, Q3, Q9
+
+**다음 할 일**
+- 개발자가 위 4개 메서드를 구현하면 리뷰 단계를 진행한다. (테스트 실행 → design.md·CLAUDE.md 기준 리뷰 → 통과하면 G05 `passes: true`, 커밋)
+
+### 2026-11-28 · G05 연결 조회와 해제, 해제 이력 저장 (리뷰)
+
+**한 일**
+- 개발자가 `GuardianLinkService.getMyGuardian()`·`disconnectMyGuardian()`·`getPatients()`·`disconnectPatient()`를 구현했다. 보호자 쪽 잠금 조회 `GuardianLinkRepository.findByPatientIdAndGuardianIdForUpdate`도 개발자가 추가했다.
+- 리뷰에서 짚은 것과 개발자가 고친 것:
+  - `disconnectMyGuardian`: 이력만 저장하고 연결을 지우지 않음 → `delete` 추가 (2장)
+  - `disconnectPatient`: 환자 id로만 찾아 제3자도 해제됨 → 환자·보호자로 찾기. 잠금 없는 조회로 바뀌어 동시 해제가 500 → 보호자 쪽도 잠금 조회 (G05 결정). `@Param` 오타(`parientId`)로 500 → 수정
+  - `getMyGuardian`: 연결이 없을 때 404 → `map(...).orElse(null)` (3.1). 개발자 요청으로 예시 코드를 보여줬다
+  - 역할 확인 누락(`getMyGuardian`·`getPatients`·`disconnectPatient`) → 요청한 사람의 역할 확인, 불일치는 `GUARDIAN_LINK_NOT_FOUND` (3.1, 3.2)
+  - 경로 `patientId`가 없는 사용자일 때 "사용자를 찾을 수 없습니다." → `GUARDIAN_LINK_NOT_FOUND`로 통일 (Q9)
+- `./gradlew test --rerun` 통과: 513개 (기존 478개, G05 35개) 모두 통과했다.
+- 완료 조건(환자·보호자 각자 조회, 양쪽 해제와 제3자 404, 해제 후 이력과 재연결, `./gradlew test`)을 모두 확인하고 개발자가 리뷰를 마쳐 G05를 `passes: true`로 바꿨다.
+
+**결정한 것**
+- 남은 다듬을 거리는 그대로 둔다. 동작에는 영향이 없다.
+  - `disconnectPatient`의 `patient` 조회와 역할 확인: 잠금 조회가 이미 걸러 준다
+  - `findByPatientIdAndGuardianIdForUpdate` 설명 주석
+
+**다음 할 일**
+- 다음 세션은 G06(환자의 기록 종류별 공개 범위 조회·변경)을 진행한다. Q8(연결·재연결 시 전부 비공개)과 3.1의 `PUT /api/my-guardian/access`를 함께 본다.
